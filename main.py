@@ -5,18 +5,32 @@ import csv
 
 
 def filter():
+    """
+    Decide if the row being examined meets the criteria.
+    If the row meets the criteria (the filter), then True will be returned and the row will be stored in points_collection.
+    """
     return True
 
 
 def parse_coordinates():
+    """
+    A generator function to parse through each line of the csv file (the google spreadsheet with point/object information).
+    The (id, title, long, lat, color, category, shape) is yielded for each row that meets the filter criteria.
+    """
     with open('points.csv', 'r') as file:
         reader = csv.reader(file)
         for row in reader:
             if filter():
-                
+                x = row[7]
+                first = x.find('[')
+                second = x.find(']')
 
-                yield (row[0], row[5], x, y, row[10], row[17], row[25])
-                # id, title, x, y, color, category, shape
+                draft = x[first+1:second]
+                new = draft.split('_COMMA_')
+                long = new[0]
+                lat = new[-1]
+                
+                yield (row[0], row[5], long, lat, row[10], row[17], row[25])
 
 
 csv_line_generator_filtered = parse_coordinates()
