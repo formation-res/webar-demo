@@ -2,6 +2,8 @@
 # yields the filtered corrdinates that meet the criteria, and stores them into a list.
 
 import csv
+import numpy as np
+from vincenty import vincenty
 
 
 def filter(title, current_title: str):
@@ -41,6 +43,17 @@ def parse_coordinates(title=None):
 
 csv_line_generator_filtered = parse_coordinates('Toilet')
 points_collection = [i for i in csv_line_generator_filtered]
-for i in points_collection:
-    print(i)
-    print()
+# for i in points_collection:
+#      print(i)
+#      print()
+
+    
+lat1 = float(points_collection[1][2])
+long1 = float(points_collection[1][3])
+p1 = (lat1, long1)
+
+lat2 = float(points_collection[0][2])
+long2 = float(points_collection[0][3])
+p2 = (lat2, long2)
+
+print("distance between two points:", vincenty(p1,p2)*1000, " meters.")
