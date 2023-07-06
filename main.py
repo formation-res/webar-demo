@@ -37,7 +37,7 @@ def create_point_collection_in_json(geo_obj, points_collection):
         p2 = (current_lat, current_long)
 
         # calculate the distance between two points in meters:
-        distance = vincenty(p1, p2)*1000
+        distance = vincenty(p1, p2) * 1000
         angle = find_angle(p1, p2)
         x = distance * np.cos(np.radians(angle))
         y = distance * np.sin(np.radians(angle))
@@ -55,7 +55,7 @@ def execute():
     """
     # starting point is an id. in this case, it will be the toilet...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
-    filter_criteria = {'title': 'Toilet', 'id': None, 'category': None, 'distance': 14}
+    filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 50}
 
     # generate a list of points we want to display with web ar:
     geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)
