@@ -5,24 +5,27 @@ import csv
 
 
 class GeoGeometry:
-    def __init__(self, starting_id: str, filter_criteria=None):
+    def __init__(self, starting_id: str, filter_criteria: dict):
         self.starting_id = starting_id  # origin
-        self.filter_criteria = filter_criteria  # the 'title' we are filtering by
+        self.filter_criteria = filter_criteria  # a dictionary; some of the values can be None
         self.starting_id_info = None  # to be defined in the parse_coordinates() method (self.search_id's attributes)
 
 
-    def filter(self, current_title: str):
+    def filter(self, row: str):
         """
         Decide if the row being examined meets the criteria.
         If the row meets the criteria (the filter), then True will be returned and the row will be stored in points_collection.
         """
-        if self.filter_criteria is None:
-            return True
-        else:
-            if self.filter_criteria == current_title:
-                return True
-            else:
-                return False
+        decision = True
+
+        if self.filter_criteria['title'] is not None and self.filter_criteria['title'] != row[5]:
+            decision = False
+        if self.filter_criteria['id'] is not None and self.filter_criteria['id'] != row[0]:
+            decision = False
+        if self.filter_criteria['category'] is not None and self.filter_criteria['category'] != row[17]:
+            decision = False
+
+        return decision
 
 
     def parse_coordinates(self):
@@ -33,7 +36,7 @@ class GeoGeometry:
         with open('points.csv', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
-                if self.filter(row[5]) or row[0] == self.starting_id:
+                if self.filter(row) or row[0] == self.starting_id:
                     x = row[7]
                     first = x.find('[')
                     second = x.find(']')

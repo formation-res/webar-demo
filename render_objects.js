@@ -26,24 +26,32 @@ console.log(colors)
 
 var points_collection = JSON.parse(json_str)
 console.log(points_collection.length)
+//
 
-	let camera, scene, renderer;
-    let mesh;
+let camera, scene, renderer;
+let mesh;
 
-		init();
-		animate();
+init();
+animate();
 
-		function init() {
-			const container = document.createElement('div');
-			document.body.appendChild(container);
+function init() {
+	const container = document.createElement('div');
+	document.body.appendChild(container);
 
-			scene = new THREE.Scene();
+	scene = new THREE.Scene();
 
-			camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
+	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
-			renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-			renderer.setPixelRatio(window.devicePixelRatio);
-			renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+	renderer.setPixelRatio(window.devicePixelRatio);
+	renderer.setSize(window.innerWidth, window.innerHeight);
+
+	renderer.xr.enabled = true;
+	container.appendChild(renderer.domElement);
+
+	var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+	light.position.set(0.5, 1, 0.25);
+	scene.add(light);
 
 			renderer.xr.enabled = true; // New!
 			container.appendChild(renderer.domElement);
