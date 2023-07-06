@@ -33,13 +33,14 @@ def create_point_collection_in_json(geo_obj, points_collection):
         current_lat = float(row[2])
         p2 = (current_lat, current_long)
 
-        # calculate the distance between two points:
+        # calculate the distance between two points in meters:
         distance = vincenty(p1, p2)*1000
 
         # calculate the angle between two points:
         angle = find_angle(p1, p2)
-        x = distance*np.cos(angle)
-        y= distance*np.sin(angle)
+
+        x = distance *np.cos(np.radians(angle) )
+        y = distance *np.sin(np.radians(angle) )
 
         # append each point to the list:
         point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle, 'x': x, 'y': y})
@@ -51,7 +52,7 @@ def create_point_collection_in_json(geo_obj, points_collection):
 
 
 def execute():
-    # starting point is an id. in this case, it will be the reception desk...
+    # starting point is an id. in this case, it will be the toilet...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
     filter_criteria = 'Toilet'
 

@@ -1,6 +1,9 @@
 import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
-    
-		let camera, scene, renderer;
+
+var points_collection = JSON.parse(json_str)
+console.log(points_collection.length)
+
+	let camera, scene, renderer;
     let mesh;
 
 		init();
@@ -34,13 +37,17 @@ import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARB
         opacity    : 0.8
       });
       
-      mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(0, 0, -0.5);
-      scene.add(mesh);
+      for (var i = 0; i <2 ;i++) {
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set((points_collection[i].x * 1), 0, (points_collection[i].y * 1));
+        scene.add(mesh);
+
+        console.log(points_collection[i].x * 1)
+      }
       
 
 			document.body.appendChild(ARButton.createButton(renderer));
-
+ 
 			window.addEventListener('resize', onWindowResize, false);
 		}
 
