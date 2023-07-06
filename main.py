@@ -1,7 +1,7 @@
 # parses the data in the spreadsheet.
 # yields the filtered corrdinates that meet the criteria, and stores them into a list.
 
-import csv
+import csv, sys, json
 import numpy as np
 from vincenty import vincenty
 
@@ -72,3 +72,19 @@ def find_angle(p1, p2):
     return fixed_angle_degrees
 
 print(f'angle between the first two points: {find_angle(p1, p2)} degrees.')
+
+
+
+# -------------------------------- Export to JSON -------------------------------- 
+
+#file exporting to, w needed for WRITE
+sys.stdout = open('icon_data.js', 'w')
+
+#where points_collection is the dictionary
+json_obj = json.dumps(points_collection)
+
+#this is printed in icon_data.js --- it will overwrite every time. 
+print("var json_str = '{}' ".format(json_obj) )
+'''
+we want to run this EVERY time the user changes what they are searching for.
+'''
