@@ -1,74 +1,66 @@
-# parses the data in the spreadsheet.
-# yields the filtered corrdinates that meet the criteria, and stores them into a list.
-
-import csv
+import geogeometry
 import numpy as np
 from vincenty import vincenty
 
 
-def filter(title, current_title: str):
-    """
-    Decide if the row being examined meets the criteria.
-    If the row meets the criteria (the filter), then True will be returned and the row will be stored in points_collection.
-    """
-    if title is None:
-        return True
-    else:
-        if title == current_title:
-            return True
-        else:
-            return False
-
-
-def parse_coordinates(title=None):
-    """
-    A generator function to parse through each line of the csv file (the google spreadsheet with point/object information).
-    The (id, title, long, lat, color, category, shape) is yielded for each row that meets the filter criteria.
-    """
-    with open('points.csv', 'r') as file:
-        reader = csv.reader(file)
-        for row in reader:
-            if filter(title, row[5]):
-                x = row[7]
-                first = x.find('[')
-                second = x.find(']')
-
-                draft = x[first+1:second]
-                new = draft.split('_COMMA_')
-                long = new[0]
-                lat = new[-1]
-
-                yield (row[0], row[5], long, lat, row[10], row[17], row[25])
-
-
-# generate a list of points we want to display with web ar:
-csv_line_generator_filtered = parse_coordinates('Toilet')
-points_collection = [i for i in csv_line_generator_filtered]
-# for i in points_collection:
-#      print(i)
-#      print()
-
-
-# find the distance between two points:
-lat1 = float(points_collection[1][2])
-long1 = float(points_collection[1][3])
-p1 = (lat1, long1)
-
-lat2 = float(points_collection[0][2])
-long2 = float(points_collection[0][3])
-p2 = (lat2, long2)
-
-print("distance between the first two points:", vincenty(p1,p2)*1000, " meters.")
-
-
-# find the angle between two points:
 def find_angle(p1, p2):
-    distance_x = p2[0] - p1[0]
-    distance_y = p2[1] - p1[1]
+        """
+        Find the angle between two points.
+        """
+        distance_x = p2[0] - p1[0]
+        distance_y = p2[1] - p1[1]
 
-    angle_radians = np.arctan2(distance_y, distance_x)
-    angle_degrees = np.degrees(angle_radians)
-    fixed_angle_degrees = (angle_degrees + 360) % 360
-    return fixed_angle_degrees
+        angle_radians = np.arctan2(distance_y, distance_x)
+        angle_degrees = np.degrees(angle_radians)
+        fixed_angle_degrees = (angle_degrees + 360) % 360
+        return fixed_angle_degrees
 
-print(f'angle between the first two points: {find_angle(p1, p2)} degrees.')
+ 
+def create_point_collection_in_json(geo_obj, points_collection):
+    point_collection_in_json = []
+    for row in points_collection:
+        # starting id:
+        origin_long = float(geo_obj.starting_id_info[3])
+        origin_lat = float(geo_obj.starting_id_info[2])
+        p1 = (origin_lat, origin_long)
+
+        # current id
+        current_long = float(row[3])
+        current_lat = float(row[2])
+        p2 = (current_lat, current_long)
+
+        # calculate the distance between two points:
+        distance = vincenty(p1, p2)*1000
+
+        # calculate the angle between two points:
+        angle = find_angle(p1, p2)
+
+        # append each point to the list:
+        point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle})
+
+    return point_collection_in_json
+    #print(f'distance between the first two points: {vincenty(p1, p2)*1000} meters.')
+    #print(f'angle between the first two points: {find_angle(p1, p2)} degrees.')
+    # [{'id': 'dhfeht', 'color': 'hiii'}, {'id': 'dhfeht', 'color': 'hiii'}]
+
+
+def execute():
+    # starting point is an id. in this case, it will be the reception desk...
+    starting_id = '3m5thyVvZnMKukIqIrhYHQ'
+    filter_criteria = 'Toilet'
+
+    # generate a list of points we want to display with web ar:
+    geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)
+    csv_line_generator_filtered = geo_obj.parse_coordinates()
+    points_collection = [i for i in csv_line_generator_filtered]
+
+    # create a list of dictionaries for web ar points:
+    point_collection_in_json = create_point_collection_in_json(geo_obj, points_collection)
+    print(len(point_collection_in_json))
+    for i in point_collection_in_json:
+         print(i)
+         print()
+
+
+if __name__ == "__main__":
+    execute()
