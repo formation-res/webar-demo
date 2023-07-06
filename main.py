@@ -1,4 +1,8 @@
 import geogeometry
+# parses the data in the spreadsheet.
+# yields the filtered corrdinates that meet the criteria, and stores them into a list.
+
+import sys, json
 import numpy as np
 from vincenty import vincenty
 
@@ -56,11 +60,22 @@ def execute():
 
     # create a list of dictionaries for web ar points:
     point_collection_in_json = create_point_collection_in_json(geo_obj, points_collection)
-    print(len(point_collection_in_json))
-    for i in point_collection_in_json:
-         print(i)
-         print()
+    return point_collection_in_json
 
 
 if __name__ == "__main__":
-    execute()
+    point_collection_in_json = execute()
+
+    # -------------------------------- Export to JSON -------------------------------- 
+
+    #file exporting to, w needed for WRITE
+    sys.stdout = open('icon_data.js', 'w')
+
+    #where points_collection is the dictionary
+    json_obj = json.dumps(point_collection_in_json)
+
+    #this is printed in icon_data.js --- it will overwrite every time. 
+    print("var json_str = '{}' ".format(json_obj) )
+    '''
+    we want to run this EVERY time the user changes what they are searching for.
+    '''
