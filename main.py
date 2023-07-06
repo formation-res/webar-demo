@@ -36,10 +36,11 @@ def create_point_collection_in_json(geo_obj, points_collection):
         current_lat = float(row[2])
         p2 = (current_lat, current_long)
 
+        # calculate the distance between two points in meters:
         distance = vincenty(p1, p2)*1000
         angle = find_angle(p1, p2)
-        x = distance * np.cos(angle)
-        y= distance * np.sin(angle)
+        x = distance * np.cos(np.radians(angle))
+        y = distance * np.sin(np.radians(angle))
 
         # append each point to the list, if it's within distance (if applicable):
         if geo_obj.filter_criteria['distance'] is None or float(geo_obj.filter_criteria['distance']) > distance:
@@ -52,7 +53,7 @@ def execute():
     """
     Execute the program with customizable filter(s).
     """
-    # starting point is an id. in this case, it will be the reception desk...
+    # starting point is an id. in this case, it will be the toilet...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
     filter_criteria = {'title': 'Toilet', 'id': None, 'category': None, 'distance': 14}
 
@@ -70,14 +71,14 @@ def execute_json(point_collection_in_json: list):
     """
     Convert the list of dictionaries into json format to prepare these point for Web AR.
     """
-    # file exporting to, w needed for WRITE
+    # file exporting to, w needed for WRITE:
     sys.stdout = open('icon_data.js', 'w')
 
-    # where points_collection is the dictionary; converts into json
+    # where points_collection is the dictionary; converts into json:
     json_obj = json.dumps(point_collection_in_json)
 
-    # this is printed in icon_data.js --- it will overwrite every time
-    # we want to run this EVERY time the user changes what they are searching for
+    # this is printed in icon_data.js --- it will overwrite every time,
+    # we want to run this EVERY time the user changes what they are searching for:
     print("var json_str = '{}' ".format(json_obj) )
 
 
