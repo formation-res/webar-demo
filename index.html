@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>Kitchen</title>
+	<title>Demo</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 	<link type="text/css" rel="stylesheet" href="style.css">
@@ -12,14 +12,9 @@
 
 <body>
 	<script type='text/javascript' src="icon_data.js"></script>
-	
-	 <!-- 	for testing purposes   -->
-	<script>	
+	<script>
+		/*	
 		var points_collection = JSON.parse(json_str)
-		
-
-			/* Dictionary format: 
-			{ id	title	long	lat		color	category	shape	distance	angle	x	y }			*/
 			document.write("<br>id: ", points_collection[0].id)
 			document.write("<br>title: ", points_collection[0].title)
 			document.write("<br>long: ", points_collection[0].long)
@@ -32,11 +27,13 @@
 			document.write("<br>x: ", points_collection[0].x)
 			document.write("<br>y: ", points_collection[0].y)
 		
+		var points_collection = JSON.parse(json_str)
+		for (var i = 0; i < points_collection.length; i++) {
+  			document.write(points_collection[i].color);
+		}
+		*/
 	</script>
-
 	<script type="module" src="render_objects.js"></script>
-
-
 </body>
 
 </html>
