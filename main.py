@@ -54,7 +54,7 @@ def create_point_collection_in_json(geo_obj, points_collection):
 def execute():
     # starting point is an id. in this case, it will be the toilet...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
-    filter_criteria = 'Toilet'
+    filter_criteria = None
 
     # generate a list of points we want to display with web ar:
     geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)
