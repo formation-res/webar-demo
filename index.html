@@ -12,11 +12,25 @@
 
 <body>
 	<script type='text/javascript' src="icon_data.js"></script>
-	<script>
+	
+	 <!-- 	for testing purposes   -->
+	<script>	
 		var points_collection = JSON.parse(json_str)
+		
 
-		document.write("id: ",points_collection[0].id)
-
+			/* Dictionary format: 
+			{ id	title	long	lat		color	category	shape	distance	angle	x	y }			*/
+			document.write("<br>id: ", points_collection[0].id)
+			document.write("<br>title: ", points_collection[0].title)
+			document.write("<br>long: ", points_collection[0].long)
+			document.write("<br>lat: ", points_collection[0].lat)
+			document.write("<br>color: ", points_collection[0].color)
+			document.write("<br>category: ", points_collection[0].category)
+			document.write("<br>shape: ", points_collection[0].shape)
+			document.write("<br>distance: ", points_collection[0].distance)
+			document.write("<br>angle: ", points_collection[0].angle)
+			document.write("<br>x: ", points_collection[0].x)
+			document.write("<br>y: ", points_collection[0].y)
 		
 	</script>
 

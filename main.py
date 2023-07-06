@@ -38,9 +38,11 @@ def create_point_collection_in_json(geo_obj, points_collection):
 
         # calculate the angle between two points:
         angle = find_angle(p1, p2)
+        x = distance*np.cos(angle)
+        y= distance*np.sin(angle)
 
         # append each point to the list:
-        point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle})
+        point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle, 'x': x, 'y': y})
 
     return point_collection_in_json
     #print(f'distance between the first two points: {vincenty(p1, p2)*1000} meters.')
