@@ -1,6 +1,29 @@
 import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 
-// added:
+const colors = {
+"LightBlueAlt":"rgb(67, 162, 218)",
+"Red":"rgb(255, 39, 39)",
+"DarkMagenta":"rgb(166, 50, 89)",
+"DarkGreen":"rgb(0, 174, 28)",
+"Grey":"#rgb(94, 94, 94)",
+"Orange":"rgb(255, 169, 39)",
+"LightGreen":"rgb(162, 248, 22)",
+"DarkBlue":"rgb(18, 51, 59)",
+"LightGreenAlt":"rgb(206, 222, 66)",
+"GreenAlt":"rgb(80, 187, 104)",
+"Turquoise":"rgb(0, 215, 176)",
+"LightGrey":"rgb(241, 241, 241)",
+"DarkRed":"rgb(183, 28, 47)",
+"Blue":"rgb(6, 123, 189)",
+"DarkOrange":"rgb(208, 111, 40)",
+"LightBlue":"rgb(172, 218, 252)",
+"AquaMarine":"rgb(22, 193, 248)",
+"Black":"rgb(0, 0, 0)",
+}
+
+console.log(colors)
+//console.log(colors["Blue"])
+
 var points_collection = JSON.parse(json_str)
 console.log(points_collection.length)
 //
@@ -30,27 +53,46 @@ function init() {
 	light.position.set(0.5, 1, 0.25);
 	scene.add(light);
 
-    const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-    const material = new THREE.MeshPhongMaterial({
-    	color      :  new THREE.Color("rgb(226,35,213)"),
-    	shininess  :  6,
+			renderer.xr.enabled = true; // New!
+			container.appendChild(renderer.domElement);
+
+			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
+			light.position.set(0.5, 1, 0.25);
+			scene.add(light);
+      
+    
+      
+      for (var i = 0; i <points_collection.length ;i++) {
+        var real_color = ""
+        if (colors[points_collection[i].color] != null) {
+            console.log(colors[points_collection[i].color])
+            real_color = colors[points_collection[i].color]
+            console.log(real_color)
+        }
+        else {
+            real_color = "rgb(0, 0, 0)"
+        }
+
+        const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+        const material = new THREE.MeshPhongMaterial({
+        color      :  new THREE.Color(real_color),
+        shininess  :  6,
         flatShading:  true,
         transparent: 1,
         opacity    : 0.8
       });
-    
-	// added:
-	for (var i = 0; i <points_collection.length ;i++) {
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set((points_collection[i].x * 1), 0, (points_collection[i].y * 1));
-		scene.add(mesh);
 
-		console.log(points_collection[i].x * 1)
-	}
-    //
+        mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set((points_collection[i].x * 1), 0, (points_collection[i].y * 1));
+        scene.add(mesh);
 
-		document.body.appendChild(ARButton.createButton(renderer));
-		window.addEventListener('resize', onWindowResize, false);
+        console.log(points_collection[i].x * 1)
+      }
+      
+
+			document.body.appendChild(ARButton.createButton(renderer));
+ 
+			window.addEventListener('resize', onWindowResize, false);
 		}
 
 		function onWindowResize() {
