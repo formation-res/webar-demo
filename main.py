@@ -55,7 +55,7 @@ def execute():
     """
     # starting point is an id. in this case, it will be the toilet...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
-    filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 50}
+    filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 8}
 
     # generate a list of points we want to display with web ar:
     geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)
