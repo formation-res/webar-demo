@@ -60,7 +60,6 @@ function init() {
 			light.position.set(0.5, 1, 0.25);
 			scene.add(light);
       
-    
       
       for (var i = 0; i <points_collection.length ;i++) {
         var real_color = ""

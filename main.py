@@ -53,7 +53,7 @@ def execute():
     """
     Execute the program with customizable filter(s).
     """
-    # starting point is an id. in this case, it will be the toilet...
+    # starting point is an id. in this case, it will be the reception desk...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
     filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 50}
 
