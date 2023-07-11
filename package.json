@@ -1,8 +1,18 @@
 {
-  "dependencies": {
-    "three": "^0.154.0"
+  "name": "webar-demo",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^4.4.2"
-  }
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "vite": "^4.4.0"
+  },
+  "dependencies": {
+    "three": "^0.154.0"
+}
 }
