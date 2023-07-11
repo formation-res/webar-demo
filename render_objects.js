@@ -127,8 +127,9 @@ function startCompass(){
 
 function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
+ document.getElementById("headingBtn").value = heading;
+ 
 }
-
 
 //run this AFTER configuring the orienation (must use a button because of iOS)
 init();
