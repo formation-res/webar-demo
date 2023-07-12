@@ -28,16 +28,25 @@ let camera, scene, renderer;
 let mesh;
 
 function translatePoints(angle) {
-  for ( i = 0; i < points_collection.length ; i++) {
-      var x = points_collection[i].x
-      var y = points_collection[i].y
-      var radians = (Math.PI / 180) * angle
-      //set up the translation.
-      cos = Math.cos(radians)
-      sin = Math.sin(radians)
-      points_collection[i].x = (cos * x) + (sin * y )
-      points_collection[i].x = (cos * y) + (sin * x )
-    }
+  for (var i = 0; i < points_collection.length; i++) {
+    var x = points_collection[i].x;
+    var y = points_collection[i].y;
+    var radians = (Math.PI / 180) * angle;
+
+    console.log("radians: ", radians);
+    var cos = Math.cos(radians);
+    var sin = Math.sin(radians);
+
+    var newX = (cos * x) + (sin * y);
+    var newY = (cos * y) + (sin * x);
+    points_collection[i].x = newX;
+    points_collection[i].y = newY;
+
+    console.log("x before: ", x);
+    console.log("x after: ", newX);
+    console.log("y before: ", y);
+    console.log("y after: ", newY);
+  }
 }
 function init() {
   const container = document.createElement("div");
@@ -140,7 +149,7 @@ generateBtn.addEventListener('click', handleGeneratePoints)
 
 function handleGeneratePoints() {
   if (heading >= 0) {
-    //translatePoints(heading)
+    translatePoints(heading)
     init()
     animate()
     document.body.appendChild(ARButton.createButton(renderer));
@@ -150,3 +159,6 @@ function handleGeneratePoints() {
 }
 
 window.addEventListener("resize", onWindowResize, false);
+
+//translatePoints(30);
+
