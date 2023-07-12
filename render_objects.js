@@ -1,5 +1,4 @@
 import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
-import { MathUtils } from "three/src/math/MathUtils";
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",
@@ -29,20 +28,15 @@ let camera, scene, renderer;
 let mesh;
 
 function translatePoints(points, angle) {
-  for ( var i = 0; i < points_collection.length ; i++) {
+  for ( i = 0; i < points_collection.length ; i++) {
       var x = points_collection[i].x
       var y = points_collection[i].y
       var radians = (Math.PI / 180) * angle
       //set up the translation.
       cos = Math.cos(radians)
       sin = Math.sin(radians)
-      points_collection[i].x = (cos * x) + (sin * y)
-      points_collection[i].x = (cos * y) + (sin * x)
-      
-      console.log("x before: ", x)
-      console.log("x after: ", points_collection[i].x)
-      console.log("y before: ", y)
-      console.log("y after: ", points_collection[y].x)
+      points_collection[i].x = (cos * x) + (sin * y )
+      points_collection[i].x = (cos * y) + (sin * x )
     }
 }
 function init() {
@@ -94,6 +88,8 @@ function init() {
       points_collection[i].y * 1
     );
     scene.add(mesh);
+
+    console.log(points_collection[i].x * 1);
   }
 }
 function onWindowResize() {
@@ -114,39 +110,42 @@ var heading = 0;
 var isOriented = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
-
-document.getElementById("testingBtn").textContent = isIOS
+if (!isIOS) { //if not iOS, then we can just do this automatically.
+  window.addEventListener("absolutedeviceorientation", handleOrientation, true);
+  document.body.appendChild(ARButton.createButton(renderer));
+  document.getElementById("testingBtn").textContent = "not iOS"
+}
 
 startBtn.addEventListener('click', startCompass);
-
 function startCompass(){
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
+              document.body.appendChild(ARButton.createButton(renderer));
               document.getElementById("testingBtn").textContent = "iOS"
             } else {
               alert("has to be allowed!");
             }
           })
           .catch(() => alert("not supported"));
-	} else {  //not iOS
-    window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-    document.getElementById("testingBtn").textContent = "not iOS"
-  }
+	}
 }
 
 function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
- //only run this the first time the heading is calculated. 
-
-}
-
-//translatePoints(points_collection, heading);
+if ( isOriented == 0) {
+translatePoints(points_collection, heading);
 init();
 animate();
-document.body.appendChild(ARButton.createButton(renderer));
+isOriented = 1;
+}
+}
+
+//run this AFTER configuring the orienation (must use a button because of iOS)
+
+
 
 window.addEventListener("resize", onWindowResize, false);
