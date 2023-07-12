@@ -145,7 +145,7 @@ function handleOrientation(e){
 }
 
 function handleARB(){
-document.getElementById("testingBtn").textContent = "it works!!!"
+document.getElementById("testingBtn").textContent = heading
 }
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
