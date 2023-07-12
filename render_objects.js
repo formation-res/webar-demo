@@ -137,6 +137,7 @@ function startCompass(){
     document.getElementById("testingBtn").textContent = "not iOS"
   }
   document.getElementById("start-btn").remove();
+  document.body.appendChild(ARButton.createButton(renderer));
 }
 
 function handleOrientation(e){
@@ -152,7 +153,6 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
-    document.body.appendChild(ARButton.createButton(renderer));
     document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
