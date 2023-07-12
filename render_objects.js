@@ -139,6 +139,7 @@ function handleOrientation(e){
 }
 
 //run this AFTER configuring the orienation (must use a button because of iOS)
+translatePoints(points_collection, heading);
 init();
 animate();
 
