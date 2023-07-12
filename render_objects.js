@@ -115,9 +115,11 @@ var isOriented = false;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 
+document.getElementById("testingBtn").textContent = isIOS
+
 startBtn.addEventListener('click', startCompass);
+
 function startCompass(){
-  document.getElementById("testingBtn").textContent = "clicked"
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {
