@@ -144,6 +144,9 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
+function handleARB(){
+document.getElementById("testingBtn").textContent = "it works!!!"
+}
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
 
@@ -152,7 +155,7 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
-    document.body.appendChild(ARButton.createButton(renderer));
+    document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
     document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
