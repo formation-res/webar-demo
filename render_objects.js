@@ -120,6 +120,11 @@ var isOriented = false;
 var ARCount = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
+if (! isIOS ) {
+window.addEventListener("absolutedeviceorientation", handleOrientation, true);
+document.getElementById("testingBtn").textContent = "not iOS"
+isOriented = true;
+}
 
 startBtn.addEventListener('click', startCompass);
 function startCompass(){
@@ -135,13 +140,9 @@ function startCompass(){
             }
           })
           .catch(() => alert("not supported"));
-	} else {
-    window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-    document.getElementById("testingBtn").textContent = "not iOS"
-    isOriented = true;
-  }
+	} 
+  document.getElementById("start-btn").textContent = isOriented;
   if (isOriented) {
-    document.getElementById("start-btn").remove();
     document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
   }
 }
@@ -157,6 +158,7 @@ if (ARCount) {  //do stuff
   init();
   animate();
 } else {    //do nothing
+document.getElementById("start-btn").remove();
 ARCount = 1;
 }
 }
