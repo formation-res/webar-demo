@@ -170,7 +170,7 @@ function handleGeneratePoints() {
     document.body.appendChild(arButton);
 
     // Simulate a click on the ARButton
-    //simulateClick(arButton);
+    simulateClick(arButton);
     
     document.getElementById("generateBtn").remove()
   } else {
