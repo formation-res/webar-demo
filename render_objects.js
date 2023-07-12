@@ -26,6 +26,7 @@ var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
 let mesh;
+var arButton = ARButton.createButton(renderer);
 
 function translatePoints(angle) {
   for (var i = 0; i < points_collection.length; i++) {
@@ -165,8 +166,6 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
-
-    var arButton = ARButton.createButton(renderer);
     document.body.appendChild(arButton);
 
     // Simulate a click on the ARButton
@@ -181,3 +180,15 @@ function handleGeneratePoints() {
 window.addEventListener("resize", onWindowResize, false);
 
 //translatePoints(90);
+
+
+
+
+
+function simulateARButtonClick() {
+  arButton.dispatchEvent(new MouseEvent('click'));
+}
+
+// Simulate click on another button to trigger ARButton click
+var triggerButton = document.getElementById('trigger-button');
+triggerButton.addEventListener('click', simulateARButtonClick);
