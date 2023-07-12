@@ -116,15 +116,8 @@ function render() {
 
 /*  Requesting permission to use device orientation */
 var heading = -1;
-var isOriented = false;
-var ARCount = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
-if (! isIOS ) {
-window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-document.getElementById("testingBtn").textContent = "not iOS"
-isOriented = true;
-}
 
 startBtn.addEventListener('click', startCompass);
 function startCompass(){
@@ -134,17 +127,16 @@ function startCompass(){
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
               document.getElementById("testingBtn").textContent = "iOS"
-              isOriented = true;
             } else {
               alert("has to be allowed!");
             }
           })
           .catch(() => alert("not supported"));
-	} 
-  document.getElementById("start-btn").textContent = isOriented;
-  if (isOriented) {
-    document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
+	} else {
+    window.addEventListener("absolutedeviceorientation", handleOrientation, true);
+    document.getElementById("testingBtn").textContent = "not iOS"
   }
+  document.getElementById("start-btn").remove();
 }
 
 function handleOrientation(e){
@@ -152,15 +144,19 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
-function handleARB(){
-if (ARCount) {  //do stuff
-  translatePoints(heading);
-  init();
-  animate();
-} else {    //do nothing
-document.getElementById("start-btn").remove();
-ARCount = 1;
-}
+const generateBtn = document.querySelector(".generatePoints");
+generateBtn.addEventListener('click', handleGeneratePoints)
+
+function handleGeneratePoints() {
+  if (heading >= 0) {
+    translatePoints(heading)
+    init()
+    animate()
+    document.body.appendChild(ARButton.createButton(renderer));
+    document.getElementById("generateBtn").remove()
+  } else {
+    alert("Must activate device orientation!")
+  }
 }
 
 window.addEventListener("resize", onWindowResize, false);
