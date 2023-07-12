@@ -136,7 +136,7 @@ function handleOrientation(e){
 }
 
 const generateBtn = document.querySelector(".generatePoints");
-generateBtn.addEventListener('click', handleGeneratePoints())
+generateBtn.addEventListener('click', handleGeneratePoints)
 
 function handleGeneratePoints() {
   if (heading >= 0) {
