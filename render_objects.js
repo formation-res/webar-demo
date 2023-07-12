@@ -135,10 +135,10 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
-const generateBtn = document.getElementById("generatePoints");
-generateBtn.addEventListener('click', handleGenerate())
+const generateBtn = document.querySelector(".generatePoints");
+generateBtn.addEventListener('click', handleGeneratePoints())
 
-function handleGenerate() {
+function handleGeneratePoints() {
   if (heading >= 0) {
     //translatePoints(heading)
     init()
@@ -148,6 +148,5 @@ function handleGenerate() {
     alert("Must activate device orientation!")
   }
 }
-
 
 window.addEventListener("resize", onWindowResize, false);
