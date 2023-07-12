@@ -162,4 +162,3 @@ function handleGeneratePoints() {
 window.addEventListener("resize", onWindowResize, false);
 
 //translatePoints(90);
-
