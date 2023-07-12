@@ -1,4 +1,5 @@
 import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
+import { MathUtils } from "three/src/math/MathUtils";
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",
@@ -28,15 +29,20 @@ let camera, scene, renderer;
 let mesh;
 
 function translatePoints(points, angle) {
-  for ( i = 0; i < points_collection.length ; i++) {
+  for ( let i = 0; i < points_collection.length ; i++) {
       var x = points_collection[i].x
       var y = points_collection[i].y
       var radians = (Math.PI / 180) * angle
       //set up the translation.
       cos = Math.cos(radians)
       sin = Math.sin(radians)
-      points_collection[i].x = (cos * x) + (sin * y )
-      points_collection[i].x = (cos * y) + (sin * x )
+      points_collection[i].x = (cos * x) + (sin * y)
+      points_collection[i].x = (cos * y) + (sin * x)
+      
+      console.log("x before: ", x)
+      console.log("x after: ", points_collection[i].x)
+      console.log("y before: ", y)
+      console.log("y after: ", points_collection[y].x)
     }
 }
 function init() {
@@ -88,8 +94,6 @@ function init() {
       points_collection[i].y * 1
     );
     scene.add(mesh);
-
-    console.log(points_collection[i].x * 1);
   }
 }
 function onWindowResize() {
@@ -136,11 +140,13 @@ function startCompass(){
 function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
+ //only run this the first time the heading is calculated. 
+ if (! isOriented ) {
+   translatePoints(points_collection, heading);
+   init();
+   animate();
+   isOriented = true;
+ }
 }
-
-//run this AFTER configuring the orienation (must use a button because of iOS)
-translatePoints(points_collection, heading);
-init();
-animate();
 
 window.addEventListener("resize", onWindowResize, false);
