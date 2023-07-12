@@ -166,6 +166,9 @@ window.addEventListener("resize", onWindowResize, false);
 
 //translatePoints(90);
 
+
+document.body.appendChild(arButton);
+
 // Simulate click on another button to trigger ARButton click
 var triggerButton = document.getElementById('trigger-button');
 triggerButton.addEventListener('click', simulateARButtonClick);
