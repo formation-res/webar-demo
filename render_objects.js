@@ -140,9 +140,10 @@ function startCompass(){
     document.getElementById("testingBtn").textContent = "not iOS"
     isOriented = true;
   }
-  document.getElementById("start-btn").remove();
-  document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
-
+  if (isOriented) {
+    document.getElementById("start-btn").remove();
+    document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
+  }
 }
 
 function handleOrientation(e){
@@ -159,7 +160,6 @@ if (ARCount) {  //do stuff
 ARCount = 1;
 }
 }
-
 
 window.addEventListener("resize", onWindowResize, false);
 
