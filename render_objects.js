@@ -20,14 +20,25 @@ const colors = {
   AquaMarine: "rgb(22, 193, 248)",
   Black: "rgb(0, 0, 0)",
 };
-//console.log(colors);
-//console.log(colors["Blue"])
 
 var points_collection = JSON.parse(json_str);
-console.log(points_collection.length);
+//console.log(points_collection.length);
 
 let camera, scene, renderer;
 let mesh;
+
+function translatePoints(points, angle) {
+  for ( i = 0; i < points_collection.length ; i++) {
+      var x = points_collection[i].x
+      var y = points_collection[i].y
+      var radians = (Math.PI / 180) * angle
+      //set up the translation.
+      cos = Math.cos(radians)
+      sin = Math.sin(radians)
+      points_collection[i].x = (cos * x) + (sin * y )
+      points_collection[i].x = (cos * y) + (sin * x )
+    }
+}
 
 function init() {
   const container = document.createElement("div");
@@ -46,14 +57,7 @@ function init() {
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  renderer.xr.enabled = true;
-  container.appendChild(renderer.domElement);
-
-  var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-  light.position.set(0.5, 1, 0.25);
-  scene.add(light);
-
-  renderer.xr.enabled = true; // New!
+  renderer.xr.enabled = true; 
   container.appendChild(renderer.domElement);
 
   var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
@@ -63,11 +67,10 @@ function init() {
   for (var i = 0; i < points_collection.length; i++) {
     var real_color = "";
     if (colors[points_collection[i].color] != null) {
-      console.log(colors[points_collection[i].color]);
       real_color = colors[points_collection[i].color];
-      console.log(real_color);
+      //console.log(real_color);
     } else {
-      real_color = "rgb(0, 0, 0)";
+      real_color = "rgb(0, 0, 0)"; //black by default
     }
 
     const geometry = new THREE.IcosahedronGeometry(0.1, 1);
@@ -103,25 +106,29 @@ function render() {
   renderer.render(scene, camera);
 }
 
+/*  Requesting permission to use device orientation */
 var heading = 0;
+var isOriented = false;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
+if (! isIOS ) { //if not iOS, then we can just do this automatically.
+  window.addEventListener("absolutedeviceorientation", handleOrientation, true);
+  document.body.appendChild(ARButton.createButton(renderer));
+}
 
 startBtn.addEventListener('click', startCompass);
-
 function startCompass(){
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
+              document.body.appendChild(ARButton.createButton(renderer));
             } else {
               alert("has to be allowed!");
             }
           })
           .catch(() => alert("not supported"));
-	} else {
-		window.addEventListener("absolutedeviceorientation", handleOrientation, true);
 	}
 }
 
@@ -134,5 +141,4 @@ function handleOrientation(e){
 init();
 animate();
 
-document.body.appendChild(ARButton.createButton(renderer));
 window.addEventListener("resize", onWindowResize, false);
