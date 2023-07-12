@@ -116,6 +116,8 @@ function render() {
 
 /*  Requesting permission to use device orientation */
 var heading = -1;
+var isOriented = false;
+var ARCount = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 
@@ -127,6 +129,7 @@ function startCompass(){
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
               document.getElementById("testingBtn").textContent = "iOS"
+              isOriented = true;
             } else {
               alert("has to be allowed!");
             }
@@ -135,8 +138,11 @@ function startCompass(){
 	} else {
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
+    isOriented = true;
   }
   document.getElementById("start-btn").remove();
+  document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
+
 }
 
 function handleOrientation(e){
@@ -145,22 +151,15 @@ function handleOrientation(e){
 }
 
 function handleARB(){
-document.getElementById("testingBtn").textContent = heading
+if (ARCount) {  //do stuff
+  translatePoints(heading);
+  init();
+  animate();
+} else {    //do nothing
+ARCount = 1;
 }
-const generateBtn = document.querySelector(".generatePoints");
-generateBtn.addEventListener('click', handleGeneratePoints)
+}
 
-function handleGeneratePoints() {
-  if (heading >= 0) {
-    translatePoints(heading)
-    init()
-    animate()
-    document.body.appendChild(ARButton.createButton(renderer), addEventListener('click', handleARB));
-    document.getElementById("generateBtn").remove()
-  } else {
-    alert("Must activate device orientation!")
-  }
-}
 
 window.addEventListener("resize", onWindowResize, false);
 
