@@ -166,8 +166,9 @@ function handleGeneratePoints() {
     init()
     animate()
 
-    var arButton = new ARButton(renderer);
-    document.body.appendChild(arButton.domElement);
+    var arButton = ARButton.createButton(renderer);
+    document.body.appendChild(arButton);
+
     // Simulate a click on the ARButton
     //simulateClick(arButton);
     
