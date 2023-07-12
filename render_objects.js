@@ -1,4 +1,5 @@
 import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
+var arButton = ARButton.createButton(renderer);
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",
@@ -26,7 +27,6 @@ var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
 let mesh;
-var arButton = ARButton.createButton(renderer);
 
 function translatePoints(angle) {
   for (var i = 0; i < points_collection.length; i++) {
@@ -145,9 +145,6 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
-//points generation and session start
-
-
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
 
@@ -156,31 +153,15 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
+    document.body.appendChild(arButton)
     document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
   }
-}
+} 
+
+
 
 window.addEventListener("resize", onWindowResize, false);
 
 //translatePoints(90);
-
-
-document.body.appendChild(arButton);
-
-// Simulate click on another button to trigger ARButton click
-var triggerButton = document.getElementById('trigger-button');
-triggerButton.addEventListener('click', simulateARButtonClick);
-
-//only works when heading is defined.
-function simulateARButtonClick() {
-  if (heading >= 0) {
-    translatePoints(heading)
-    init()
-    animate()
-    arButton.dispatchEvent(new MouseEvent('click'));
-  } else {
-    alert("Must activate device orientation!")
-  }
-}
