@@ -107,13 +107,8 @@ function render() {
 
 /*  Requesting permission to use device orientation */
 var heading = 0;
-var isOriented = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
-if (!isIOS) { //if not iOS, then we can just do this automatically.
-  window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-  document.getElementById("testingBtn").textContent = "not iOS"
-}
 
 startBtn.addEventListener('click', startCompass);
 function startCompass(){
@@ -128,23 +123,27 @@ function startCompass(){
             }
           })
           .catch(() => alert("not supported"));
-	}
+	} else {
+    window.addEventListener("absolutedeviceorientation", handleOrientation, true);
+    document.getElementById("testingBtn").textContent = "not iOS"
+  }
+  init()
+  animate()
+  document.body.appendChild(ARButton.createButton(renderer));
 }
 
 function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
-if ( isOriented == 0) {
-translatePoints(points_collection, heading);
-init();
-animate();
-document.getElementById("testingBtn").textContent = "THIS WORKS"
-isOriented = 1;
-}
 }
 
-//run this AFTER configuring the orienation (must use a button because of iOS)
+// const generateBtn = document.getElementById("generatePoints");
+// generateBtn.addEventListener('click', handleGenerate())
 
-document.body.appendChild(ARButton.createButton(renderer));
+// function handleGenerate() {
+//   init();
+//   animate();
+// }
+
 
 window.addEventListener("resize", onWindowResize, false);
