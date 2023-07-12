@@ -138,13 +138,13 @@ if ( isOriented == 0) {
 translatePoints(points_collection, heading);
 init();
 animate();
-document.body.appendChild(ARButton.createButton(renderer));
+document.getElementById("testingBtn").textContent = "THIS WORKS"
 isOriented = 1;
 }
 }
 
 //run this AFTER configuring the orienation (must use a button because of iOS)
 
-
+document.body.appendChild(ARButton.createButton(renderer));
 
 window.addEventListener("resize", onWindowResize, false);
