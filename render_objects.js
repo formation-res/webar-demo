@@ -38,7 +38,7 @@ function translatePoints(angle) {
     var sin = Math.sin(radians);
 
     var newX = (cos * x) + (sin * y);
-    var newY = (cos * y) + (sin * x);
+    var newY = (cos * y) - (sin * x);
     points_collection[i].x = newX;
     points_collection[i].y = newY;
 
@@ -153,6 +153,7 @@ function handleGeneratePoints() {
     init()
     animate()
     document.body.appendChild(ARButton.createButton(renderer));
+    document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
   }
@@ -160,5 +161,5 @@ function handleGeneratePoints() {
 
 window.addEventListener("resize", onWindowResize, false);
 
-//translatePoints(30);
+//translatePoints(90);
 
