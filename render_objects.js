@@ -1,5 +1,5 @@
 import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
-var arButton = ARButton.createButton(renderer);
+
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",
@@ -27,6 +27,7 @@ var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
 let mesh;
+
 
 function translatePoints(angle) {
   for (var i = 0; i < points_collection.length; i++) {
@@ -147,6 +148,8 @@ function handleOrientation(e){
 
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
+
+var arButton = ARButton.createButton(renderer);
 
 function handleGeneratePoints() {
   if (heading >= 0) {
