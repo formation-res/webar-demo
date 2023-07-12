@@ -127,7 +127,7 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
-
+  document.getElementById("start-btn").remove();
 }
 
 function handleOrientation(e){
@@ -140,7 +140,7 @@ generateBtn.addEventListener('click', handleGeneratePoints)
 
 function handleGeneratePoints() {
   if (heading >= 0) {
-    //translatePoints(heading)
+    translatePoints(heading)
     init()
     animate()
     document.body.appendChild(ARButton.createButton(renderer));
