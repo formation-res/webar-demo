@@ -112,7 +112,6 @@ const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 if (!isIOS) { //if not iOS, then we can just do this automatically.
   window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-  document.body.appendChild(ARButton.createButton(renderer));
   document.getElementById("testingBtn").textContent = "not iOS"
 }
 
@@ -123,7 +122,6 @@ function startCompass(){
 		.then((response) => {
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
-              document.body.appendChild(ARButton.createButton(renderer));
               document.getElementById("testingBtn").textContent = "iOS"
             } else {
               alert("has to be allowed!");
@@ -140,6 +138,7 @@ if ( isOriented == 0) {
 translatePoints(points_collection, heading);
 init();
 animate();
+document.body.appendChild(ARButton.createButton(renderer));
 isOriented = 1;
 }
 }
