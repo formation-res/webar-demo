@@ -111,7 +111,7 @@ function render() {
 
 /*  Requesting permission to use device orientation */
 var heading = 0;
-var isOriented = false;
+var isOriented = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 
@@ -141,13 +141,12 @@ function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
  //only run this the first time the heading is calculated. 
- if (! isOriented ) {
-   translatePoints(points_collection, heading);
-   init();
-   animate();
-   document.body.appendChild(ARButton.createButton(renderer));
-   isOriented = true;
- }
+
 }
+
+translatePoints(points_collection, heading);
+init();
+animate();
+document.body.appendChild(ARButton.createButton(renderer));
 
 window.addEventListener("resize", onWindowResize, false);
