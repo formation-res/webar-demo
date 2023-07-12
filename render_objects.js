@@ -144,7 +144,7 @@ function handleOrientation(e){
 
 }
 
-translatePoints(points_collection, heading);
+//translatePoints(points_collection, heading);
 init();
 animate();
 document.body.appendChild(ARButton.createButton(renderer));
