@@ -148,8 +148,6 @@ function handleOrientation(e){
 
 //points generation and session start
 
-var arButton = ARButton.createButton(renderer);
-
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
 
@@ -158,8 +156,6 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
-    document.body.appendChild(arButton);
-    
     document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
@@ -171,7 +167,9 @@ window.addEventListener("resize", onWindowResize, false);
 //translatePoints(90);
 
 
+var arButton = ARButton.createButton(renderer);
 
+// Simulate click on ARButton
 function simulateARButtonClick() {
   arButton.dispatchEvent(new MouseEvent('click'));
 }
