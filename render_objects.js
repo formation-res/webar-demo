@@ -27,7 +27,7 @@ var points_collection = JSON.parse(json_str);
 let camera, scene, renderer;
 let mesh;
 
-function translatePoints(points, angle) {
+function translatePoints(angle) {
   for ( i = 0; i < points_collection.length ; i++) {
       var x = points_collection[i].x
       var y = points_collection[i].y
@@ -127,6 +127,7 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
+  translatePoints(heading)
   init()
   animate()
   document.body.appendChild(ARButton.createButton(renderer));
