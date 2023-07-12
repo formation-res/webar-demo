@@ -144,6 +144,19 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
+
+
+//points generation and session start
+
+function simulateClick(element) {
+  var event = new MouseEvent('click', {
+    bubbles: true,
+    cancelable: true,
+    view: window
+  });
+  element.dispatchEvent(event);
+}
+
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
 
@@ -152,7 +165,12 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
-    document.body.appendChild(ARButton.createButton(renderer));
+
+    var arButton = new ARButton(renderer);
+    document.body.appendChild(arButton.domElement);
+    // Simulate a click on the ARButton
+    simulateClick(arButton);
+    
     document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
