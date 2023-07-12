@@ -29,7 +29,7 @@ let camera, scene, renderer;
 let mesh;
 
 function translatePoints(points, angle) {
-  for ( let i = 0; i < points_collection.length ; i++) {
+  for ( var i = 0; i < points_collection.length ; i++) {
       var x = points_collection[i].x
       var y = points_collection[i].y
       var radians = (Math.PI / 180) * angle
@@ -114,11 +114,6 @@ var heading = 0;
 var isOriented = false;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
-if (!isIOS) { //if not iOS, then we can just do this automatically.
-  window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-  document.body.appendChild(ARButton.createButton(renderer));
-  document.getElementById("testingBtn").textContent = "not iOS"
-}
 
 startBtn.addEventListener('click', startCompass);
 function startCompass(){
@@ -127,14 +122,16 @@ function startCompass(){
 		.then((response) => {
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
-              document.body.appendChild(ARButton.createButton(renderer));
               document.getElementById("testingBtn").textContent = "iOS"
             } else {
               alert("has to be allowed!");
             }
           })
           .catch(() => alert("not supported"));
-	}
+	} else {  //not iOS
+    window.addEventListener("absolutedeviceorientation", handleOrientation, true);
+    document.getElementById("testingBtn").textContent = "not iOS"
+  }
 }
 
 function handleOrientation(e){
@@ -145,6 +142,7 @@ function handleOrientation(e){
    translatePoints(points_collection, heading);
    init();
    animate();
+   document.body.appendChild(ARButton.createButton(renderer));
    isOriented = true;
  }
 }
