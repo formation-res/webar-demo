@@ -117,6 +117,7 @@ const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userA
 
 startBtn.addEventListener('click', startCompass);
 function startCompass(){
+  document.getElementById("testingBtn").textContent = "clicked"
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {
