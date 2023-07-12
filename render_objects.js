@@ -39,7 +39,6 @@ function translatePoints(points, angle) {
       points_collection[i].x = (cos * y) + (sin * x )
     }
 }
-
 function init() {
   const container = document.createElement("div");
   document.body.appendChild(container);
@@ -111,9 +110,10 @@ var heading = 0;
 var isOriented = false;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
-if (! isIOS ) { //if not iOS, then we can just do this automatically.
+if (!isIOS) { //if not iOS, then we can just do this automatically.
   window.addEventListener("absolutedeviceorientation", handleOrientation, true);
   document.body.appendChild(ARButton.createButton(renderer));
+  document.getElementById("testingBtn").textContent = "not iOS"
 }
 
 startBtn.addEventListener('click', startCompass);
@@ -124,6 +124,7 @@ function startCompass(){
             if (response === "granted") {
               window.addEventListener("deviceorientation", handleOrientation, true);
               document.body.appendChild(ARButton.createButton(renderer));
+              document.getElementById("testingBtn").textContent = "iOS"
             } else {
               alert("has to be allowed!");
             }
