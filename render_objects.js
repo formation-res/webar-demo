@@ -158,9 +158,7 @@ function handleGeneratePoints() {
   } else {
     alert("Must activate device orientation!")
   }
-} 
-
-
+}
 
 window.addEventListener("resize", onWindowResize, false);
 
