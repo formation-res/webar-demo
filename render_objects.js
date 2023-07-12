@@ -145,18 +145,8 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
-
-
 //points generation and session start
 
-function simulateClick(element) {
-  var event = new MouseEvent('click', {
-    bubbles: true,
-    cancelable: true,
-    view: window
-  });
-  element.dispatchEvent(event);
-}
 
 const generateBtn = document.querySelector(".generatePoints");
 generateBtn.addEventListener('click', handleGeneratePoints)
@@ -166,11 +156,6 @@ function handleGeneratePoints() {
     translatePoints(heading)
     init()
     animate()
-    document.body.appendChild(arButton);
-
-    // Simulate a click on the ARButton
-    simulateClick(arButton);
-    
     document.getElementById("generateBtn").remove()
   } else {
     alert("Must activate device orientation!")
@@ -181,14 +166,18 @@ window.addEventListener("resize", onWindowResize, false);
 
 //translatePoints(90);
 
-
-
-
-
-function simulateARButtonClick() {
-  arButton.dispatchEvent(new MouseEvent('click'));
-}
-
 // Simulate click on another button to trigger ARButton click
 var triggerButton = document.getElementById('trigger-button');
 triggerButton.addEventListener('click', simulateARButtonClick);
+
+//only works when heading is defined.
+function simulateARButtonClick() {
+  if (heading >= 0) {
+    translatePoints(heading)
+    init()
+    animate()
+    arButton.dispatchEvent(new MouseEvent('click'));
+  } else {
+    alert("Must activate device orientation!")
+  }
+}
