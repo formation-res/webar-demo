@@ -106,7 +106,7 @@ function render() {
 }
 
 /*  Requesting permission to use device orientation */
-var heading = 0;
+var heading = -1;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 
@@ -127,10 +127,7 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
-  translatePoints(heading)
-  init()
-  animate()
-  document.body.appendChild(ARButton.createButton(renderer));
+
 }
 
 function handleOrientation(e){
@@ -138,13 +135,19 @@ function handleOrientation(e){
  document.getElementById("headingBtn").textContent = heading;
 }
 
-// const generateBtn = document.getElementById("generatePoints");
-// generateBtn.addEventListener('click', handleGenerate())
+const generateBtn = document.getElementById("generatePoints");
+generateBtn.addEventListener('click', handleGenerate())
 
-// function handleGenerate() {
-//   init();
-//   animate();
-// }
+function handleGenerate() {
+  if (heading >= 0) {
+    //translatePoints(heading)
+    init()
+    animate()
+    document.body.appendChild(ARButton.createButton(renderer));
+  } else {
+    alert("Must activate device orientation!")
+  }
+}
 
 
 window.addEventListener("resize", onWindowResize, false);
