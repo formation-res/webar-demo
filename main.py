@@ -1,7 +1,5 @@
-# parses the data in the spreadsheet.
-# yields the filtered corrdinates that meet the criteria, and stores them into a list.
-
 import geogeometry
+import csv
 import sys, json
 import numpy as np
 from vincenty import vincenty
@@ -82,8 +80,23 @@ def execute_json(point_collection_in_json: list):
     print("var json_str = '{}' ".format(json_obj) )
 
 
+def get_titles():
+    """
+    Retreive the titles for filtering.
+    """
+    with open('points.csv', 'r') as file_read:
+        reader = csv.reader(file_read)
+        content = []
+        for row in reader:
+            if row[5] not in content:
+                content.append(row[5])
+        sys.stdout = open('titles.js', 'w')
+        content_obj = json.dumps(content)
+        print("var content_str = '{}' ".format(content_obj) )
+
+
 if __name__ == "__main__":
     point_collection_in_json = execute()
     print(f'number of points: {len(point_collection_in_json)}')
-
     execute_json(point_collection_in_json)
+    get_titles()

@@ -1,5 +1,56 @@
 import { ARButton } from 'https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js';
 
+// filtering code:
+let clickedItem = null;
+var titles = JSON.parse(content_str)
+
+const list = titles
+const output = document.querySelector(".output");
+const search = document.querySelector(".filter-input");
+
+window.addEventListener("DOMContentLoaded", loadList);
+search.addEventListener("input", filter);
+
+function loadList() {
+    let temp = `<ul class="list-items">`;
+    list.forEach((item) => {
+        temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item}</a> </li>`;
+    });
+    temp += `</ul>`;
+    output.innerHTML = temp;
+    output.addEventListener("click", handleItemClick);
+}
+
+function filter(e) {
+    let temp = '';
+    const result  = list.filter(item=> item.toLowerCase().includes(e.target.value.toLowerCase()));
+    if(result.length>0){
+        temp = `<ul class="list-items">`;
+        result.forEach((item) => {
+            temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item}</a> </li>`;
+        });
+        temp += `</ul>`;
+    }else{
+        temp =`<div class="no-item"> No Item Found </div>`;
+    }
+    output.innerHTML =temp;
+    output.addEventListener("click", handleItemClick);
+}
+
+function handleItemClick(event) {
+	clickedItem = event.target.textContent;
+    console.log(`Clicked item: ${clickedItem}`);
+	var container = document.querySelector('.container');
+    if (container) {
+        container.remove();
+    }
+	init();
+	animate();
+}
+
+
+
+// web ar code:
 const colors = {
 "LightBlueAlt":"rgb(67, 162, 218)",
 "Red":"rgb(255, 39, 39)",
@@ -21,25 +72,17 @@ const colors = {
 "Black":"rgb(0, 0, 0)",
 }
 
-console.log(colors)
-//console.log(colors["Blue"])
-
 var points_collection = JSON.parse(json_str)
-console.log(points_collection.length)
-//
-
 let camera, scene, renderer;
 let mesh;
 
-init();
-animate();
-
 function init() {
+	console.log(`Inside web ar: ${clickedItem}`);
+
 	const container = document.createElement('div');
 	document.body.appendChild(container);
 
 	scene = new THREE.Scene();
-
 	camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
 
 	renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -52,59 +95,48 @@ function init() {
 	var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
 	light.position.set(0.5, 1, 0.25);
 	scene.add(light);
-
-			renderer.xr.enabled = true; // New!
-			container.appendChild(renderer.domElement);
-
-			var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
-			light.position.set(0.5, 1, 0.25);
-			scene.add(light);
       
-      
-      for (var i = 0; i <points_collection.length ;i++) {
-        var real_color = ""
-        if (colors[points_collection[i].color] != null) {
-            console.log(colors[points_collection[i].color])
-            real_color = colors[points_collection[i].color]
-            console.log(real_color)
-        }
-        else {
-            real_color = "rgb(0, 0, 0)"
-        }
+	for (var i = 0; i <points_collection.length ;i++) {
+		var real_color = ""
+		console.log(points_collection[i].title.trim() == clickedItem.trim());
 
-        const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-        const material = new THREE.MeshPhongMaterial({
-        color      :  new THREE.Color(real_color),
-        shininess  :  6,
-        flatShading:  true,
-        transparent: 1,
-        opacity    : 0.8
-      });
+		if (points_collection[i].title.trim() == clickedItem.trim()) {
+			if (colors[points_collection[i].color] != null) {
+				real_color = colors[points_collection[i].color]
+			}
+			else {
+				real_color = "rgb(0, 0, 0)"
+			}
 
-        mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set((points_collection[i].x * 1), 0, (points_collection[i].y * 1));
-        scene.add(mesh);
+			const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+			const material = new THREE.MeshPhongMaterial({
+				color      :  new THREE.Color(real_color),
+				shininess  :  6,
+				flatShading:  true,
+				transparent: 1,
+				opacity    : 0.8
+			});
 
-        console.log(points_collection[i].x * 1)
-      }
-      
-
-			document.body.appendChild(ARButton.createButton(renderer));
- 
-			window.addEventListener('resize', onWindowResize, false);
+			mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set((points_collection[i].x * 1), 0, (points_collection[i].y * 1));
+			scene.add(mesh);
 		}
+	}
+	
+	document.body.appendChild(ARButton.createButton(renderer));
+	window.addEventListener('resize', onWindowResize, false);
+}
 
-		function onWindowResize() {
-			camera.aspect = window.innerWidth / window.innerHeight;
-			camera.updateProjectionMatrix();
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize(window.innerWidth, window.innerHeight);
+}
 
-			renderer.setSize(window.innerWidth, window.innerHeight);
-		}
+function animate() {
+	renderer.setAnimationLoop(render);
+}
 
-		function animate() {
-			renderer.setAnimationLoop(render);
-		}
-
-		function render() {      
-			renderer.render(scene, camera);
-		}
+function render() {      
+	renderer.render(scene, camera);
+}
