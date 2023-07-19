@@ -1,3 +1,13 @@
+var points_collection = JSON.parse(json_str);
+let camera, scene, renderer;
+let mesh;
+
+var heading = -1;
+const startBtn = document.querySelector(".start-btn");
+const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
+window.addEventListener("resize", onWindowResize, false);
+startBtn.addEventListener('click', startCompass);
+
 class ARButton {
 
 	static createButton( renderer, sessionInit = {} ) {
@@ -59,7 +69,6 @@ class ARButton {
 
 				currentSession = session;
 
-        alert("session started!")
 
 			}
 
@@ -98,15 +107,12 @@ class ARButton {
 
 				if ( currentSession === null ) {
 
+          //before starting the session, create all the points.
+          createPoints(heading);
+
+          alert("points generated?");
+
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
-					
-//this button can only be pressed once we have gotten a heading.
-          if (heading >= 0) {
-          translatePoints(heading)
-          }
-          else {
-            alert("error! orientation has not yet been allowed")
-          }
 
 				} else {
 
@@ -224,25 +230,41 @@ const colors = {
   Black: "rgb(0, 0, 0)",
 };
 
-var points_collection = JSON.parse(json_str);
-//console.log(points_collection.length);
+function createPoints(angle) {
+  for (var i = 0; i < points_collection.length; i++) {
 
-let camera, scene, renderer;
-let mesh;
+    //get the color
+    var real_color = "";
+    if (colors[points_collection[i].color] != null) { real_color = colors[points_collection[i].color]; } 
+    else  { real_color = "rgb(0, 0, 0)"; }
 
+    const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+    const material = new THREE.MeshPhongMaterial
+    ({
+      color: new THREE.Color(real_color),
+      shininess: 6,
+      flatShading: true,
+      transparent: 1,
+      opacity: 0.8,
+    });
 
-function translatePoints(points, angle) {
-  for ( i = 0; i < points_collection.length ; i++) {
-      var x = points_collection[i].x
-      var y = points_collection[i].y
-      var radians = (Math.PI / 180) * angle
-      //set up the translation.
-      cos = Math.cos(radians)
-      sin = Math.sin(radians)
-      points_collection[i].x = (cos * x) + (sin * y )
-      points_collection[i].x = (cos * y) + (sin * x )
+    //adjusted for the angle
+    var x = points_collection[i].x;
+    var y = points_collection[i].y;
+    var radians = (Math.PI / 180) * angle;
+    var cos = Math.cos(radians);
+    var sin = Math.sin(radians);
+    var newX = (cos * x) + (sin * y);
+    var newY = (cos * y) - (sin * x);
+
+    //create the points in the scene
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set( newX, newY);
+    scene.add(mesh)
+    console.log(points_collection[i].x * 1);
     }
 }
+
 function init() {
   const container = document.createElement("div");
   document.body.appendChild(container);
@@ -267,35 +289,8 @@ function init() {
   light.position.set(0.5, 1, 0.25);
   scene.add(light);
 
-  for (var i = 0; i < points_collection.length; i++) {
-    var real_color = "";
-    if (colors[points_collection[i].color] != null) {
-      real_color = colors[points_collection[i].color];
-      //console.log(real_color);
-    } else {
-      real_color = "rgb(0, 0, 0)"; //black by default
-    }
-
-    const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-    const material = new THREE.MeshPhongMaterial({
-      color: new THREE.Color(real_color),
-      shininess: 6,
-      flatShading: true,
-      transparent: 1,
-      opacity: 0.8,
-    });
-
-    mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(
-      points_collection[i].x * 1,
-      0,
-      points_collection[i].y * 1
-    );
-    scene.add(mesh);
-
-    console.log(points_collection[i].x * 1);
-  }
 }
+
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -309,12 +304,6 @@ function render() {
   renderer.render(scene, camera);
 }
 
-/*  Requesting permission to use device orientation */
-var heading = 0;
-const startBtn = document.querySelector(".start-btn");
-const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
-
-startBtn.addEventListener('click', startCompass);
 function startCompass(){
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
@@ -340,5 +329,3 @@ function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
 }
-
-window.addEventListener("resize", onWindowResize, false);
