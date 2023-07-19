@@ -1,4 +1,4 @@
-import ARButton from "./components/ar-button";
+import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",

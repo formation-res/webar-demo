@@ -195,4 +195,4 @@ class ARButton {
 
 }
 
-export default ARButton;
+export { ARButton };
