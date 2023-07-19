@@ -1,4 +1,4 @@
-import { ARButton } from "./components/ARButton";
+import { ARButton } from "./components/ARButton.js";
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",
