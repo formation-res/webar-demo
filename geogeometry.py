@@ -48,5 +48,5 @@ class GeoGeometry:
 
                     if row[0] == self.starting_id:
                         self.starting_id_info = (row[0], row[5], long, lat, row[10], row[17], row[24])
-                    else:
-                        yield (row[0], row[5], long, lat, row[10], row[17], row[24])
+                    
+                    yield (row[0], row[5], long, lat, row[10], row[17], row[24])

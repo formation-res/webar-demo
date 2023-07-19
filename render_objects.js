@@ -110,8 +110,6 @@ class ARButton {
           //before starting the session, create all the points.
           createPoints(heading);
 
-          alert("points generated?");
-
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 
 				} else {
@@ -261,7 +259,7 @@ function createPoints(angle) {
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set( newX, 0, newY);
     scene.add(mesh)
-    console.log(points_collection[i].x * 1);
+    
     }
 }
 
