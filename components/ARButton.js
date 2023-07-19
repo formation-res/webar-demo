@@ -99,7 +99,8 @@ class ARButton {
 				if ( currentSession === null ) {
 
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
-
+					alert("AR started!")
+					//could add the translation/processing here of the data points 
 				} else {
 
 					currentSession.end();
