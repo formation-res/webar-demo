@@ -256,15 +256,15 @@ function createPoints(angle) {
     var radians = (Math.PI / 180) * angle;
     var cos = Math.cos(radians);
     var sin = Math.sin(radians);
-    var newX = (cos * x) + (sin * y);
-    var newY = (cos * y) - (sin * x); //must be negative because -z = +y north
+    var newX = (cos * x) - (sin * y);
+    var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 
     //create the points in the scene. 
     /* 
     we want +z to correspond to +y axis of 2D
     */
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, - newY);
+    mesh.position.set( newX, 0, -newY);
     scene.add(mesh)
     
     }
