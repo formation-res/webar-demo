@@ -99,8 +99,17 @@ class ARButton {
 				if ( currentSession === null ) {
 
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
-					alert("AR started!")
-					//could add the translation/processing here of the data points 
+					
+					//this button can only be pressed once we have gotten a heading.
+          if (heading >= 0) {
+          translatePoints(heading)
+          init()
+          animate()
+          }
+          else {
+            alert("error! orientation has not yet been allowed")
+          }
+
 				} else {
 
 					currentSession.end();
@@ -324,8 +333,6 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
-  init()
-  animate()
   document.body.appendChild(ARButton.createButton(renderer));
 }
 
