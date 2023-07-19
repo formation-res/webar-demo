@@ -1,4 +1,4 @@
-import { ARButton } from "https://unpkg.com/three@0.126.0/examples/jsm/webxr/ARButton.js";
+import { ARButton } from "./components/ar-button"
 
 const colors = {
   LightBlueAlt: "rgb(67, 162, 218)",
@@ -88,7 +88,6 @@ function init() {
       points_collection[i].y * 1
     );
     scene.add(mesh);
-    mesh.position.
 
     console.log(points_collection[i].x * 1);
   }
@@ -131,11 +130,6 @@ function startCompass(){
   init()
   animate()
   document.body.appendChild(ARButton.createButton(renderer));
-  //ARButton.addEventListener("click", handleARClick);
-}
-
-function handleARClick(){
-  alert("worked!")
 }
 
 function handleOrientation(e){
