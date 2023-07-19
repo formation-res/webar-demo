@@ -27,26 +27,17 @@ var points_collection = JSON.parse(json_str);
 let camera, scene, renderer;
 let mesh;
 
-function translatePoints(angle) {
-  for (var i = 0; i < points_collection.length; i++) {
-    var x = points_collection[i].x;
-    var y = points_collection[i].y;
-    var radians = (Math.PI / 180) * angle;
-
-    console.log("radians: ", radians);
-    var cos = Math.cos(radians);
-    var sin = Math.sin(radians);
-
-    var newX = (cos * x) + (sin * y);
-    var newY = (cos * y) - (sin * x);
-    points_collection[i].x = newX;
-    points_collection[i].y = newY;
-
-    console.log("x before: ", x);
-    console.log("x after: ", newX);
-    console.log("y before: ", y);
-    console.log("y after: ", newY);
-  }
+function translatePoints(points, angle) {
+  for ( i = 0; i < points_collection.length ; i++) {
+      var x = points_collection[i].x
+      var y = points_collection[i].y
+      var radians = (Math.PI / 180) * angle
+      //set up the translation.
+      cos = Math.cos(radians)
+      sin = Math.sin(radians)
+      points_collection[i].x = (cos * x) + (sin * y )
+      points_collection[i].x = (cos * y) + (sin * x )
+    }
 }
 function init() {
   const container = document.createElement("div");
@@ -115,7 +106,7 @@ function render() {
 }
 
 /*  Requesting permission to use device orientation */
-var heading = -1;
+var heading = 0;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 
@@ -136,25 +127,14 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
-  document.getElementById("start-btn").remove();
+  init()
+  animate()
+  document.body.appendChild(ARButton.createButton(renderer));
 }
 
 function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
 }
+
 window.addEventListener("resize", onWindowResize, false);
-
-var arButton = ARButton.createButton(renderer);
-
-// Simulate click on ARButton
-function simulateARButtonClick() {
-  arButton.dispatchEvent(new MouseEvent('click'));
-}
-
-// Simulate click on another button to trigger ARButton click
-var triggerButton = document.getElementById('trigger-button');
-triggerButton.addEventListener('click', simulateARButtonClick);
-
-init()
-animate()
