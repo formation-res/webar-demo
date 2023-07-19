@@ -259,7 +259,7 @@ function createPoints(angle) {
 
     //create the points in the scene
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, newY);
+    mesh.position.set( newX, 0, newY);
     scene.add(mesh)
     console.log(points_collection[i].x * 1);
     }
