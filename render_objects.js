@@ -128,11 +128,10 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
-
   init()
   animate()
   document.body.appendChild(ARButton.createButton(renderer));
-  ARButton.addEventListener("click", handleARClick);
+  //ARButton.addEventListener("click", handleARClick);
 }
 
 function handleARClick(){
