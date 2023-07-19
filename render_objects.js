@@ -143,29 +143,7 @@ function handleOrientation(e){
  heading = e.webkitCompassHeading || Math.abs(e.alpha - 360);
  document.getElementById("headingBtn").textContent = heading;
 }
-
-
-
-//points generation and session start
-
-const generateBtn = document.querySelector(".generatePoints");
-generateBtn.addEventListener('click', handleGeneratePoints)
-
-function handleGeneratePoints() {
-  if (heading >= 0) {
-    translatePoints(heading)
-    init()
-    animate()
-    document.getElementById("generateBtn").remove()
-  } else {
-    alert("Must activate device orientation!")
-  }
-}
-
 window.addEventListener("resize", onWindowResize, false);
-
-//translatePoints(90);
-
 
 var arButton = ARButton.createButton(renderer);
 
@@ -177,3 +155,6 @@ function simulateARButtonClick() {
 // Simulate click on another button to trigger ARButton click
 var triggerButton = document.getElementById('trigger-button');
 triggerButton.addEventListener('click', simulateARButtonClick);
+
+init()
+animate()
