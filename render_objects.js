@@ -88,6 +88,7 @@ function init() {
       points_collection[i].y * 1
     );
     scene.add(mesh);
+    mesh.position.
 
     console.log(points_collection[i].x * 1);
   }
@@ -127,9 +128,15 @@ function startCompass(){
     window.addEventListener("absolutedeviceorientation", handleOrientation, true);
     document.getElementById("testingBtn").textContent = "not iOS"
   }
+
   init()
   animate()
   document.body.appendChild(ARButton.createButton(renderer));
+  ARButton.addEventListener("click", handleARClick);
+}
+
+function handleARClick(){
+  alert("worked!")
 }
 
 function handleOrientation(e){
