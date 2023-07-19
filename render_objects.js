@@ -264,7 +264,7 @@ function createPoints(angle) {
     we want +z to correspond to +y axis of 2D
     */
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( -newX, 0, newY);
+    mesh.position.set( x, 0, y);
     scene.add(mesh)
     
     }
