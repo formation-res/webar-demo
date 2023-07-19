@@ -54,7 +54,7 @@ def execute():
     Execute the program with customizable filter(s).
     """
     # starting point is an id. in this case, it will be the reception desk...
-    starting_id = '3m5thyVvZnMKukIqIrhYHQ'
+    starting_id = 'jvr95JW6MnnjR6HhfeAnRw'      # green "Install the App" in the office.
     filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 50}
 
     # generate a list of points we want to display with web ar:
