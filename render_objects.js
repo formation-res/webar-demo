@@ -5,6 +5,10 @@ let mesh;
 var heading = -1;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
+
+// if (!(isIOS)) {
+//   console.log
+// }
 window.addEventListener("resize", onWindowResize, false);
 startBtn.addEventListener('click', startCompass);
 
@@ -255,9 +259,12 @@ function createPoints(angle) {
     var newX = (cos * x) + (sin * y);
     var newY = (cos * y) - (sin * x);
 
-    //create the points in the scene
+    //create the points in the scene. 
+    /* 
+    we want +z to correspond to +y axis of 2D
+    */
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, newY);
+    mesh.position.set( -newX, 0, newY);
     scene.add(mesh)
     
     }
