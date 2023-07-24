@@ -1,10 +1,10 @@
 import { json_str } from "./icon_data.js";
 import { waypoint_path } from "./shortest_path.js";
 
-var points_collection = JSON.parse(json_str);
+var points = JSON.parse(json_str);
+var points_collection = points.filterPoints(waypoint_path);
 
 //now only the path shows up. 
-filterPoints(waypoint_path);
 console.log("points_collection: ", points_collection)
 
 let camera, scene, renderer;
@@ -117,17 +117,11 @@ class ARButton {
 
           //before starting the session, create all the points.
           createPoints(heading);
-
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
-
 				} else {
-
 					currentSession.end();
-
 				}
-
 			};
-
 		}
 
 		function disableButton() {
@@ -272,7 +266,7 @@ function createPoints(angle) {
 
 function filterPoints(points_list){
 	//filters points_collection so that only POIs along the path are displayed.
-	points_collection = points_collection.filter( (element) => points_list.indexOf(element) >= 0 )
+	points_collection.filter( (element) => points_list.indexOf(element) >= 0 )
 }
 
 function init() {

@@ -27,6 +27,7 @@ for (var i = 0; i < points_collection.length; i++)
         
     }
 
+
 export const waypoint_path = g.findShortestPath(points_collection[0].id, points_collection[4].id);
 console.log(waypoint_path)
 //obtain these by input. will use these to choose vertex1 and vertex2. 
