@@ -5,6 +5,7 @@ var points_collection = JSON.parse(json_str);
 
 //now only the path shows up. 
 filterPoints(waypoint_path);
+console.log("points_collection: ", points_collection)
 
 let camera, scene, renderer;
 let mesh;
