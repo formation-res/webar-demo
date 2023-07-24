@@ -272,7 +272,7 @@ function createPoints(angle) {
 
 function filterPoints(points_list){
 	//filters points_collection so that only POIs along the path are displayed.
-	points_collection.filter( (element) => points_list.indexOf(element) >= 0 )
+	points_collection = points_collection.filter( (element) => points_list.indexOf(element) >= 0 )
 }
 
 function init() {
