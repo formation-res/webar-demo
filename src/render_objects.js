@@ -1,4 +1,7 @@
+import { json_str } from "./icon_data.js";
 var points_collection = JSON.parse(json_str);
+// console.log(points_collection);
+
 let camera, scene, renderer;
 let mesh;
 

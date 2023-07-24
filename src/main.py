@@ -1,7 +1,7 @@
 # parses the data in the spreadsheet.
 # yields the filtered corrdinates that meet the criteria, and stores them into a list.
 
-import components.src.geogeometry as geogeometry
+import geogeometry as geogeometry
 import sys, json
 import numpy as np
 from vincenty import vincenty
@@ -56,7 +56,7 @@ def execute():
     # starting point is an id. in this case, it will be the reception desk...
     starting_id = 'b7nHb34SwJn3S5oXkEh0vQ'      # green "Install the App" in the office.
     # amOmzFhs9abwKYFV8owvoQ which is "More info about FORMATION" should be very close.
-    filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 50}
+    filter_criteria = {'title': None, 'id': None, 'category': "Desk", 'distance': 10}
 
     # generate a list of points we want to display with web ar:
     geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)
@@ -73,14 +73,14 @@ def execute_json(point_collection_in_json: list):
     Convert the list of dictionaries into json format to prepare these point for Web AR.
     """
     # file exporting to, w needed for WRITE:
-    sys.stdout = open('icon_data.js', 'w')
+    sys.stdout = open('./src/icon_data.js', 'w')
 
     # where points_collection is the dictionary; converts into json:
     json_obj = json.dumps(point_collection_in_json)
 
     # this is printed in icon_data.js --- it will overwrite every time,
     # we want to run this EVERY time the user changes what they are searching for:
-    print("var json_str = '{}' ".format(json_obj) )
+    print("export var json_str = '{}' ".format(json_obj) )
 
 
 if __name__ == "__main__":

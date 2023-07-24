@@ -4,6 +4,20 @@ import { WeightedGraph } from "./Classes/WeightedGraph.js"
         TEST CASES FOR THE WEIGHTEDGRAPH CLASS
 */
 
+
+let Waypoints = {};     //sample data
+Waypoints["point1"] = {name: "Bathroom", lat: 40, long: 50};
+Waypoints["point2"] = {name: "Door2", lat: 30, long: 40};
+Waypoints["point3"] = {name: "hallway 8", lat: 20, long: 30};
+Waypoints["point4"] = {name: "main entrance", lat: 10, long: 20};
+Waypoints["point5"] = {name: "emergency exit", lat: 0, long: 10};
+
+const g1 = new WeightedGraph();
+//create a graph with verticies of the waypoint IDs (unique)
+for (var key in Waypoints)   {g1.addVertex(key); }
+
+
+
 const graph = new WeightedGraph();
 const g = new WeightedGraph();
 

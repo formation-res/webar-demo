@@ -19,6 +19,7 @@ class PriorityQueue {
   }
 }
 
+
 // WeightedGraph class
 export class WeightedGraph {
   constructor() {
@@ -103,4 +104,4 @@ export class WeightedGraph {
     }
   }
 
-} //end graph class
+} //end WeightedGraph class

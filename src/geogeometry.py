@@ -3,7 +3,6 @@
 
 import csv
 
-
 class GeoGeometry:
     def __init__(self, starting_id: str, filter_criteria: dict):
         self.starting_id = starting_id  # origin
@@ -33,7 +32,7 @@ class GeoGeometry:
         A generator function to parse through each line of the csv file (the google spreadsheet with point/object information).
         The (id, title, long, lat, color, category, shape) is yielded for each row that meets the filter criteria.
         """
-        with open('points.csv', 'r') as file:
+        with open('./src/points.csv', 'r') as file:
             reader = csv.reader(file)
             for row in reader:
                 if self.filter(row) or row[0] == self.starting_id:
