@@ -55,7 +55,7 @@ def execute():
     """
     # starting point is an id. in this case, it will be the reception desk...
     starting_id = 'b7nHb34SwJn3S5oXkEh0vQ'      # green "Install the App" in the office.
-    # amOmzFhs9abwKYFV8owvoQ which is "More info about FORMATION" should be very close.
+    # ending_id = ''
     filter_criteria = {'title': None, 'id': None, 'category': "Desk", 'distance': 10}
 
     # generate a list of points we want to display with web ar:
@@ -80,6 +80,7 @@ def execute_json(point_collection_in_json: list):
 
     # this is printed in icon_data.js --- it will overwrite every time,
     # we want to run this EVERY time the user changes what they are searching for:
+    print("// id, title. long, lat, color, category, shape, distance, angle, x, y")
     print("export var json_str = '{}' ".format(json_obj) )
 
 

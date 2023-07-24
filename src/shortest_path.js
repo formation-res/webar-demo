@@ -1,27 +1,36 @@
-import { WeightedGraph } from "./Classes/WeightedGraph.js"
+import { WeightedGraph, distanceBetweenPoints } from "./Classes/WeightedGraph.js"
 import { json_str } from "./icon_data.js";
 
+const startingPOI = 'b7nHb34SwJn3S5oXkEh0vQ';       //install formation app
+const destinationPOI = 'UGe5iM8v-j1LDaJSuXK3Jw';    //coffee machine
+
 var points_collection = JSON.parse(json_str);
-/* 
-Do I want to store the graphs in a database? If it was integrated into Formation, they would create a new database subset for the waypoints.
+const g = new WeightedGraph();
 
-Like this, how do we search for waypoints? we have a dictionary to translate string ID --> index
-*/
+let Waypoints = {};     // NOTE : : : icon_data will NOT be used for the waypoints in real version.
+for (var i = 0; i < points_collection.length; i++) 
+    { 
+        Waypoints[points_collection[i].id] = {title: points_collection[i].title, lat: points_collection[i].lat, long: points_collection[i].long, x: points_collection[i].x, y: points_collection[i].y};
+        g.addVertex(points_collection[i].id)
+    }
 
-/*  Waypoints is a list of dictionaries, where each Waypoint represents a vertex in the graph.
-- the ID is the name of the vertex in the WeightedGraph
-- coordinates, name, and other properties can be obtained by this reference.
-- every time a waypoint is added, we add it to Waypoints[], and we can then add it to the WeightedGraph, G, as well.
-*/
+    //make simple graph.
+    for (var i = 0; i < points_collection.length; i++) 
+    { 
+        for (var j = 0; j < 1 + Math.floor(Math.random()* (points_collection.length/3)) ; j++)  
+        {
+            // adds edge, for each vertex, with 1-2 other random verticies.
+            let randomNum = Math.floor( Math.random() * points_collection.length );
+            let distance = distanceBetweenPoints(points_collection[i].x, points_collection[i].y, points_collection[randomNum].x, points_collection[randomNum].y );
+            g.addEdge(points_collection[i].id, points_collection[randomNum].id, distance);
+        }
+        
+    }
 
+export const waypoint_path = g.findShortestPath(points_collection[0].id, points_collection[4].id);
+console.log(waypoint_path)
+//obtain these by input. will use these to choose vertex1 and vertex2. 
+//for now make it choose the closest one. 
 
-let Waypoints = {};
-
-for (var i = 0; i < points_collection.length; i++) { 
-    Waypoints[points_collection[i].id] = {title: points_collection[i].title, lat: points_collection[i].lat, long: points_collection[i].long};
-}
-
-// console.log(Waypoints);
- 
-//create graph based on input data.
-
+//this is what will be displayed on the AR screen.
+const complete_path = waypoint_path + destinationPOI;

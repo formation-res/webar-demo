@@ -1,6 +1,10 @@
 import { json_str } from "./icon_data.js";
+import { waypoint_path } from "./shortest_path.js";
+
 var points_collection = JSON.parse(json_str);
-// console.log(points_collection);
+
+//now only the path shows up. 
+filterPoints(waypoint_path);
 
 let camera, scene, renderer;
 let mesh;
@@ -263,6 +267,11 @@ function createPoints(angle) {
     scene.add(mesh)
     
     }
+}
+
+function filterPoints(points_list){
+	//filters points_collection so that only POIs along the path are displayed.
+	points_collection.filter( (element) => points_list.indexOf(element) >= 0 )
 }
 
 function init() {
