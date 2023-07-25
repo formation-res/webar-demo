@@ -1,11 +1,11 @@
 import { json_str } from "./icon_data.js";
 import { waypoint_path } from "./shortest_path.js";
 
-var points = JSON.parse(json_str);
-var points_collection = points.filterPoints(waypoint_path);
+var points_collection = JSON.parse(json_str);
+points_collection = filterPoints();
 
 //now only the path shows up. 
-console.log("points_collection: ", points_collection)
+console.log("points_collection: ", points_collection);
 
 let camera, scene, renderer;
 let mesh;
@@ -264,9 +264,21 @@ function createPoints(angle) {
     }
 }
 
-function filterPoints(points_list){
+function filterPoints(){
 	//filters points_collection so that only POIs along the path are displayed.
-	points_collection.filter( (element) => points_list.indexOf(element) >= 0 )
+	let newArr = [];
+	let waypoint_clone= [];
+	newArr = points_collection.filter( (element) => waypoint_path.indexOf(element.id) >= 0 )
+	
+	//to correct the order
+	for (var i = 0; i< waypoint_path.length; i++) {
+		for (var j = 0; j < newArr.length; j++) {
+			if (newArr[j].id === waypoint_path[i]) {
+				waypoint_clone[i] = newArr[j];
+			}
+		}
+	}
+	return waypoint_clone;
 }
 
 function init() {

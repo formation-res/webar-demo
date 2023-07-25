@@ -102,7 +102,7 @@ export class WeightedGraph {
 
       // Calculate and display the total distance of the path
       const totalDistance = distances[target];
-      console.log('Total distance:', totalDistance);
+      //console.log('Total distance:', totalDistance);
 
       return path;
       }
