@@ -5,6 +5,15 @@ import geogeometry as geogeometry
 import sys, json
 import numpy as np
 from vincenty import vincenty
+import json
+
+#extract starting and ending ID from config JSON
+with open('./config.json') as config_file:
+    config_data = json.load(config_file)
+
+starting_id = config_data['STARTING_POI']
+destination_id = config_data['DESTINATION_POI']
+filter_criteria = config_data['FILTER_CRITERIA']
 
 
 def find_angle(p1, p2):
@@ -50,13 +59,6 @@ def create_point_collection_in_json(geo_obj, points_collection):
 
 
 def execute():
-    """
-    Execute the program with customizable filter(s).
-    """
-    # starting point is an id. in this case, it will be the reception desk...
-    starting_id = 'b7nHb34SwJn3S5oXkEh0vQ'      # green "Install the App" in the office.
-    # ending_id = ''
-    filter_criteria = {'title': None, 'id': None, 'category': "Desk", 'distance': 10}
 
     # generate a list of points we want to display with web ar:
     geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)

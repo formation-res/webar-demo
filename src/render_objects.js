@@ -1,11 +1,9 @@
-import { json_str } from "./icon_data.js";
+import { json_str } from "./data/icon_data.js";
 import { waypoint_path } from "./shortest_path.js";
 
 var points_collection = JSON.parse(json_str);
-points_collection = filterPoints();
 
-//now only the path shows up. 
-console.log("points_collection: ", points_collection);
+// console.log("points_collection: ", points_collection);
 
 let camera, scene, renderer;
 let mesh;

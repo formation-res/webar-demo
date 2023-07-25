@@ -1,4 +1,4 @@
-import { WeightedGraph } from "./Classes/WeightedGraph.js"
+import { WeightedGraph } from "./WeightedGraph.js"
 
 /* 
         TEST CASES FOR THE WEIGHTEDGRAPH CLASS
