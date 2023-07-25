@@ -2,7 +2,8 @@ import { WeightedGraph } from "./Classes/WeightedGraph.js"
 import { json_str } from "./data/icon_data.js";
 import { waypoints_raw } from "./data/waypoints_dump.js";
 import { inverseVincentyDistance, calculateBearing, degreesToRadians} from "./Classes/Geo.js";
-import { readFileSync } from 'fs';
+
+// import { readFileSync } from 'fs';               TESTING USE THIS
 
 const hits = waypoints_raw.data.search.hits;
 var points_collection = JSON.parse(json_str);
@@ -25,10 +26,10 @@ if (typeof window !== 'undefined') {     // Code is running in a browser environ
 console.log(starting_id, destination_id)
 
   } else if (typeof global !== 'undefined')     // Code is running in Node.js WORKS
-      {
-        const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));
-        Tstarting_id = jsonData.STARTING_POI;
-        Tdestination_id = jsonData.DESTINATION_POI;
+      { 
+        // const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));             TESTING USE THIS
+        // Tstarting_id = jsonData.STARTING_POI;
+        // Tdestination_id = jsonData.DESTINATION_POI;
       } 
   else { exit(1); }
 
