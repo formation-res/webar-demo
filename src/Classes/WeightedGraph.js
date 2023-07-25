@@ -144,3 +144,14 @@ export function distanceBetweenPoints(x1, y1, x2, y2) {
   const distance = Math.sqrt(distanceSquared);
   return distance;
 }
+
+export function findAngle(p1,p2) {
+   /*       Find the angle between two points.       */
+  const distance_x = p2[0] - p1[0];
+  const distance_y = p2[1] - p1[1];
+
+  const angle_radians = Math.atan2(distance_y, distance_x);
+  let angle_degrees = (angle_radians * 180) / Math.PI;
+  let fixed_angle_degrees = (angle_degrees + 360) % 360;
+  return fixed_angle_degrees;
+}

@@ -8,7 +8,7 @@ from vincenty import vincenty
 import json
 
 #extract starting and ending ID from config JSON
-with open('./config.json') as config_file:
+with open('./src/config.json') as config_file:
     config_data = json.load(config_file)
 
 starting_id = config_data['STARTING_POI']
@@ -75,7 +75,7 @@ def execute_json(point_collection_in_json: list):
     Convert the list of dictionaries into json format to prepare these point for Web AR.
     """
     # file exporting to, w needed for WRITE:
-    sys.stdout = open('./src/icon_data.js', 'w')
+    sys.stdout = open('./src/data/icon_data.js', 'w')
 
     # where points_collection is the dictionary; converts into json:
     json_obj = json.dumps(point_collection_in_json)

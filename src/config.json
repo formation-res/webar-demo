@@ -1,5 +1,5 @@
 {
     "STARTING_POI" : "b7nHb34SwJn3S5oXkEh0vQ",  
     "DESTINATION_POI" : "UGe5iM8v-j1LDaJSuXK3Jw",
-    "FILTER_CRITERIA" : {"title": null, "id": null, "category": "Desk", "distance" : 10}
+    "FILTER_CRITERIA" : {"title": null, "id": null, "category": null, "distance" : 50}
 }
