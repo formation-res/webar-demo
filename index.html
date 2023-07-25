@@ -1,25 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 	<head>
-		<title>Demo</title>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-		<link type="text/css" rel="stylesheet" href="style.css">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
-		<script type="module" src="https://cdn.jsdelivr.net/npm/three/examples/jsm/loaders/GLTFLoader.js"></script>
+		<title>WebAR Navigation</title>
+		<script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+		<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 	</head>
-	<body>
-
-        <div class="container">
-            <h1>Filter</h1>
-            <input type="text" placeholder=" Search for what you want to display..." class="filter-input">
-            <div class="output"></div>
-            <!--<script type='text/javascript' src="titles.js"></script>
-            <script type="module" src="filter.js"></script>-->
-        </div>
-
-        <script type='text/javascript' src="titles.js"></script>
-        <script type='text/javascript' src="icon_data.js"></script>
-		<script type="module" src="render_objects.js"></script>
+	<body style="margin: 0; overflow: hidden;">
+		<a-scene>
+			<script type='text/javascript' src="icon_data.js"></script>
+			<script type="module" src="execute.js"></script>
+		</a-scene>
 	</body>
 </html>

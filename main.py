@@ -15,6 +15,7 @@ def find_angle(p1, p2):
         angle_radians = np.arctan2(distance_y, distance_x)
         angle_degrees = np.degrees(angle_radians)
         fixed_angle_degrees = (angle_degrees + 360) % 360
+
         return fixed_angle_degrees
 
  
@@ -23,7 +24,10 @@ def create_point_collection_in_json(geo_obj, points_collection):
     Prepare the points to be converted into json by making storing each point's information into a dictionary and adding
     the distance and angle paramters.
     """
+    # add starting point
     point_collection_in_json = []
+    point_collection_in_json.append({'x': 0, 'z': 0})
+
     for row in points_collection:
         # starting id:
         origin_long = float(geo_obj.starting_id_info[3])
@@ -42,7 +46,7 @@ def create_point_collection_in_json(geo_obj, points_collection):
 
         # append each point to the list, if it's within distance (if applicable):
         if geo_obj.filter_criteria['distance'] is None or float(geo_obj.filter_criteria['distance']) > distance:
-            point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle, 'x': x, 'y': y})
+            point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle, 'x': x, 'z': y})
              
     return point_collection_in_json
 
@@ -53,7 +57,7 @@ def execute():
     """
     # starting point is an id. in this case, it will be the reception desk...
     starting_id = '3m5thyVvZnMKukIqIrhYHQ'
-    filter_criteria = {'title': None, 'id': None, 'category': None, 'distance': 50}
+    filter_criteria = {'title': 'Toilet', 'id': None, 'category': None, 'distance': 50}
 
     # generate a list of points we want to display with web ar:
     geo_obj = geogeometry.GeoGeometry(starting_id, filter_criteria)
@@ -62,6 +66,7 @@ def execute():
 
     # create a list of dictionaries for web ar points:
     point_collection_in_json = create_point_collection_in_json(geo_obj, points_collection)
+
     return point_collection_in_json
 
 
@@ -80,23 +85,7 @@ def execute_json(point_collection_in_json: list):
     print("var json_str = '{}' ".format(json_obj) )
 
 
-def get_titles():
-    """
-    Retreive the titles for filtering.
-    """
-    with open('points.csv', 'r') as file_read:
-        reader = csv.reader(file_read)
-        content = []
-        for row in reader:
-            if row[5] not in content:
-                content.append(row[5])
-        sys.stdout = open('titles.js', 'w')
-        content_obj = json.dumps(content)
-        print("var content_str = '{}' ".format(content_obj) )
-
-
 if __name__ == "__main__":
     point_collection_in_json = execute()
     print(f'number of points: {len(point_collection_in_json)}')
     execute_json(point_collection_in_json)
-    get_titles()
