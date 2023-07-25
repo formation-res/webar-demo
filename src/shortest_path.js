@@ -1,17 +1,41 @@
-import { WeightedGraph, distanceBetweenPoints, findAngle} from "./Classes/WeightedGraph.js"
+import { WeightedGraph } from "./Classes/WeightedGraph.js"
 import { json_str } from "./data/icon_data.js";
 import { waypoints_raw } from "./data/waypoints_dump.js";
 import { inverseVincentyDistance, calculateBearing, degreesToRadians} from "./Classes/Geo.js";
 import { readFileSync } from 'fs';
 
-
 const hits = waypoints_raw.data.search.hits;
 var points_collection = JSON.parse(json_str);
 const g = new WeightedGraph();
 
-const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));
-const starting_id = jsonData.STARTING_POI;
-const destination_id = jsonData.DESTINATION_POI;
+let Tstarting_id = '';
+let Tdestination_id = '';
+
+if (typeof window !== 'undefined') {     // Code is running in a browser environment
+
+    fetch('./src/config.json')
+  .then(response => response.json())
+  .then(data => {
+    Tstarting_id = data.STARTING_POI;
+    Tdestination_id = data.DESTINATION_POI;
+  })
+  .catch(error => {
+    console.error('Error fetching the file:', error);
+  });
+console.log(starting_id, destination_id)
+
+  } else if (typeof global !== 'undefined')     // Code is running in Node.js WORKS
+      {
+        const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));
+        Tstarting_id = jsonData.STARTING_POI;
+        Tdestination_id = jsonData.DESTINATION_POI;
+      } 
+  else { exit(1); }
+
+  const starting_id = Tstarting_id;
+  const destination_id = Tdestination_id;
+  //console.log(starting_id, destination_id);
+
 
 
 let origin = {};
