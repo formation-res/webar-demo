@@ -8,22 +8,18 @@ import { inverseVincentyDistance, calculateBearing, degreesToRadians} from "./Cl
 const hits = waypoints_raw.data.search.hits;
 var points_collection = JSON.parse(json_str);
 const g = new WeightedGraph();
-
 let Tstarting_id = '';
 let Tdestination_id = '';
 
-if (typeof window !== 'undefined') {     // Code is running in a browser environment
 
+if (typeof window !== 'undefined') {     // Code is running in a browser environment
     fetch('./src/config.json')
-  .then(response => response.json())
-  .then(data => {
-    Tstarting_id = data.STARTING_POI;
-    Tdestination_id = data.DESTINATION_POI;
-  })
-  .catch(error => {
-    console.error('Error fetching the file:', error);
-  });
-console.log(starting_id, destination_id)
+      .then(response => response.json())
+        .then(data => {
+           Tstarting_id = data.STARTING_POI;
+           Tdestination_id = data.DESTINATION_POI;
+  }) .catch(error => { console.error('Error fetching the file:', error)});
+// console.log(starting_id, destination_id)
 
   } else if (typeof global !== 'undefined')     // Code is running in Node.js WORKS
       { 
@@ -31,16 +27,15 @@ console.log(starting_id, destination_id)
         // Tstarting_id = jsonData.STARTING_POI;
         // Tdestination_id = jsonData.DESTINATION_POI;
       } 
-  else { exit(1); }
+  else {  throw new Error("unknown platform") }
 
   const starting_id = Tstarting_id;
   const destination_id = Tdestination_id;
   //console.log(starting_id, destination_id);
 
 
-
-let origin = {};
 //extract origin. currently points_collections reperesents OUR database, which is a subset from original excel.
+let origin = {};
 for (var i = 0; i < points_collection.length; i++) {
     if (points_collection[i].id === starting_id){
         origin = {lat : points_collection[i].lat, lng : points_collection[i].long }

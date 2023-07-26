@@ -1,9 +1,33 @@
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection } from "./shortest_path.js";
+// import { readFileSync } from 'fs';             //  TESTING USE THIS
+
+
+/* 
+Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
+-Version1: perhaps can tap the icons to do something useful or just visualize certain things.
+-Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible 
+*/
+
+
+//extract globals from config file: different for Node testing vs. browser environment
+	var init_version = 2;	
+	if (typeof window !== 'undefined'){		//browser
+		fetch("./src/config.json")
+		.then(response => response.json())
+			.then(data => {
+				init_version = data.VERSION });
+		} else if (typeof global !== 'undefined') {		//Node.js
+		// const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));             //TESTING USE THIS
+		// init_version = jsonData.VERSION;
+		} else { 
+				throw new Error("unknown platform");
+				}
+const version = init_version;	//global const from the config.
+//console.log(version);
+console.log(waypoint_collection);
 
 var points_collection = JSON.parse(json_str);
-
-// console.log("points_collection: ", points_collection);
 
 let camera, scene, renderer;
 let mesh;
@@ -15,11 +39,8 @@ window.addEventListener("resize", onWindowResize, false);
 startBtn.addEventListener('click', startCompass);
 
 class ARButton {
-
 	static createButton( renderer, sessionInit = {} ) {
-
 		const button = document.createElement( 'button' );
-
 		function showStartAR( /*device*/ ) {
 
 			if ( sessionInit.domOverlay === undefined ) {
@@ -52,13 +73,9 @@ class ARButton {
 					sessionInit.optionalFeatures = [];
 
 				}
-
 				sessionInit.optionalFeatures.push( 'dom-overlay' );
 				sessionInit.domOverlay = { root: overlay };
-
 			}
-
-			//
 
 			let currentSession = null;
 
@@ -75,7 +92,6 @@ class ARButton {
 
 				currentSession = session;
 
-
 			}
 
 			function onSessionEnded( /*event*/ ) {
@@ -86,27 +102,20 @@ class ARButton {
 				sessionInit.domOverlay.root.style.display = 'none';
 
 				currentSession = null;
-
 			}
 
 			button.style.display = '';
-
 			button.style.cursor = 'pointer';
 			button.style.left = 'calc(50% - 50px)';
 			button.style.width = '100px';
-
 			button.textContent = 'START AR';
 
 			button.onmouseenter = function () {
-
 				button.style.opacity = '1.0';
-
 			};
 
 			button.onmouseleave = function () {
-
 				button.style.opacity = '0.5';
-
 			};
 
 			button.onclick = function () {
@@ -114,7 +123,15 @@ class ARButton {
 				if ( currentSession === null ) {
 
           //before starting the session, create all the points.
-          createPoints(heading);
+        if (version === 1) 
+		  	{ 
+				createPoints(heading);
+			}
+		else 
+			{
+				createWayPoints(heading);
+			}
+
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				} else {
 					currentSession.end();
@@ -125,24 +142,19 @@ class ARButton {
 		function disableButton() {
 
 			button.style.display = '';
-
 			button.style.cursor = 'auto';
 			button.style.left = 'calc(50% - 75px)';
 			button.style.width = '150px';
 
 			button.onmouseenter = null;
 			button.onmouseleave = null;
-
 			button.onclick = null;
-
 		}
 
 		function showARNotSupported() {
 
 			disableButton();
-
 			button.textContent = 'AR NOT SUPPORTED';
-
 		}
 
 		function stylizeElement( element ) {
@@ -159,14 +171,11 @@ class ARButton {
 			element.style.opacity = '0.5';
 			element.style.outline = 'none';
 			element.style.zIndex = '999';
-
 		}
-
 		if ( 'xr' in navigator ) {
 
 			button.id = 'ARButton';
 			button.style.display = 'none';
-
 			stylizeElement( button );
 
 			navigator.xr.isSessionSupported( 'immersive-ar' ).then( function ( supported ) {
@@ -176,23 +185,19 @@ class ARButton {
 			} ).catch( showARNotSupported );
 
 			return button;
-
 		} else {
 
 			const message = document.createElement( 'a' );
 
 			if ( window.isSecureContext === false ) {
-
 				message.href = document.location.href.replace( /^http:/, 'https:' );
 				message.innerHTML = 'WEBXR NEEDS HTTPS'; // TODO Improve message
 
 			} else {
-
 				message.href = 'https://immersiveweb.dev/';
 				message.innerHTML = 'WEBXR NOT AVAILABLE';
 
 			}
-
 			message.style.left = 'calc(50% - 90px)';
 			message.style.width = '180px';
 			message.style.textDecoration = 'none';
@@ -200,11 +205,8 @@ class ARButton {
 			stylizeElement( message );
 
 			return message;
-
 		}
-
 	}
-
 }
 
 const colors = {
@@ -228,6 +230,7 @@ const colors = {
   Black: "rgb(0, 0, 0)",
 };
 
+//for version 1
 function createPoints(angle) {
   for (var i = 0; i < points_collection.length; i++) {
 
@@ -262,6 +265,42 @@ function createPoints(angle) {
     }
 }
 
+//same as createPoints, but for waypoints (which for some reason is in a different format).
+function createWayPoints(angle){
+	for (const element in waypoint_collection) {
+
+		//get the color
+		var real_color = "";
+		if (colors[waypoint_collection[element].color] != null) { real_color = colors[waypoint_collection[element].color]; } 
+		else  { real_color = "rgb(0, 0, 0)"; }
+	
+		const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+		const material = new THREE.MeshPhongMaterial
+		({
+		  color: new THREE.Color(real_color),
+		  shininess: 6,
+		  flatShading: true,
+		  transparent: 1,
+		  opacity: 0.8,
+		});
+	
+		//adjusted for the angle
+		var x = waypoint_collection[element].x;
+		var y = waypoint_collection[element].y;
+		var radians = (Math.PI / 180) * angle;
+		var cos = Math.cos(radians);
+		var sin = Math.sin(radians);
+		var newX = (cos * x) - (sin * y);
+		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+	
+		mesh = new THREE.Mesh(geometry, material);
+		mesh.position.set( newX, 0, -newY);
+		scene.add(mesh)
+		
+		}
+}
+
+//used during testing
 function filterPoints(){
 	//filters points_collection so that only POIs along the path are displayed.
 	let newArr = [];
@@ -283,15 +322,9 @@ function init() {
   const container = document.createElement("div");
   document.body.appendChild(container);
 
+  //initializes the scene in three.js
   scene = new THREE.Scene();
-
-  camera = new THREE.PerspectiveCamera(
-    70,
-    window.innerWidth / window.innerHeight,
-    0.01,
-    40
-  );
-
+  camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 40);
   renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -299,16 +332,15 @@ function init() {
   renderer.xr.enabled = true; 
   container.appendChild(renderer.domElement);
 
+  //mostly defaults
   var light = new THREE.HemisphereLight(0xffffff, 0xbbbbff, 1);
   light.position.set(0.5, 1, 0.25);
   scene.add(light);
-
 }
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
-
   renderer.setSize(window.innerWidth, window.innerHeight);
 }
 function animate() {
