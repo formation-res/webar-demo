@@ -1,6 +1,8 @@
 import { json_str } from "./data/icon_data.js";
-import { waypoint_collection } from "./shortest_path.js";
+//  import { waypoint_collection } from "./shortest_path.js";
+import { calculateWaypoints, getVersion } from "./shortest_path.js";
 // import { readFileSync } from 'fs';             //  TESTING USE THIS
+
 
 
 /* 
@@ -10,22 +12,29 @@ Going to make this two separate versions: one to display the waypoints and path,
 */
 
 
-//extract globals from config file: different for Node testing vs. browser environment
-	var init_version = 2;	
-	if (typeof window !== 'undefined'){		//browser
-		fetch("./src/config.json")
-		.then(response => response.json())
-			.then(data => {
-				init_version = data.VERSION });
-		} else if (typeof global !== 'undefined') {		//Node.js
+if (typeof global !== 'undefined') {		//Node.js
 		// const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));             //TESTING USE THIS
-		// init_version = jsonData.VERSION;
-		} else { 
-				throw new Error("unknown platform");
-				}
-const version = init_version;	//global const from the config.
-//console.log(version);
-console.log(waypoint_collection);
+		// version = jsonData.VERSION;
+		//
+	} 
+
+async function handleWaypointsAsync() {
+	try {
+	  const version = await getVersion()
+	  const waypoint_collection = await calculateWaypoints();
+	  // Use the waypoint_collection here or do whatever you want with it
+	  console.log(waypoint_collection);
+	  console.log(version);
+
+	  startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
+
+	} catch (error) {
+	  console.error('Error occurred:', error);
+	}
+  }
+  
+  // Call handleWaypointsAsync
+  handleWaypointsAsync();
 
 var points_collection = JSON.parse(json_str);
 
@@ -36,7 +45,7 @@ var heading = -1;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
-startBtn.addEventListener('click', startCompass);
+startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
 
 class ARButton {
 	static createButton( renderer, sessionInit = {} ) {

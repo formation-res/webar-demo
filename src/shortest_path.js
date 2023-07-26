@@ -1,123 +1,96 @@
-import { WeightedGraph } from "./Classes/WeightedGraph.js"
+import { WeightedGraph } from "./Classes/WeightedGraph.js";
 import { json_str } from "./data/icon_data.js";
 import { waypoints_raw } from "./data/waypoints_dump.js";
-import { inverseVincentyDistance, calculateBearing, degreesToRadians} from "./Classes/Geo.js";
+import LatLon from 'geodesy/latlon-spherical.js';
 
-// import { readFileSync } from 'fs';               TESTING USE THIS
+function degreesToRadians(degrees) {
+  return degrees * (Math.PI / 180);
+}
 
-const hits = waypoints_raw.data.search.hits;
-var points_collection = JSON.parse(json_str);
-const g = new WeightedGraph();
-let Tstarting_id = '';
-let Tdestination_id = '';
-
-
-if (typeof window !== 'undefined') {     // Code is running in a browser environment
+export function getVersion() {
+  return new Promise((resolve, reject) => {
     fetch('./src/config.json')
       .then(response => response.json())
-        .then(data => {
-           Tstarting_id = data.STARTING_POI;
-           Tdestination_id = data.DESTINATION_POI;
-  }) .catch(error => { console.error('Error fetching the file:', error)});
-// console.log(starting_id, destination_id)
+      .then(data => {
+        const version = data.VERSION;
+        //console.log(version);
 
-  } else if (typeof global !== 'undefined')     // Code is running in Node.js WORKS
-      { 
-        // const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));             TESTING USE THIS
-        // Tstarting_id = jsonData.STARTING_POI;
-        // Tdestination_id = jsonData.DESTINATION_POI;
-      } 
-  else {  throw new Error("unknown platform") }
-
-  const starting_id = Tstarting_id;
-  const destination_id = Tdestination_id;
-  //console.log(starting_id, destination_id);
-
-
-//extract origin. currently points_collections reperesents OUR database, which is a subset from original excel.
-let origin = {};
-for (var i = 0; i < points_collection.length; i++) {
-    if (points_collection[i].id === starting_id){
-        origin = {lat : points_collection[i].lat, lng : points_collection[i].long }
-        //console.log(origin);
-    }
+        resolve(version);
+      })
+      .catch(error => {
+        console.error('Error fetching or parsing config.json:', error);
+        reject(error); // Reject the Promise if there's an error
+      });
+  });
 }
 
 
-let Waypoints = {};    
-for (var i = 0; i < hits.length; i++) 
-    { 
-        Waypoints[hits[i].hit.id] = {title: hits[i].hit.title, color : hits[i].hit.color , lat: hits[i].hit.latLon.lat, long: hits[i].hit.latLon.lon, description: hits[i].hit.description, x : Infinity, y : Infinity, distance : Infinity, angle : Infinity};
-        g.addVertex(hits[i].hit.id)
-        //for each ID add a vertex that corresponds with this waypoint.
-        //we will have to MANUALLY add the edges.........
-    }
-// console.log(Waypoints)
+//eventually want this to return only the waypoints we will visit in order based on traversal algorithm.
+export function calculateWaypoints() {
+  return new Promise((resolve, reject) => {
+    fetch('./src/config.json')
+      .then(response => response.json())
+      .then(data => {
+        const starting_id = data.STARTING_POI;
+        const destination_id = data.DESTINATION_POI;
+        console.log(`Starting id: ${starting_id}\nDestination id: ${destination_id}`);
+
+        const hits = waypoints_raw.data.search.hits;
+        var points_collection = JSON.parse(json_str);
+        const g = new WeightedGraph();
+
+        //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
+        let origin = {};
+        console.log(starting_id);
+        for (var i = 0; i < points_collection.length; i++) {
+          if (points_collection[i].id === starting_id) {
+            origin = { lat: points_collection[i].lat, long: points_collection[i].long };
+            console.log("Origin found!");
+          }
+        }
+
+        let Waypoints = {};
+        for (var i = 0; i < hits.length; i++) {
+          Waypoints[hits[i].hit.id] = {
+            title: hits[i].hit.title,
+            color: hits[i].hit.color,
+            lat: hits[i].hit.latLon.lat,
+            long: hits[i].hit.latLon.lon,
+            description: hits[i].hit.description,
+            x: Infinity,
+            y: Infinity,
+            distance: Infinity,
+            angle: Infinity
+          };
+          g.addVertex(hits[i].hit.id);
+          //for each ID add a vertex that corresponds with this waypoint.
+          //we will have to MANUALLY add the edges.........
+        }
 
 
-//insert the x and y values into the waypoints that are relative to the STARTING ID.
-for (const element in Waypoints) {
-   let p1 = {lat : Waypoints[element].lat, lng : Waypoints[element].long } ;
+        //insert the x and y values into the waypoints that are relative to the STARTING ID.
+        for (const element in Waypoints) {
+          const p2 = new LatLon(Waypoints[element].lat, Waypoints[element].long);
+          const p1 = new LatLon(origin.lat, origin.long);
+          let distance = p1.distanceTo(p2);
+          let angle = p1.initialBearingTo(p2);
 
-    let distance = inverseVincentyDistance(origin, p1);
-    let angle = calculateBearing(origin.lat, origin.lng, Waypoints[element].lat, Waypoints[element].long);
-    Waypoints[element].distance = distance;
-    Waypoints[element].angle = angle;
-    Waypoints[element].x = distance * Math.cos( degreesToRadians(angle) );
-    Waypoints[element].y = distance * Math.cos( degreesToRadians(angle) );
-    // console.log(`x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`)
-}   
+          Waypoints[element].distance = distance;
+          Waypoints[element].angle = angle;
+          Waypoints[element].x = distance * Math.cos(degreesToRadians(angle));
+          Waypoints[element].y = distance * Math.sin(degreesToRadians(angle));
+          //  console.log(`x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`)
+        }
 
-export const waypoint_collection = Waypoints;
-
-
-
-
+        //console.log(Waypoints);
+        //this looks good in here, but why when I try to import it is it bad?????
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // //make simple graph.
-    // for (var i = 0; i < .length; i++) 
-    // { 
-    //     for (var j = 0; j < 1 + Math.floor(Math.random()* (points_collection.length/3)) ; j++)  
-    //     {
-    //         // adds edge, for each vertex, with 1-2 other random verticies.
-    //         let randomNum = Math.floor( Math.random() * points_collection.length );
-    //         let distance = distanceBetweenPoints(points_collection[i].x, points_collection[i].y, points_collection[randomNum].x, points_collection[randomNum].y );
-    //         g.addEdge(points_collection[i].id, points_collection[randomNum].id, distance);
-    //     }
-        
-    // }
-
-
-// export const waypoint_path = g.findShortestPath(points_collection[0].id, points_collection[4].id);
-//console.log(waypoint_path)
-//obtain these by input. will use these to choose vertex1 and vertex2. 
-//for now make it choose the closest one. 
-
-//this is what will be displayed on the AR screen.
-// const complete_path = waypoint_path + destinationPOI;
-
-
-    // let p1 = {lat : hits[0].hit.latLon.lat, lng : hits[0].hit.latLon.lon } 
-    // let p2 = {lat : hits[1].hit.latLon.lat, lng : hits[1].hit.latLon.lon } 
-    // console.log(inverseVincentyDistance(p1,p2))
-    // let pointA = { lat: 52.5200, lng: 13.4050 } // Berlin, Germany
-    // let pointB = { lat: 48.8566, lng: 2.3522 }  // Paris, France
-    // expectedDistance: 559422.127 Distance in meters (approximately)
-    // console.log(inverseVincentyDistance(pointA,pointB))
+        resolve(Waypoints);
+      })
+      .catch(error => {
+        console.error('Error fetching or parsing config.json:', error);
+        reject(error); // Reject the Promise if there's an error
+      });
+  });
+}
