@@ -22,6 +22,7 @@ const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
 startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
+alert("hi")
 
 class ARButton {
 	static createButton( renderer, sessionInit = {} ) {
@@ -336,6 +337,7 @@ function render() {
 }
 
 function startCompass(){
+	alert("clicked")
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {
