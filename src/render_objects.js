@@ -26,8 +26,6 @@ async function handleWaypointsAsync() {
 	  console.log(waypoint_collection);
 	  console.log(version);
 
-	  startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
-
 	} catch (error) {
 	  console.error('Error occurred:', error);
 	}
