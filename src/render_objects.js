@@ -1,7 +1,5 @@
 import { json_str } from "./data/icon_data.js";
-//  import { waypoint_collection } from "./shortest_path.js";
-import { calculateWaypoints, getVersion } from "./shortest_path.js";
-// import { readFileSync } from 'fs';             //  TESTING USE THIS
+import { waypoint_collection } from "./shortest_path.js";
 
 
 
@@ -11,29 +9,9 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible 
 */
 
+const version = 2;
 
-if (typeof global !== 'undefined') {		//Node.js
-		// const jsonData = JSON.parse(readFileSync('./src/config.json', 'utf-8'));             //TESTING USE THIS
-		// version = jsonData.VERSION;
-		//
-	} 
-
-async function handleWaypointsAsync() {
-	try {
-	  const version = await getVersion()
-	  const waypoint_collection = await calculateWaypoints();
-	  // Use the waypoint_collection here or do whatever you want with it
-	  console.log(waypoint_collection);
-	  console.log(version);
-
-	} catch (error) {
-	  console.error('Error occurred:', error);
-	}
-  }
-  
-  // Call handleWaypointsAsync
-  handleWaypointsAsync();
-
+console.log(waypoint_collection);
 var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
