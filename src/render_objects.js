@@ -16,7 +16,7 @@ var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
 let mesh;
-
+alert("Wrking!")
 var heading = -1;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
