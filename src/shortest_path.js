@@ -1,7 +1,7 @@
 // import { WeightedGraph } from "./Classes/WeightedGraph.js";
 // import { json_str } from "./data/icon_data.js";
 // import { waypoints_raw } from "./data/waypoints_dump.js";
-import LatLon from 'geodesy/latlon-spherical.js';
+// import LatLon from 'geodesy/latlon-spherical.js';
 
 alert("here lies issue");
 
