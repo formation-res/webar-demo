@@ -1,14 +1,15 @@
-// import { WeightedGraph } from "./Classes/WeightedGraph.js";
-// import { json_str } from "./data/icon_data.js";
-// import { waypoints_raw } from "./data/waypoints_dump.js";
-// import LatLon from 'geodesy/latlon-spherical.js';
+import { WeightedGraph } from "./Classes/WeightedGraph.js";
+import { json_str } from "./data/icon_data.js";
+import { waypoints_raw } from "./data/waypoints_dump.js";
+import LatLon from 'geodesy/latlon-spherical.js';
 
 alert("here lies issue");
-// const hits = waypoints_raw.data.search.hits;
-// var points_collection = JSON.parse(json_str);
-// const g = new WeightedGraph();
-// const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";
-// const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";
+
+const hits = waypoints_raw.data.search.hits;
+var points_collection = JSON.parse(json_str);
+const g = new WeightedGraph();
+const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";
+const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";
 
 // function degreesToRadians(degrees) {
 //   return degrees * (Math.PI / 180);
