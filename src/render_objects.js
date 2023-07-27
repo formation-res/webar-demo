@@ -213,7 +213,7 @@ const colors = {
   DarkOrange: "rgb(208, 111, 40)",
   LightBlue: "rgb(172, 218, 252)",
   AquaMarine: "rgb(22, 193, 248)",
-  Yellow:	"rgb(255, 255, 0",
+  Yellow: "rgb(255, 255, 0)",
   Black: "rgb(0, 0, 0)",
 };
 
@@ -274,7 +274,13 @@ function createWayPoints(angle){
 		var real_color = "";
 		if (colors[waypoint_collection[element].color] != null) { real_color = colors[waypoint_collection[element].color]; } 
 		else  { real_color = "rgb(0, 0, 0)"; }
+
+		if (element === "PpvGjpxbS56-Gmymffxt8g")	//enterence waypoint
+		{
+			real_color = "rgb(255, 39, 39)";
+		}
 	
+		console.log(real_color);
 		const geometry = new THREE.IcosahedronGeometry(0.1, 1);
 		const material = new THREE.MeshPhongMaterial
 		({
