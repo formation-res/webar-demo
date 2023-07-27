@@ -9,7 +9,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible 
 */
 
-const version = 1;
+const version = 2;
 
 console.log(waypoint_collection);
 var points_collection = JSON.parse(json_str);
@@ -118,10 +118,13 @@ class ARButton {
 				createWayPoints(heading);
 			}
 
-					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
+			navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				} else {
 					currentSession.end();
 				}
+			
+				//get list of waypoints.
+
 			};
 		}
 
@@ -278,17 +281,17 @@ function createWayPoints(angle){
 		});
 	
 		//adjusted for the angle
-		var x = waypoint_collection[element].x;
-		var y = waypoint_collection[element].y;
+		var dis = waypoint_collection[element].distance;
+		var ang = waypoint_collection[element].angle;
 
-		var radians = (Math.PI / 180) * angle;
+		var radians = (Math.PI / 180) * (angle+ang) ;
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
 		var newX = (cos * x) - (sin * y);
 		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 	
 		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(newX , 0, -newY);
+		mesh.position.set( cos*dis, 0, - (sin*dis) );
 		scene.add(mesh)
 		}
 }

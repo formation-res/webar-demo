@@ -32,6 +32,12 @@ export class WeightedGraph {
     }
   }
 
+  printVertices() {
+    for (const vertex of this.adjacencyList.keys()) {
+      console.log(vertex);
+    }
+  }
+
   addEdge(vertex1, vertex2, weight) {
     if (vertex1 === vertex2){
       //console.log("Cannot make self-edges!");
@@ -72,7 +78,7 @@ export class WeightedGraph {
     return false;
   }
 
-  // Dijkstra's algorithm to find the shortest path between two vertices
+  // Dijkstra's algorithm to find the shortest path between two vertices. returns an array.
   findShortestPath(start, target) {
     const distances = {};
     const previous = {};
@@ -127,12 +133,6 @@ export class WeightedGraph {
     }
   
     return null; // Should not reach this point, but adding for clarity
-  }
-
-  printVertices() {
-    for (const vertex of this.adjacencyList.keys()) {
-      console.log(vertex);
-    }
   }
 
 } //end WeightedGraph class
