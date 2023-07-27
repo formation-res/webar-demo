@@ -1,5 +1,5 @@
 import { json_str } from "./data/icon_data.js";
-import { waypoint_collection } from "./shortest_path.js";
+import { waypoint_collection, final_path } from "./shortest_path.js";
 
 
 
@@ -12,6 +12,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 const version = 2;
 
 console.log(waypoint_collection);
+console.log(final_path);
 var points_collection = JSON.parse(json_str);
 
 

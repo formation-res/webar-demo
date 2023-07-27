@@ -3,24 +3,49 @@ import { WeightedGraph, findAngle} from "./Classes/WeightedGraph.js";
 import { json_str } from "./data/icon_data.js";
 import { waypoints_raw } from "./data/waypoints_dump.js";
 
-
+// Based on waypoints in FORMATION demo. fetched from formation.
 const hits = waypoints_raw.data.search.hits;
+
+//Based on all the data points we have (currently just the subset in the excell spreadsheet).
 var points_collection = JSON.parse(json_str);
 const g = new WeightedGraph();
-const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI
-const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";  //final destination POI
 
+//----------------------------------------------------------------------------------------------------------------------------------
+//want to make user input with formation API
+
+const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI              == install the app
+const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
+
+//----------------------------------------------------------------------------------------------------------------------------------
+let origin = {};          //initial coordinates
+let destination = {};     //destination coordinates
+let Waypoints = {};
+let first_waypoint;
+let last_waypoint;
+let min_dist_start = Infinity;      //eventually will be starting_POI --> first_waypoint.
+let min_dist_end = Infinity;        //eventually last_waypoint --> destination_POI
+
+let path;
+let totalDistance;
+
+
+function extractOrigin() {
   //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
-  let origin = {};
   //console.log(starting_id);
   for (var i = 0; i < points_collection.length; i++) {
     if (points_collection[i].id === starting_id) {
       origin = { lat: points_collection[i].lat, long: points_collection[i].long };
       //console.log("Origin found!");
     }
+    if (points_collection[i].id === destination_id) {
+      destination = { lat: points_collection[i].lat, long: points_collection[i].long };
+      //console.log("destination found!");
+    }
+    
   }
+}
 
-  let Waypoints = {};
+function fillWaypoints() {
   for (var i = 0; i < hits.length; i++) {
     Waypoints[hits[i].hit.id] = {
       title: hits[i].hit.title,
@@ -33,51 +58,55 @@ const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";  //final destination POI
       distance: Infinity,
       angle: Infinity
     };
-
     g.addVertex(hits[i].hit.id);
     //for each ID add a vertex that corresponds with this waypoint.
-    //we will have to MANUALLY add the edges.........
   }
 
 
   //insert the x and y values into the waypoints that are relative to the STARTING ID.
   for (const element in Waypoints) {
-    
-  
     let res = distVincenty(origin.lat, origin.long, Waypoints[element].lat, Waypoints[element].long)
-    //console.log("calculateBearing() angle: ", angle)
-
     let distance = res['distance'];
     let angle = res['initialBearing']
-    // let p1 = [origin.lat, origin.long];
-    // let p2 = [Waypoints[element].lat, Waypoints[element].long];
-    // let angle2 = findAngle(p1,p2);
-    // //console.log("findAngle(): ", angle2);
-  
     Waypoints[element].distance = distance;
     Waypoints[element].angle = angle;
     Waypoints[element].x = distance * Math.cos(degreesToRadians(angle));
     Waypoints[element].y = distance * Math.sin(degreesToRadians(angle));
     //console.log(`title: ${Waypoints[element].title}` , `x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`, `angle: ${angle}`)
+
+
+    //ADD CHECKS HERE TO SEE IF IN SAME ROOM? or the like !!!!!! -------------------------------------------------------------
+    //check for closest waypoint to start. 
+    if (distance < min_dist_start) {
+      min_dist_start = distance;
+      first_waypoint = element;
+    }
+
+    //check for closest waypoint to FINAL destination.
+    let res2 = distVincenty(destination.lat, destination.long, Waypoints[element].lat, Waypoints[element].long)
+    let distance2 = res2['distance'];   //for the END POINT distance only
+    if  (distance2 < min_dist_end) {
+      min_dist_end = distance2;
+      last_waypoint = element;
+    }
+
   }
-  
 //console.log(Waypoints);
 
-generateEdges(g);
-console.log(g.adjacencyList);
-
-let result = g.findShortestPath("sK_AvPfFzIlFm5yrdP_mBQ", "7UWclg7NYhPtbPvzgfiPtg");
-
-if (result) {
-  let path = result.path;
-  let totalDistance = result.totalDistance;
-
-  console.log("path: ", path, "  distance travelled: ", totalDistance);
-} else {
-  console.log("No path found.");
 }
 
-export const waypoint_collection = Waypoints;
+function getPath() {
+  let result = g.findShortestPath(first_waypoint, last_waypoint);
+  if (result) {
+    path = result.path;
+    totalDistance = result.totalDistance;
+    path.push(destination_id);
+    path.unshift(starting_id);  
+  }
+  else {
+    path = null;
+  }
+}
 
 function generateEdges(g) {
   for (const element in Waypoints){
@@ -267,3 +296,19 @@ function generateEdges(g) {
     }
   }   //end element loop
 } //end function
+
+
+//----------------------------------------------------------------------------------------------------------------------------------
+//    Main code.
+
+extractOrigin();
+fillWaypoints();
+generateEdges(g);
+//console.log(g.adjacencyList);
+
+getPath();
+
+export const final_path = path;
+export const waypoint_collection = Waypoints;
+
+//console.log(final_path);
