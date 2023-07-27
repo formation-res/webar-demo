@@ -39,12 +39,13 @@ export class WeightedGraph {
   }
 
   addEdge(vertex1, vertex2, weight) {
-    if (vertex1 === vertex2){
+    if
+     (vertex1 === vertex2){
       //console.log("Cannot make self-edges!");
       return;
     }
     if (this.isEdge(vertex1, vertex2)) {
-      //console.log("cannot make duplicate edges!")
+      //onsole.log("cannot make duplicate edges!")
       return;
     }
 
@@ -110,7 +111,7 @@ export class WeightedGraph {
       const totalDistance = distances[target];
       //console.log('Total distance:', totalDistance);
 
-      return path;
+      return [path, totalDistance];
       }
   
       if (currentVertex && distances[currentVertex] !== Infinity) {
