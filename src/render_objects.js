@@ -13,7 +13,7 @@ const version = 2;
 
 console.log(waypoint_collection);
 var points_collection = JSON.parse(json_str);
-alert("Wrking!")
+
 
 let camera, scene, renderer;
 let mesh;
@@ -213,6 +213,7 @@ const colors = {
   DarkOrange: "rgb(208, 111, 40)",
   LightBlue: "rgb(172, 218, 252)",
   AquaMarine: "rgb(22, 193, 248)",
+  Yellow:	"rgb(256, 256, 0",
   Black: "rgb(0, 0, 0)",
 };
 
@@ -276,8 +277,8 @@ function createWayPoints(angle){
 		var radians = (Math.PI / 180) * angle;
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
-		var newX = (cos * x) - (sin * y);
-		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+		var newX = (cos * x) + (sin * y);
+		var newY = (cos * y) - (sin * x); //must be negative because -z = +y north
 	
 		mesh = new THREE.Mesh(geometry, material);
 		mesh.position.set( newX, 0, -newY);
