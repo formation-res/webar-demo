@@ -287,7 +287,7 @@ function createWayPoints(angle){
 		var x = waypoint_collection[element].x;
 		var y = waypoint_collection[element].y;
 
-		 var radians = (Math.PI / 180) * (90+angle);
+		 var radians = (Math.PI / 180) * (90-angle);
 	     var cos = Math.cos(radians);
    		 var sin = Math.sin(radians);
    		 var newX = (cos * x) - (sin * y);
