@@ -295,7 +295,7 @@ function createWayPoints(angle){
    		 var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, newY);
+    mesh.position.set( -newX, 0, -newY);
     scene.add(mesh)
 		}
 }
