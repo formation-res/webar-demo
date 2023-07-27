@@ -66,10 +66,16 @@ const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";  //final destination POI
 generateEdges(g);
 console.log(g.adjacencyList);
 
-let list = g.findShortestPath("sK_AvPfFzIlFm5yrdP_mBQ", "8M-V4tmK7B0ycDADY2QhaA");
-console.log("path: ", list[0], "  distance travelled: ", list[1]);
-// use list[0] for the list.
+let result = g.findShortestPath("sK_AvPfFzIlFm5yrdP_mBQ", "7UWclg7NYhPtbPvzgfiPtg");
 
+if (result) {
+  let path = result.path;
+  let totalDistance = result.totalDistance;
+
+  console.log("path: ", path, "  distance travelled: ", totalDistance);
+} else {
+  console.log("No path found.");
+}
 
 export const waypoint_collection = Waypoints;
 

@@ -84,21 +84,21 @@ export class WeightedGraph {
     const distances = {};
     const previous = {};
     const vertices = new Set();
-  
+
     // Initialize distances with Infinity and previous with null
     for (const vertex of this.adjacencyList.keys()) {
       distances[vertex] = Infinity;
       previous[vertex] = null;
       vertices.add(vertex);
     }
-  
+
     distances[start] = 0;
     const priorityQueue = new PriorityQueue();
     priorityQueue.enqueue(start, 0);
-  
+
     while (!priorityQueue.isEmpty()) {
       const currentVertex = priorityQueue.dequeue();
-  
+
       if (currentVertex === target) {
         const path = [];
         let vertex = target;
@@ -107,18 +107,16 @@ export class WeightedGraph {
           vertex = previous[vertex];
         }
 
-      // Calculate and display the total distance of the path
-      const totalDistance = distances[target];
-      //console.log('Total distance:', totalDistance);
-
-      return [path, totalDistance];
+        // Calculate and display the total distance of the path
+        const totalDistance = distances[target];
+        return { path, totalDistance };
       }
-  
+
       if (currentVertex && distances[currentVertex] !== Infinity) {
         for (const neighbor of this.adjacencyList.get(currentVertex)) {
           const { node, weight } = neighbor;
-          const candidateDistance = distances[currentVertex] + weight;
-  
+          const candidateDistance = distances[currentVertex] + parseFloat(weight);
+
           if (candidateDistance < distances[node]) {
             distances[node] = candidateDistance;
             previous[node] = currentVertex;
@@ -127,13 +125,9 @@ export class WeightedGraph {
         }
       }
     }
-  
+
     // If there is no path between the start and target vertices
-    if (distances[target] === Infinity) {
-      return null;
-    }
-  
-    return null; // Should not reach this point, but adding for clarity
+    return null;
   }
 
 } //end WeightedGraph class
