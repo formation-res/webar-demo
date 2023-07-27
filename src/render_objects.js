@@ -213,7 +213,7 @@ const colors = {
   DarkOrange: "rgb(208, 111, 40)",
   LightBlue: "rgb(172, 218, 252)",
   AquaMarine: "rgb(22, 193, 248)",
-  Yellow:	"rgb(256, 256, 0",
+  Yellow:	"rgb(255, 255, 0",
   Black: "rgb(0, 0, 0)",
 };
 
@@ -243,10 +243,10 @@ function createPoints(angle) {
     var cos = Math.cos(radians);
     var sin = Math.sin(radians);
     var newX = (cos * x) - (sin * y);
-    var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+    var newY = (cos * y) + (sin * x); 
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, -newY);
+    mesh.position.set( newX, 0, newY);
     scene.add(mesh)
     
     }
@@ -277,7 +277,7 @@ function createWayPoints(angle){
 		var radians = (Math.PI / 180) * angle;
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
-		var newX = (cos * x) + (sin * y);
+		var newX = (cos * x) - (sin * y);
 		var newY = (cos * y) - (sin * x); //must be negative because -z = +y north
 	
 		mesh = new THREE.Mesh(geometry, material);
