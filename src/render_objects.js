@@ -9,7 +9,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible 
 */
 
-const version = 2;
+const version = 1;
 
 console.log(waypoint_collection);
 var points_collection = JSON.parse(json_str);
@@ -217,20 +217,6 @@ const colors = {
   Black: "rgb(0, 0, 0)",
 };
 
-
-function rotatePoint(x, y, angleDegrees) {
-	const toRad = (angle) => (angle * Math.PI) / 180;
-  
-	const angleRad = toRad(angleDegrees);
-	const cosTheta = Math.cos(angleRad);
-	const sinTheta = Math.sin(angleRad);
-  
-	const newX = x * cosTheta - y * sinTheta;
-	const newY = x * sinTheta + y * cosTheta;
-  
-	return { x: newX, y: newY };
-  }
-
 //for version 1
 function createPoints(angle) {
   for (var i = 0; i < points_collection.length; i++) {
@@ -295,9 +281,6 @@ function createWayPoints(angle){
 		var x = waypoint_collection[element].x;
 		var y = waypoint_collection[element].y;
 
-		newP = rotatePoint(x,y,angle);
-
-
 		var radians = (Math.PI / 180) * angle;
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
@@ -305,7 +288,7 @@ function createWayPoints(angle){
 		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 	
 		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set( newP.x , 0, -newP.y);
+		mesh.position.set(newX , 0, -newY);
 		scene.add(mesh)
 		}
 }
