@@ -217,6 +217,20 @@ const colors = {
   Black: "rgb(0, 0, 0)",
 };
 
+
+function rotatePoint(x, y, angleDegrees) {
+	const toRad = (angle) => (angle * Math.PI) / 180;
+  
+	const angleRad = toRad(angleDegrees);
+	const cosTheta = Math.cos(angleRad);
+	const sinTheta = Math.sin(angleRad);
+  
+	const newX = x * cosTheta - y * sinTheta;
+	const newY = x * sinTheta + y * cosTheta;
+  
+	return { x: newX, y: newY };
+  }
+
 //for version 1
 function createPoints(angle) {
   for (var i = 0; i < points_collection.length; i++) {
@@ -243,10 +257,10 @@ function createPoints(angle) {
     var cos = Math.cos(radians);
     var sin = Math.sin(radians);
     var newX = (cos * x) - (sin * y);
-    var newY = (cos * y) + (sin * x); 
+    var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, newY);
+    mesh.position.set( newX, 0, -newY);
     scene.add(mesh)
     
     }
@@ -276,13 +290,13 @@ function createWayPoints(angle){
 		var y = waypoint_collection[element].y;
 		var radians = (Math.PI / 180) * angle;
 		var cos = Math.cos(radians);
-		var sin = Math.sin(radians);
-		var newX = (cos * x) - (sin * y);
-		var newY = (cos * y) - (sin * x); //must be negative because -z = +y north
-	
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set( newX, 0, -newY);
-		scene.add(mesh)
+    	var sin = Math.sin(radians);
+   		var newX = (cos * x) - (sin * y);
+   		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+
+   		mesh = new THREE.Mesh(geometry, material);
+   		mesh.position.set( newX, 0, -newY);
+   		scene.add(mesh)
 		
 		}
 }
