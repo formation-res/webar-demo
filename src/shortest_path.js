@@ -1,9 +1,8 @@
+import { calculateBearing, haversineDistance } from "./Classes/Geo.js";
 import { WeightedGraph } from "./Classes/WeightedGraph.js";
 import { json_str } from "./data/icon_data.js";
 import { waypoints_raw } from "./data/waypoints_dump.js";
-import LatLon from 'https://cdn.jsdelivr.net/npm/geodesy@2/latlon-ellipsoidal.js'; // browser
 
-alert("here lies issue");
 
 const hits = waypoints_raw.data.search.hits;
 var points_collection = JSON.parse(json_str);
@@ -46,10 +45,11 @@ function degreesToRadians(degrees) {
 
   //insert the x and y values into the waypoints that are relative to the STARTING ID.
   for (const element in Waypoints) {
-    const p2 = new LatLon(Waypoints[element].lat, Waypoints[element].long);
-    const p1 = new LatLon(origin.lat, origin.long);
-    let distance = p1.distanceTo(p2);
-    let angle = p1.initialBearingTo(p2);
+    
+
+    let distance = haversineDistance(origin.lat, origin.long, Waypoints[element].lat, Waypoints[element].long)
+    let angle = calculateBearing(origin.lat, origin.long, Waypoints[element].lat, Waypoints[element].long)
+
 
     Waypoints[element].distance = distance;
     Waypoints[element].angle = angle;
@@ -60,5 +60,4 @@ function degreesToRadians(degrees) {
 
   //console.log(Waypoints);
   //this looks good in here, but why when I try to import it is it bad?????
-  console.log("one");
   export const waypoint_collection = Waypoints;

@@ -1,7 +1,7 @@
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection } from "./shortest_path.js";
 
-alert("Wrking!")
+
 
 /* 
 Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
@@ -13,6 +13,7 @@ const version = 2;
 
 console.log(waypoint_collection);
 var points_collection = JSON.parse(json_str);
+alert("Wrking!")
 
 let camera, scene, renderer;
 let mesh;
@@ -336,7 +337,6 @@ function render() {
 }
 
 function startCompass(){
-	alert("clicked")
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {
