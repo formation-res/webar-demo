@@ -23,7 +23,6 @@ const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
 startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
-document.getElementById("testingBtn").textContent = "iOS???"
 
 class ARButton {
 	static createButton( renderer, sessionInit = {} ) {
@@ -295,7 +294,7 @@ function createWayPoints(angle){
    		 var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( -newX, 0, -newY);
+    mesh.position.set( x, 0, -y);
     scene.add(mesh)
 		}
 }
