@@ -10,6 +10,28 @@ const g = new WeightedGraph();
 const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";
 const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";
 
+function generateEdges(g) {
+  for (const element in Waypoints){
+
+    if (element === "sK_AvPfFzIlFm5yrdP_mBQ")   { //waypoint 2
+      const lat = Waypoints[element].lat;
+      const long = Waypoints[element].long;
+      const connections = ["PpvGjpxbS56-Gmymffxt8g", "Jf4oujbxDxty4o9rTdLWkA", "8M-V4tmK7B0ycDADY2QhaA", 
+                           "5zUZUZfOyG_yI9dsyNPXRA", "s7pI1GTGz-p_DaxCHmtoVQ", "9PqPhP1AslO_L2RAeZuyFw", 
+                           "JAb_7VFKSIwsMUTVVU3QjQ", "DNkhxAlFtI6t9I1FYnCQRQ", "SA0Z4KQH_zA81fQfrfD6AA"]
+
+      for (var i = 0; i < connections.length; i++){   //adds all edges to waypoint 2. 
+        const id = connections[i];
+        g.addEdge(element, id, distVincenty(lat, long, Waypoints[id].lat, Waypoints[id].long)["distance"])
+      }
+    }
+    
+
+
+
+  }   //end element loop
+} //end function
+
 
   //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
   let origin = {};
@@ -62,8 +84,10 @@ const destination_id = "UGe5iM8v-j1LDaJSuXK3Jw";
     //console.log(`title: ${Waypoints[element].title}` , `x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`, `angle: ${angle}`)
   }
   
-  //onsole.log(Waypoints);
+  //console.log(Waypoints);
   //this looks good in here, but why when I try to import it is it bad?????
 
+generateEdges(g);
 
+console.log(g.adjacencyList);
   export const waypoint_collection = Waypoints;
