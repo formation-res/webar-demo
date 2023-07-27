@@ -287,8 +287,8 @@ function createWayPoints(angle){
 		var radians = (Math.PI / 180) * (angle+ang) ;
 		var cos = Math.cos(radians);
 		var sin = Math.sin(radians);
-		var newX = (cos * x) - (sin * y);
-		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+		// var newX = (cos * x) - (sin * y);
+		// var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
 	
 		mesh = new THREE.Mesh(geometry, material);
 		mesh.position.set( cos*dis, 0, - (sin*dis) );
