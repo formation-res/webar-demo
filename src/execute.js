@@ -1,8 +1,6 @@
 
-export function createPath(){
+export function createPath(points){
 
- // Define an array of points for the connected lines
-const points = JSON.parse(json_str)   
 // Create connected lines by iterating through the points
 for (let i = 1; i < points.length; i++) {
     const point1 = points[i - 1];

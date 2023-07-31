@@ -25,8 +25,9 @@ let last_waypoint;
 let min_dist_start = Infinity;      //eventually will be starting_POI --> first_waypoint.
 let min_dist_end = Infinity;        //eventually last_waypoint --> destination_POI
 
-let path;
+let path = [];
 let totalDistance;
+let path_points = []
 
 
 function extractOrigin() {
@@ -38,7 +39,7 @@ function extractOrigin() {
       //console.log("Origin found!");
     }
     if (points_collection[i].id === destination_id) {
-      destination = { lat: points_collection[i].lat, long: points_collection[i].long };
+      destination = { lat: points_collection[i].lat, long: points_collection[i].long, x : Infinity, y : Infinity, color : points_collection[i].color };
       //console.log("destination found!");
     }
     
@@ -93,6 +94,13 @@ function fillWaypoints() {
   }
 //console.log(Waypoints);
 
+
+//adding coordinates for the destination point
+let res = distVincenty(origin.lat, origin.long, destination.lat, destination.long)
+    let distance = res['distance'];
+    let angle = res['initialBearing']
+    destination.x =  distance * Math.cos(degreesToRadians(angle));
+    destination.y = distance * Math.sin(degreesToRadians(angle));
 }
 
 function getPath() {
@@ -102,11 +110,24 @@ function getPath() {
     totalDistance = result.totalDistance;
     path.push(destination_id);
     path.unshift(starting_id);  
+
+
+    //translate path into a list of points. 
+
+    for (var i = 1; i < path.length-1; i++){    // MISSING start and end coordinates
+      let id = path[i]
+      path_points.push( {x: Waypoints[id].x, y: Waypoints[id].y} )  //push a coordinate point based on the ID.
+    }
+
+    path_points.unshift({x : 0, y : 0}) //start point is always the origin
+    path_points.push( {x : destination.x, y : destination.y} )  //pushing the destination coords
+    
   }
   else {
     path = null;
   }
 }
+
 
 function generateEdges(g) {
   for (const element in Waypoints){
@@ -308,7 +329,11 @@ generateEdges(g);
 
 getPath();
 
-export const final_path = path;
+// console.log(destination);
+// console.log(path_points)
+
+
+export const final_path = path_points;
 export const waypoint_collection = Waypoints;
 
 //console.log(final_path);

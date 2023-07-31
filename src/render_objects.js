@@ -15,7 +15,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 const version = 3;
 
 //console.log(waypoint_collection);
-//console.log(final_path);
+console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 
@@ -126,7 +126,7 @@ class ARButton {
 			}
 			else if ( version === 3) {
 				if (final_path.length) {
-					createPath(final_path)
+					createPath(final_path);
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				}
 				else {
