@@ -3,7 +3,6 @@ import { waypoint_collection, final_path } from "./shortest_path.js";
 import { createPath } from "./execute.js";
 
 
-
 /* 
 Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
 -Version1: perhaps can tap the icons to do something useful or just visualize certain things.

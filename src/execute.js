@@ -6,7 +6,10 @@ for (let i = 1; i < points.length; i++) {
     const point1 = points[i - 1];
     const point2 = points[i];
 
-    const lineEntity = createLineEntity(point1.x, point1.z, point2.x, point2.z);
+    console.log(point1)
+    console.log(point2)
+    const lineEntity = createLineEntity(point1.x, point1.y, point2.x, point2.y);
+    console.log(lineEntity);
     document.querySelector('a-scene').appendChild(lineEntity);
 }
 
