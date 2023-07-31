@@ -235,30 +235,8 @@ const colors = {
 };
 
 function createPath(points, angle) {
-
-	const lineMaterial = new THREE.ShaderMaterial({
-		uniforms: {
-		  color: { value: new THREE.Color(0x00ff00) }, // Line color
-		  linewidth: { value: 0.9 } // Adjust this value for the desired line thickness
-		},
-		vertexShader: `
-		  uniform float linewidth;
-		  void main() {
-			vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-			gl_Position = projectionMatrix * mvPosition;
-			gl_PointSize = linewidth;
-		  }
-		`,
-		fragmentShader: `
-		  uniform vec3 color;
-		  void main() {
-			gl_FragColor = vec4(color, 1.0);
-		  }
-		`
-	  });
-
-	  const lineGeometry = new THREE.BufferGeometry();
-	  const vertices = [];
+	// Create a thicker line material
+	const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 200 });
   
 	// Create connected lines by iterating through the points
 	for (let i = 1; i < points.length; i++) {
@@ -268,6 +246,8 @@ function createPath(points, angle) {
 	  //translate based on the heading angle
 	  var x = point1.x;
 	  var y = point1.y;
+	  var x2 = point2.x;
+	  var y2 = point2.y;
 
 	  //alert(`old x: ${x} and old z: ${y}`);
 	   var radians = (Math.PI / 180) * (angle);
@@ -275,19 +255,21 @@ function createPath(points, angle) {
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);
 		  var newY = (cos * y) + (sin * x); 
+		  var newX2 = (cos * x2) - (sin * y2);
+		  var newY2 = (cos * y2) + (sin * x2); 
+
 		  const floorHeight = -1.2;
 		  const pointA = {x : newX, z : -newY, y : floorHeight};
-		  //console.log(pointA)		//new adjusted point
+		  const pointB = {x : newX2, z : -newY2, y : floorHeight};
+		  //console.log(pointA, pointB)		//new adjusted point
 
 		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
   
-			vertices.push(pointA.x, pointA.y, pointA.z);
-		  }
-
-		  lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+	  const lineGeometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
 	  const line = new THREE.Line(lineGeometry, lineMaterial);
 	  scene.add(line);
 	}
+  }
 
 
 //for version 1
