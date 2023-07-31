@@ -364,7 +364,7 @@ function createWayPoints(angle){
    		 var newY = (cos * y) + (sin * x); 
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, -newY);
+    mesh.position.set( -newX, 0, -newY);
     scene.add(mesh)
 		}
 }
