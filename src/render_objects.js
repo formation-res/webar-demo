@@ -1,5 +1,6 @@
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection, final_path } from "./shortest_path.js";
+import { createPath } from "./execute.js";
 
 
 
@@ -11,7 +12,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 2;
+const version = 3;
 
 //console.log(waypoint_collection);
 //console.log(final_path);
@@ -25,55 +26,6 @@ const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
 startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
-
- 
-// -------------------------------  filtering code:  ----------------------------------
-let clickedItem = null;
-var titles = JSON.parse(content_str)
-
-const list = titles
-const output = document.querySelector(".output");
-const search = document.querySelector(".filter-input");
-
-window.addEventListener("DOMContentLoaded", loadList);
-search.addEventListener("input", filter);
-
-function loadList() {
-    let temp = `<ul class="list-items">`;
-    list.forEach((item) => {
-        temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item}</a> </li>`;
-    });
-    temp += `</ul>`;
-    output.innerHTML = temp;
-    output.addEventListener("click", handleItemClick);
-}
-
-function filter(e) {
-    let temp = '';
-    const result  = list.filter(item=> item.toLowerCase().includes(e.target.value.toLowerCase()));
-    if(result.length>0){
-        temp = `<ul class="list-items">`;
-        result.forEach((item) => {
-            temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item}</a> </li>`;
-        });
-        temp += `</ul>`;
-    }else{
-        temp =`<div class="no-item"> No Item Found </div>`;
-    }
-    output.innerHTML =temp;
-    output.addEventListener("click", handleItemClick);
-}
-
-function handleItemClick(event) {
-	clickedItem = event.target.textContent;
-    console.log(`Clicked item: ${clickedItem}`);
-	var container = document.querySelector('.container');
-    if (container) {
-        container.remove();
-    }
-	init();
-	animate();
-}
 
 class ARButton {
 	static createButton( renderer, sessionInit = {} ) {
@@ -163,13 +115,26 @@ class ARButton {
         if (version === 1) 
 		  	{ 
 				createPoints(heading);
+				navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
+
 			}
-		else 
+		else if (version === 2)
 			{
 				createWayPoints(heading);
+				navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
+
+			}
+			else if ( version === 3) {
+				if (final_path.length) {
+					createPath(final_path)
+					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
+				}
+				else {
+					alert("No path found!")
+				}
+				
 			}
 
-			navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				} else {
 					currentSession.end();
 				}
