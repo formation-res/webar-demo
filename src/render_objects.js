@@ -249,7 +249,7 @@ function createPath(points, angle) {
 	  var x2 = point2.x;
 	  var y2 = point2.y;
 
-	  alert("  old x: ", x, "  old z: ", y);
+	  alert(" old x: ", x, "  old z: ", y);
 	   var radians = (Math.PI / 180) * (angle);
 		var cos = Math.cos(radians);
 		  var sin = Math.sin(radians);
