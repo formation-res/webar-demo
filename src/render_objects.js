@@ -125,6 +125,7 @@ class ARButton {
 			else if ( version === 3) {
 				if (final_path.length) {
 					createPath(final_path, heading);
+					createWayPoints(heading);
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				}
 				else {
