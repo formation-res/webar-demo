@@ -239,7 +239,7 @@ function createPath(points, angle) {
 	const lineMaterial = new THREE.ShaderMaterial({
 		uniforms: {
 		  color: { value: new THREE.Color(0x00ff00) }, // Line color
-		  linewidth: { value: 0.1 } // Adjust this value for the desired line thickness
+		  linewidth: { value: 0.9 } // Adjust this value for the desired line thickness
 		},
 		vertexShader: `
 		  uniform float linewidth;
