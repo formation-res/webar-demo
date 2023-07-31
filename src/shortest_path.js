@@ -69,11 +69,11 @@ function fillWaypoints() {
     let res = distVincenty(origin.lat, origin.long, Waypoints[element].lat, Waypoints[element].long)
     let distance = res['distance'];
     let angle = res['initialBearing']
-    console.log(`distance: ${distance} and bearing: ${angle}. the angle should be small values from -30 to 60 if from north like I thought.`)
+    //console.log(`distance: ${distance} and bearing: ${angle}.`)
     Waypoints[element].distance = distance;
     Waypoints[element].angle = angle;
-    Waypoints[element].x = distance * Math.cos(degreesToRadians(angle));
-    Waypoints[element].y = distance * Math.sin(degreesToRadians(angle));
+    Waypoints[element].x = distance * Math.sin(degreesToRadians(angle));  //east
+    Waypoints[element].y = distance * Math.cos(degreesToRadians(angle));  //north
     //console.log(`title: ${Waypoints[element].title}` , `x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`, `angle: ${angle}`)
 
 
@@ -93,15 +93,15 @@ function fillWaypoints() {
     }
 
   }
-//console.log(Waypoints);
+console.log(Waypoints);
 
 
 //adding coordinates for the destination point
 let res = distVincenty(origin.lat, origin.long, destination.lat, destination.long)
     let distance = res['distance'];
     let angle = res['initialBearing']
-    destination.x =  distance * Math.cos(degreesToRadians(angle));
-    destination.y = distance * Math.sin(degreesToRadians(angle));
+    destination.y =  distance * Math.cos(degreesToRadians(angle));  //this represents NORTH.
+    destination.x = distance * Math.sin(degreesToRadians(angle));   // EAST
 }
 
 function getPath() {

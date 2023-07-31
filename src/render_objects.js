@@ -236,7 +236,7 @@ const colors = {
 
 function createPath(points, angle) {
 	// Create a thicker line material
-	const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 20 });
+	const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 200 });
   
 	// Create connected lines by iterating through the points
 	for (let i = 1; i < points.length; i++) {
@@ -259,9 +259,9 @@ function createPath(points, angle) {
 		  var newY2 = (cos * y2) + (sin * x2); 
 
 		  const floorHeight = -1.2;
-		  const pointA = {x : -newY, z : newX, y : floorHeight};
-		  const pointB = {x : -newY2, z : newX2, y : floorHeight};
-		  console.log(pointA, pointB)		//new adjusted point
+		  const pointA = {x : newX, z : -newY, y : floorHeight};
+		  const pointB = {x : newX2, z : -newY2, y : floorHeight};
+		  //console.log(pointA, pointB)		//new adjusted point
 
 		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
   
