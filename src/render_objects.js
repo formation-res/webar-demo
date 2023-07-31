@@ -283,12 +283,12 @@ function createPath(points, angle) {
   
 			vertices.push(pointA.x, pointA.y, pointA.z);
 		  }
-		  
+
 		  lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 	  const line = new THREE.Line(lineGeometry, lineMaterial);
 	  scene.add(line);
 	}
-  }
+
 
 //for version 1
 function createPoints(angle) {
