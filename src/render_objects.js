@@ -10,7 +10,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 3;
+const version = 2;
 
 console.log(waypoint_collection);
 console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
@@ -235,8 +235,30 @@ const colors = {
 };
 
 function createPath(points, angle) {
-	// Create a thicker line material
-	const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 200 });
+
+	const lineMaterial = new THREE.ShaderMaterial({
+		uniforms: {
+		  color: { value: new THREE.Color(0x00ff00) }, // Line color
+		  linewidth: { value: 0.1 } // Adjust this value for the desired line thickness
+		},
+		vertexShader: `
+		  uniform float linewidth;
+		  void main() {
+			vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+			gl_Position = projectionMatrix * mvPosition;
+			gl_PointSize = linewidth;
+		  }
+		`,
+		fragmentShader: `
+		  uniform vec3 color;
+		  void main() {
+			gl_FragColor = vec4(color, 1.0);
+		  }
+		`
+	  });
+
+	  const lineGeometry = new THREE.BufferGeometry();
+	  const vertices = [];
   
 	// Create connected lines by iterating through the points
 	for (let i = 1; i < points.length; i++) {
@@ -246,8 +268,6 @@ function createPath(points, angle) {
 	  //translate based on the heading angle
 	  var x = point1.x;
 	  var y = point1.y;
-	  var x2 = point2.x;
-	  var y2 = point2.y;
 
 	  //alert(`old x: ${x} and old z: ${y}`);
 	   var radians = (Math.PI / 180) * (angle);
@@ -255,17 +275,16 @@ function createPath(points, angle) {
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);
 		  var newY = (cos * y) + (sin * x); 
-		  var newX2 = (cos * x2) - (sin * y2);
-		  var newY2 = (cos * y2) + (sin * x2); 
-
 		  const floorHeight = -1.2;
 		  const pointA = {x : newX, z : -newY, y : floorHeight};
-		  const pointB = {x : newX2, z : -newY2, y : floorHeight};
-		  //console.log(pointA, pointB)		//new adjusted point
+		  //console.log(pointA)		//new adjusted point
 
 		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
   
-	  const lineGeometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
+			vertices.push(pointA.x, pointA.y, pointA.z);
+		  }
+		  
+		  lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 	  const line = new THREE.Line(lineGeometry, lineMaterial);
 	  scene.add(line);
 	}
@@ -338,14 +357,14 @@ function createWayPoints(angle){
 		var x = waypoint_collection[element].x;
 		var y = waypoint_collection[element].y;
 
-		 var radians = (Math.PI / 180) * (60-angle);
+		 var radians = (Math.PI / 180) * (angle);
 	     var cos = Math.cos(radians);
    		 var sin = Math.sin(radians);
    		 var newX = (cos * x) - (sin * y);
    		 var newY = (cos * y) + (sin * x); 
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( -newX, 0, -newY);
+    mesh.position.set( newX, 0, -newY);
     scene.add(mesh)
 		}
 }
