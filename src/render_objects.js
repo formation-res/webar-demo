@@ -249,7 +249,8 @@ function createPath(points, angle) {
 	  var x2 = point2.x;
 	  var y2 = point2.y;
 
-	   var radians = (Math.PI / 180) * (60-angle);
+	  alert("  old x: ", x, "  old z: ", y);
+	   var radians = (Math.PI / 180) * (angle);
 		var cos = Math.cos(radians);
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);
@@ -261,6 +262,8 @@ function createPath(points, angle) {
 		  const pointA = {x : newX, z : -newY, y : floorHeight};
 		  const pointB = {x : newX2, z : -newY2, y : floorHeight};
 		  console.log(pointA, pointB)		//new adjusted point
+
+		  alert("  new x: ", newX, "  new z: ", -newY, "   This should be translated by HEADING degrees.")
   
 	  const lineGeometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
 	  const line = new THREE.Line(lineGeometry, lineMaterial);
