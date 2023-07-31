@@ -3,6 +3,13 @@ import * as THREE from 'three';
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection, final_path } from "./shortest_path.js";
 
+import WebGL from 'three/addons/capabilities/WebGL.js';
+
+if ( WebGL.isWebGLAvailable() ) {
+	console.log("webGL works!")
+} else {
+	alert("no webGL support")
+}
 
 /* 
 Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
