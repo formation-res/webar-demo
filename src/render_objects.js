@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+import { MeshLine, MeshLineMaterial, MeshLineRaycast } from 'three.meshline';
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection, final_path } from "./shortest_path.js";
 
@@ -12,8 +14,8 @@ Going to make this two separate versions: one to display the waypoints and path,
 
 const version = 3;
 
-console.log(waypoint_collection);
-console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
+//console.log(waypoint_collection);
+//console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 
@@ -236,50 +238,31 @@ const colors = {
 
 function createPath(points, angle) {
 	// Create a thicker line material
-	const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 200 });
+	const points_list = [];
   
 	// Create connected lines by iterating through the points
-	for (let i = 1; i < points.length; i++) {
-	  const point1 = points[i - 1];
-	  const point2 = points[i];
+	for (let i = 0; i < points.length; i++) {
+	  const point1 = points[i];
 
 	  //translate based on the heading angle
 	  var x = point1.x;
 	  var y = point1.y;
-	  var x2 = point2.x;
-	  var y2 = point2.y;
 
-	  //alert(`old x: ${x} and old z: ${y}`);
 	   var radians = (Math.PI / 180) * (angle);
 		var cos = Math.cos(radians);
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);
 		  var newY = (cos * y) + (sin * x); 
-		  var newX2 = (cos * x2) - (sin * y2);
-		  var newY2 = (cos * y2) + (sin * x2); 
 
 		  const floorHeight = -1.2;
 		  const pointA = {x : newX, z : -newY, y : floorHeight};
-		  const pointB = {x : newX2, z : -newY2, y : floorHeight};
 		  //console.log(pointA, pointB)		//new adjusted point
+		 	points_list.push(pointA);
+	}	
+	console.log(points_list)
 
-		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
-  
-		  const lineGeometry = new THREE.Geometry();
-		  lineGeometry.vertices.push(pointA, pointB);
-		
-		  const lineMaterial = new THREE.MeshLineMaterial({
-			color: new THREE.Color(0x00ff00), // Line color
-			lineWidth: 4, // Line thickness
-			resolution: new THREE.Vector2(window.innerWidth, window.innerHeight) // Resolution of the canvas
-		  });
-		
-		  const meshLine = new THREE.MeshLine();
-		  meshLine.setGeometry(lineGeometry);
-		
-		  const line = new THREE.Mesh(meshLine.geometry, lineMaterial);
-		  scene.add(line);
-	}
+	//line.setPoints(geometry, p => 2); // makes width 2 * lineWidth
+
   }
 
 
