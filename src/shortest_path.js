@@ -72,8 +72,8 @@ function fillWaypoints() {
     //console.log(`distance: ${distance} and bearing: ${angle}.`)
     Waypoints[element].distance = distance;
     Waypoints[element].angle = angle;
-    Waypoints[element].x = distance * Math.cos(degreesToRadians(angle));  //east
-    Waypoints[element].y = distance * Math.sin(degreesToRadians(angle));  //north
+    Waypoints[element].x = distance * Math.sin(degreesToRadians(angle));  //east
+    Waypoints[element].y = distance * Math.cos(degreesToRadians(angle));  //north
     //console.log(`title: ${Waypoints[element].title}` , `x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`, `angle: ${angle}`)
 
 
@@ -333,6 +333,13 @@ getPath();
 
 console.log(Waypoints);
 console.log(path_points);
+
+export var test_points = [
+  {x: 2, y: 2},
+  {x: 2, y: 0},
+  {x: 0, y: 2},
+  {x: 0, y: 0},
+]
 
 
 export const final_path = path_points;

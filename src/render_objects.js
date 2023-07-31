@@ -1,5 +1,5 @@
 import { json_str } from "./data/icon_data.js";
-import { waypoint_collection, final_path } from "./shortest_path.js";
+import { waypoint_collection, final_path, test_points} from "./shortest_path.js";
 
 
 /* 
@@ -10,7 +10,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 3;
+const version = 4;
 
 console.log(waypoint_collection);
 console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
@@ -127,6 +127,10 @@ class ARButton {
 					createPath(final_path, heading);
 					createWayPoints(heading);
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
+				}
+				else if (version === 4){
+					translateTestPoints(test_points)
+					//should make a box in notheast direction, regardless of the heading.
 				}
 				else {
 					alert("No path found!")
@@ -364,9 +368,27 @@ function createWayPoints(angle){
    		 var newY = (cos * y) + (sin * x); 
 
     mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( -newX, 0, -newY);
+    mesh.position.set( newX, 0, -newY);
     scene.add(mesh)
 		}
+}
+
+function translateTestPoints(points,angle){
+	for (var i = 0; i < points.length; i++){
+		    //adjusted for the angle
+			var x = points[i].x;
+			var y = points[i].y;
+			var radians = (Math.PI / 180) * angle;
+			var cos = Math.cos(radians);
+			var sin = Math.sin(radians);
+			var newX = (cos * x) - (sin * y);
+			var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+		
+			mesh = new THREE.Mesh(geometry, material);
+			mesh.position.set( newX, 0, -newY);
+			scene.add(mesh)
+			
+	}
 }
 
 //used during testing
