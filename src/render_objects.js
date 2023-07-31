@@ -10,7 +10,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 2;
+const version = 3;
 
 console.log(waypoint_collection);
 console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
