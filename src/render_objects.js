@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { MeshLine, MeshLineMaterial, MeshLineRaycast } from 'three.meshline';
+// import { MeshLine, MeshLineMaterial, MeshLineRaycast } from 'three.meshline';
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection, final_path } from "./shortest_path.js";
 
@@ -259,9 +259,11 @@ function createPath(points, angle) {
 		  //console.log(pointA, pointB)		//new adjusted point
 		 	points_list.push(pointA);
 	}	
+
 	console.log(points_list)
 
-	//line.setPoints(geometry, p => 2); // makes width 2 * lineWidth
+	//const line = new MeshLine();
+	//line.setPoints(points);
 
   }
 
