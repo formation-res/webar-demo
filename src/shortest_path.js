@@ -120,7 +120,7 @@ function getPath() {
     }
 
     path_points.unshift({x : 0, y : 0}) //start point is always the origin
-    path_points.push( {x : destination.x, y : destination.y} )  //pushing the destination coords
+    path_points.push( {x : destination.x, y : destination.y } )  //pushing the destination coords
     
   }
   else {

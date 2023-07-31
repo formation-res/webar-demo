@@ -124,7 +124,7 @@ class ARButton {
 			}
 			else if ( version === 3) {
 				if (final_path.length) {
-					createPath(final_path);
+					createPath(final_path, heading);
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				}
 				else {
@@ -234,22 +234,38 @@ const colors = {
   Black: "rgb(0, 0, 0)",
 };
 
-function createPath(points) {
-    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+function createPath(points, angle) {
+	// Create a thicker line material
+	const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 5 });
   
-    // Create connected lines by iterating through the points
-    for (let i = 1; i < points.length; i++) {
-      const point1 = points[i - 1];
-      const point2 = points[i];
+	// Create connected lines by iterating through the points
+	for (let i = 1; i < points.length; i++) {
+	  const point1 = points[i - 1];
+	  const point2 = points[i];
+
+	  //translate based on the heading angle
+	  var x = point1.x;
+	  var y = point1.y;
+	  var x2 = point2.x;
+	  var y2 = point2.y;
+
+	   var radians = (Math.PI / 180) * (60-angle);
+		var cos = Math.cos(radians);
+		  var sin = Math.sin(radians);
+		  var newX = (cos * x) - (sin * y);
+		  var newY = (cos * y) + (sin * x); 
+		  var newX2 = (cos * x2) - (sin * y2);
+		  var newY2 = (cos * y2) + (sin * x2); 
+
+		  const floorHeight = -1;
+		  const pointA = {x : -newX, z : -newY, y : floorHeight};
+		  const pointB = {x : -newX2, z : -newY2, y : floorHeight};
+		  console.log(pointA, pointB)		//new adjusted point
   
-      const lineGeometry = new THREE.BufferGeometry().setFromPoints([point1, point2]);
-      const line = new THREE.Line(lineGeometry, lineMaterial);
-      scene.add(line);
-    }
-  
-    // Update the lines' position based on surface detection
-    // Note: This part is A-Frame specific and won't work with Three.js directly.
-    // You will need to handle ARJS and surface detection separately using the AR library you choose for Three.js.
+	  const lineGeometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
+	  const line = new THREE.Line(lineGeometry, lineMaterial);
+	  scene.add(line);
+	}
   }
 
 //for version 1
