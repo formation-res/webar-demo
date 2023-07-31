@@ -117,7 +117,7 @@ function getPath() {
 
     for (var i = 1; i < path.length-1; i++){    // MISSING start and end coordinates
       let id = path[i]
-      path_points.push( {x: Waypoints[id].x, y: Waypoints[id].y} )  //push a coordinate point based on the ID.
+      path_points.push( {x: Waypoints[id].x, y: Waypoints[id].y, title: Waypoints[id].title} )  //push a coordinate point based on the ID.
     }
 
     path_points.unshift({x : 0, y : 0}) //start point is always the origin
@@ -330,8 +330,9 @@ generateEdges(g);
 
 getPath();
 
-// console.log(destination);
-// console.log(path_points)
+
+console.log(Waypoints);
+console.log(path_points);
 
 
 export const final_path = path_points;

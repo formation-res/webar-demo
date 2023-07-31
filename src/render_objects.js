@@ -262,9 +262,8 @@ function createPath(points, angle) {
 	  const vertices = [];
   
 	// Create connected lines by iterating through the points
-	for (let i = 1; i < points.length; i++) {
-	  const point1 = points[i - 1];
-	  const point2 = points[i];
+	for (let i = 0; i < points.length; i++) {
+	  const point1 = points[i];
 
 	  //translate based on the heading angle
 	  var x = point1.x;
