@@ -1,6 +1,5 @@
 import { json_str } from "./data/icon_data.js";
 import { waypoint_collection, final_path } from "./shortest_path.js";
-import { createPath } from "./execute.js";
 
 
 /* 
@@ -234,6 +233,24 @@ const colors = {
   Yellow: "rgb(255, 255, 0)",
   Black: "rgb(0, 0, 0)",
 };
+
+function createPath(points) {
+    const lineMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+  
+    // Create connected lines by iterating through the points
+    for (let i = 1; i < points.length; i++) {
+      const point1 = points[i - 1];
+      const point2 = points[i];
+  
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints([point1, point2]);
+      const line = new THREE.Line(lineGeometry, lineMaterial);
+      scene.add(line);
+    }
+  
+    // Update the lines' position based on surface detection
+    // Note: This part is A-Frame specific and won't work with Three.js directly.
+    // You will need to handle ARJS and surface detection separately using the AR library you choose for Three.js.
+  }
 
 //for version 1
 function createPoints(angle) {
