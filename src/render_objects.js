@@ -12,7 +12,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 
 const version = 3;
 
-//console.log(waypoint_collection);
+console.log(waypoint_collection);
 console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
@@ -249,7 +249,7 @@ function createPath(points, angle) {
 	  var x2 = point2.x;
 	  var y2 = point2.y;
 
-	  alert(`old x: ${x} and old z: ${y}`);
+	  //alert(`old x: ${x} and old z: ${y}`);
 	   var radians = (Math.PI / 180) * (angle);
 		var cos = Math.cos(radians);
 		  var sin = Math.sin(radians);
@@ -259,11 +259,11 @@ function createPath(points, angle) {
 		  var newY2 = (cos * y2) + (sin * x2); 
 
 		  const floorHeight = -1.2;
-		  const pointA = {x : newX, z : -newY, y : floorHeight};
-		  const pointB = {x : newX2, z : -newY2, y : floorHeight};
+		  const pointA = {x : newY, z : -newX, y : floorHeight};
+		  const pointB = {x : newY2, z : -newX2, y : floorHeight};
 		  console.log(pointA, pointB)		//new adjusted point
 
-		  alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
+		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
   
 	  const lineGeometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
 	  const line = new THREE.Line(lineGeometry, lineMaterial);
