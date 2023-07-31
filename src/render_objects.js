@@ -265,9 +265,20 @@ function createPath(points, angle) {
 
 		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
   
-	  const lineGeometry = new THREE.BufferGeometry().setFromPoints([pointA, pointB]);
-	  const line = new THREE.Line(lineGeometry, lineMaterial);
-	  scene.add(line);
+		  const lineGeometry = new THREE.Geometry();
+		  lineGeometry.vertices.push(pointA, pointB);
+		
+		  const lineMaterial = new THREE.MeshLineMaterial({
+			color: new THREE.Color(0x00ff00), // Line color
+			lineWidth: 4, // Line thickness
+			resolution: new THREE.Vector2(window.innerWidth, window.innerHeight) // Resolution of the canvas
+		  });
+		
+		  const meshLine = new THREE.MeshLine();
+		  meshLine.setGeometry(lineGeometry);
+		
+		  const line = new THREE.Mesh(meshLine.geometry, lineMaterial);
+		  scene.add(line);
 	}
   }
 
