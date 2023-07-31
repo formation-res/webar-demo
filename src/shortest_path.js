@@ -69,6 +69,7 @@ function fillWaypoints() {
     let res = distVincenty(origin.lat, origin.long, Waypoints[element].lat, Waypoints[element].long)
     let distance = res['distance'];
     let angle = res['initialBearing']
+    console.log(`distance: ${distance} and bearing: ${angle}. the angle should be small values from -30 to 60 if from north like I thought.`)
     Waypoints[element].distance = distance;
     Waypoints[element].angle = angle;
     Waypoints[element].x = distance * Math.cos(degreesToRadians(angle));
