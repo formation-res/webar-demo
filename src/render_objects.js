@@ -7,12 +7,14 @@ import { waypoint_collection, final_path } from "./shortest_path.js";
 Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
 -Version1: perhaps can tap the icons to do something useful or just visualize certain things.
 -Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible 
+
+-Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
 const version = 2;
 
-console.log(waypoint_collection);
-console.log(final_path);
+//console.log(waypoint_collection);
+//console.log(final_path);
 var points_collection = JSON.parse(json_str);
 
 
@@ -23,6 +25,55 @@ const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
 startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
+
+ 
+// -------------------------------  filtering code:  ----------------------------------
+let clickedItem = null;
+var titles = JSON.parse(content_str)
+
+const list = titles
+const output = document.querySelector(".output");
+const search = document.querySelector(".filter-input");
+
+window.addEventListener("DOMContentLoaded", loadList);
+search.addEventListener("input", filter);
+
+function loadList() {
+    let temp = `<ul class="list-items">`;
+    list.forEach((item) => {
+        temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item}</a> </li>`;
+    });
+    temp += `</ul>`;
+    output.innerHTML = temp;
+    output.addEventListener("click", handleItemClick);
+}
+
+function filter(e) {
+    let temp = '';
+    const result  = list.filter(item=> item.toLowerCase().includes(e.target.value.toLowerCase()));
+    if(result.length>0){
+        temp = `<ul class="list-items">`;
+        result.forEach((item) => {
+            temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item}</a> </li>`;
+        });
+        temp += `</ul>`;
+    }else{
+        temp =`<div class="no-item"> No Item Found </div>`;
+    }
+    output.innerHTML =temp;
+    output.addEventListener("click", handleItemClick);
+}
+
+function handleItemClick(event) {
+	clickedItem = event.target.textContent;
+    console.log(`Clicked item: ${clickedItem}`);
+	var container = document.querySelector('.container');
+    if (container) {
+        container.remove();
+    }
+	init();
+	animate();
+}
 
 class ARButton {
 	static createButton( renderer, sessionInit = {} ) {
