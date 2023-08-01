@@ -9,6 +9,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible 
 */
 
+
 const version = 2;
 
 console.log(waypoint_collection);
