@@ -260,13 +260,30 @@ function createPath(points, angle) {
 		  }
 		  //console.log(vertices)
 
-		const path = new THREE.CatmullRomCurve3(vertices, "chordal");
-		const tubeGeometry = new THREE.TubeBufferGeometry(path, 100, 0.2, 8, false, 0.2);	//last is tube radius
-		const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x0FA05D }); // Green color
-		const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
-		scene.add(tube);
+		const thickness = 0.1; 
+
+		for (let i = 1; i < vertices.length; i++) {
+ 		 const point1 = vertices[i - 1];
+ 		 const point2 = vertices[i];
+ 		 const lineTube = createLineTubeGeometry(point1, point2, thickness);
+ 		 scene.add(lineTube);
+		}
+
 	}
 
+	function createLineTubeGeometry(p1, p2, thickness) {
+		const direction = new THREE.Vector3().subVectors(p2, p1);
+		const length = direction.length();
+	  
+		const geometry = new THREE.CylinderBufferGeometry(thickness, thickness, length, 8);
+		const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
+	  
+		const line = new THREE.Mesh(geometry, material);
+		line.position.copy(p1);
+		line.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
+	  
+		return line;
+	  }
 
 //for version 1
 function createPoints(angle) {
