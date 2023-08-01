@@ -252,7 +252,7 @@ function createPath(points, angle) {
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);
 		  var newY = (cos * y) + (sin * x); 
-		  
+
 		  const floorHeight = -1.2;
 		  const pointA = new THREE.Vector3(newX, floorHeight, -newY);
   
@@ -261,11 +261,10 @@ function createPath(points, angle) {
 		  //console.log(vertices)
 
 		const path = new THREE.CatmullRomCurve3(vertices);
-		const pathGeometry = new THREE.BufferGeometry().setFromPoints(path.getPoints(50)); // Adjust the resolution (50 in this case) for smoother or coarser path
-		const pathMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 }); // Green color
-		const pathLine = new THREE.Line(pathGeometry, pathMaterial);
-		scene.add(pathLine);
-
+		const tubeGeometry = new THREE.TubeBufferGeometry(path, 100, 0.2, 8, false, 0.4);	//last is tube radius
+		const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
+		const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
+		scene.add(tube);
 	}
 
 
