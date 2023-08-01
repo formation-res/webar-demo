@@ -13,7 +13,7 @@ const g = new WeightedGraph();
 //----------------------------------------------------------------------------------------------------------------------------------
 //want to make user input with formation API
 
-const starting_id = "llyg3aZm1HjQ6LCQCsVkcw";   //starting POI              == flex desk 16
+const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
 const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
 
 //----------------------------------------------------------------------------------------------------------------------------------
