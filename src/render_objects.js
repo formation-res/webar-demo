@@ -10,7 +10,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 3;
+const version = 1;
 
 //console.log(waypoint_collection);
 console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
@@ -261,7 +261,7 @@ function createPath(points, angle) {
 		  //console.log(vertices)
 
 		const path = new THREE.CatmullRomCurve3(vertices);
-		const tubeGeometry = new THREE.TubeBufferGeometry(path, 100, 0.2, 8, false, 0.3);	//last is tube radius
+		const tubeGeometry = new THREE.TubeBufferGeometry(path, 100, 0.2, 8, false, 0.2);	//last is tube radius
 		const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x0FA05D }); // Green color
 		const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
 		scene.add(tube);
