@@ -289,7 +289,8 @@ function createPoints(angle) {
   
 	  //adjusted for the angle
 	  var x = points_collection[i].x;
-	  var y = points_collection[i].y;
+	  var y = points_collection[i].z;
+	  console.log(x, y)
 	  var radians = (Math.PI / 180) * angle;
 	  var cos = Math.cos(radians);
 	  var sin = Math.sin(radians);
@@ -298,7 +299,6 @@ function createPoints(angle) {
   
 	  mesh = new THREE.Mesh(geometry, material);
 	  mesh.position.set( newX, 0, -newY);
-	  alert(`Point created: ${newX, -newY}`)
 	  scene.add(mesh)
 	  
 	  }
