@@ -261,8 +261,8 @@ function createPath(points, angle) {
 		  //console.log(vertices)
 
 		const path = new THREE.CatmullRomCurve3(vertices);
-		const tubeGeometry = new THREE.TubeBufferGeometry(path, 100, 0.2, 8, false, 0.4);	//last is tube radius
-		const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
+		const tubeGeometry = new THREE.TubeBufferGeometry(path, 100, 0.2, 8, false, 0.3);	//last is tube radius
+		const tubeMaterial = new THREE.MeshBasicMaterial({ color: 0x0FA05D }); // Green color
 		const tube = new THREE.Mesh(tubeGeometry, tubeMaterial);
 		scene.add(tube);
 	}

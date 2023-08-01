@@ -22,7 +22,7 @@ let destination = {};     //destination coordinates
 let Waypoints = {};
 let first_waypoint;
 let last_waypoint;
-let min_dist_start = Infinity;      //eventually will be starting_POI --> first_waypoint.
+var min_dist_start = Infinity;      //eventually will be starting_POI --> first_waypoint.
 let min_dist_end = Infinity;        //eventually last_waypoint --> destination_POI
 
 let path = [];
@@ -79,7 +79,10 @@ function fillWaypoints() {
 
     //ADD CHECKS HERE TO SEE IF IN SAME ROOM? or the like !!!!!! -------------------------------------------------------------
     //check for closest waypoint to start. 
-    if (distance < min_dist_start) {
+
+
+    //console.log(`Distance: ${distance}  min_dist_start: ${min_dist_start} `)
+    if ( (min_dist_start - distance) > 0) {
       min_dist_start = distance;
       first_waypoint = element;
     }
@@ -111,6 +114,8 @@ function getPath() {
     totalDistance = result.totalDistance;
     path.push(destination_id);
     path.unshift(starting_id);  
+
+    // console.log(Waypoints[first_waypoint], Waypoints[last_waypoint]);
 
 
     //translate path into a list of points. 
@@ -332,7 +337,7 @@ getPath();
 
 
 //console.log(Waypoints);
-//console.log(path_points);
+console.log(path_points);
 
 export var test_points = [
   {x: 2, y: 2},
