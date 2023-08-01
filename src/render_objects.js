@@ -13,7 +13,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 const version = 1;
 
 //console.log(waypoint_collection);
-console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
+//console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 
@@ -270,6 +270,7 @@ function createPath(points, angle) {
 
 //for version 1
 function createPoints(angle) {
+	console.log(points_collection);
   for (var i = 0; i < points_collection.length; i++) {
 
     //get the color

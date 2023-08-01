@@ -337,7 +337,7 @@ getPath();
 
 
 //console.log(Waypoints);
-console.log(path_points);
+// console.log(path_points);
 
 export var test_points = [
   {x: 2, y: 2},
