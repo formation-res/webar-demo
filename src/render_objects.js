@@ -13,7 +13,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 const version = 3;
 
 //console.log(waypoint_collection);
-//console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
+console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 
@@ -258,7 +258,7 @@ function createPath(points, angle) {
   
 		  vertices.push(pointA);
 		  }
-		  //console.log(vertices)
+		  console.log(vertices)
 
 		const thickness = 0.1; 
 
@@ -266,6 +266,7 @@ function createPath(points, angle) {
  		 const point1 = vertices[i - 1];
  		 const point2 = vertices[i];
  		 const lineTube = createLineTubeGeometry(point1, point2, thickness);
+		
  		 scene.add(lineTube);
 		}
 
@@ -274,12 +275,13 @@ function createPath(points, angle) {
 	function createLineTubeGeometry(p1, p2, thickness) {
 		const direction = new THREE.Vector3().subVectors(p2, p1);
 		const length = direction.length();
+		const center = new THREE.Vector3().addVectors(p1, p2).multiplyScalar(0.5);
 	  
 		const geometry = new THREE.CylinderBufferGeometry(thickness, thickness, length, 8);
 		const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
 	  
 		const line = new THREE.Mesh(geometry, material);
-		line.position.copy(p1);
+		line.position.copy(center);
 		line.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
 	  
 		return line;
