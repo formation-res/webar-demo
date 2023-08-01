@@ -10,7 +10,7 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 1;
+const version = 3;
 
 //console.log(waypoint_collection);
 //console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
@@ -291,7 +291,7 @@ function createPoints(angle) {
 	  var x = points_collection[i].x;
 	  var y = points_collection[i].y;
 
-	  var radians = ( (Math.PI / 180) * angle) + .3 ;
+	  var radians = ( (Math.PI / 180) * angle);
 	  var cos = Math.cos(radians);
 	  var sin = Math.sin(radians);
 	  var newX = (cos * x) - (sin * y);
