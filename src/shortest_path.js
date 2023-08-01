@@ -331,8 +331,8 @@ generateEdges(g);
 getPath();
 
 
-console.log(Waypoints);
-console.log(path_points);
+//console.log(Waypoints);
+//console.log(path_points);
 
 export var test_points = [
   {x: 2, y: 2},
@@ -340,7 +340,7 @@ export var test_points = [
   {x: 0, y: 2},
   {x: 0, y: 0},
 ]
-
+console.log(test_points)
 
 export const final_path = path_points;
 export const waypoint_collection = Waypoints;

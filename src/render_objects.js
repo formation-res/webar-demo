@@ -128,15 +128,15 @@ class ARButton {
 					createWayPoints(heading);
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				}
-				else if (version === 4){
-					translateTestPoints(test_points)
-					//should make a box in notheast direction, regardless of the heading.
-				}
 				else {
 					alert("No path found!")
 				}
-				
 			}
+			else if (version === 4){
+				translateTestPoints(test_points,heading)
+				navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
+			}
+				
 
 				} else {
 					currentSession.end();
@@ -374,6 +374,19 @@ function createWayPoints(angle){
 }
 
 function translateTestPoints(points,angle){
+
+
+	var real_color = "rgb(0, 0, 0)";
+    const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+    const material = new THREE.MeshPhongMaterial
+    ({
+      color: new THREE.Color(real_color),
+      shininess: 6,
+      flatShading: true,
+      transparent: 1,
+      opacity: 0.8,
+    });
+
 	for (var i = 0; i < points.length; i++){
 		    //adjusted for the angle
 			var x = points[i].x;
