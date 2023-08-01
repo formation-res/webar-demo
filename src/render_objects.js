@@ -10,10 +10,10 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 1;
+const version = 3;
 
 //console.log(waypoint_collection);
-//console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
+console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 
@@ -113,7 +113,6 @@ class ARButton {
         if (version === 1) 
 		  	{ 
 				createPoints(heading);
-				createWayPoints(heading);
 				navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 
 			}
@@ -126,7 +125,6 @@ class ARButton {
 			else if ( version === 3) {
 				if (final_path.length) {
 					createPath(final_path, heading);
-					createWayPoints(heading);
 					navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 				}
 				else {
@@ -241,57 +239,33 @@ const colors = {
 };
 
 function createPath(points, angle) {
+	let vertices = [];
 
-	const lineMaterial = new THREE.ShaderMaterial({
-		uniforms: {
-		  color: { value: new THREE.Color(0x00ff00) }, // Line color
-		  linewidth: { value: 0.9 } // Adjust this value for the desired line thickness
-		},
-		vertexShader: `
-		  uniform float linewidth;
-		  void main() {
-			vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
-			gl_Position = projectionMatrix * mvPosition;
-			gl_PointSize = linewidth;
-		  }
-		`,
-		fragmentShader: `
-		  uniform vec3 color;
-		  void main() {
-			gl_FragColor = vec4(color, 1.0);
-		  }
-		`
-	  });
-
-	  const lineGeometry = new THREE.BufferGeometry();
-	  const vertices = [];
-  
-	// Create connected lines by iterating through the points
 	for (let i = 0; i < points.length; i++) {
 	  const point1 = points[i];
-
-	  //translate based on the heading angle
 	  var x = point1.x;
 	  var y = point1.y;
 
-	  //alert(`old x: ${x} and old z: ${y}`);
-	   var radians = (Math.PI / 180) * (angle);
+	  //translate
+	   	var radians = (Math.PI / 180) * (angle);
 		var cos = Math.cos(radians);
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);
 		  var newY = (cos * y) + (sin * x); 
+		  
 		  const floorHeight = -1.2;
-		  const pointA = {x : newX, z : -newY, y : floorHeight};
-		  //console.log(pointA)		//new adjusted point
-
-		  //alert(`new x: ${newX} and new z: ${-newY}   SHOULD BE TRANSLATED BY HEADING`);
+		  const pointA = new THREE.Vector3(newX, floorHeight, -newY);
   
-			vertices.push(pointA.x, pointA.y, pointA.z);
+		  vertices.push(pointA);
 		  }
+		  //console.log(vertices)
 
-		  lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-	  const line = new THREE.Line(lineGeometry, lineMaterial);
-	  scene.add(line);
+		const path = new THREE.CatmullRomCurve3(vertices);
+		const pathGeometry = new THREE.BufferGeometry().setFromPoints(path.getPoints(50)); // Adjust the resolution (50 in this case) for smoother or coarser path
+		const pathMaterial = new THREE.LineBasicMaterial({ color: 0x00ff00 }); // Green color
+		const pathLine = new THREE.Line(pathGeometry, pathMaterial);
+		scene.add(pathLine);
+
 	}
 
 
