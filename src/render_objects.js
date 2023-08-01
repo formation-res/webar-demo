@@ -10,10 +10,10 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
-const version = 4;
+const version = 1;
 
-console.log(waypoint_collection);
-console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
+//console.log(waypoint_collection);
+//console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 
@@ -113,6 +113,7 @@ class ARButton {
         if (version === 1) 
 		  	{ 
 				createPoints(heading);
+				createWayPoints(heading);
 				navigator.xr.requestSession( 'immersive-ar', sessionInit ).then( onSessionStarted );
 
 			}
@@ -355,9 +356,6 @@ function createWayPoints(angle){
 		});
 	
 		//adjusted for the angle
-		// var dis = waypoint_collection[element].distance;
-		// var ang = waypoint_collection[element].angle;
-
 		var x = waypoint_collection[element].x;
 		var y = waypoint_collection[element].y;
 
