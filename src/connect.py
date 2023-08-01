@@ -38,7 +38,7 @@ def connect(item: str):
 
 if __name__ == "__main__":
     results = connect("Toilet")
-    
+
     print(f"Number of results: {len(results)}")
     for i in range(len(results)):
         print(results[i]['hit']['title'])

@@ -16,7 +16,6 @@ console.log(waypoint_collection);
 console.log(final_path);
 var points_collection = JSON.parse(json_str);
 
-
 let camera, scene, renderer;
 let mesh;
 var heading = -1;
