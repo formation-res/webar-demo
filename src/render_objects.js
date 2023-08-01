@@ -270,39 +270,39 @@ function createPath(points, angle) {
 
 //for version 1
 function createPoints(angle) {
-	console.log(points_collection);
-  for (var i = 0; i < points_collection.length; i++) {
-
-    //get the color
-    var real_color = "";
-    if (colors[points_collection[i].color] != null) { real_color = colors[points_collection[i].color]; } 
-    else  { real_color = "rgb(0, 0, 0)"; }
-
-    const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-    const material = new THREE.MeshPhongMaterial
-    ({
-      color: new THREE.Color(real_color),
-      shininess: 6,
-      flatShading: true,
-      transparent: 1,
-      opacity: 0.8,
-    });
-
-    //adjusted for the angle
-    var x = points_collection[i].x;
-    var y = points_collection[i].y;
-    var radians = (Math.PI / 180) * angle;
-    var cos = Math.cos(radians);
-    var sin = Math.sin(radians);
-    var newX = (cos * x) - (sin * y);
-    var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
-
-    mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set( newX, 0, -newY);
-    scene.add(mesh)
-    
-    }
-}
+	for (var i = 0; i < points_collection.length; i++) {
+  
+	  //get the color
+	  var real_color = "";
+	  if (colors[points_collection[i].color] != null) { real_color = colors[points_collection[i].color]; } 
+	  else  { real_color = "rgb(0, 0, 0)"; }
+  
+	  const geometry = new THREE.IcosahedronGeometry(0.1, 1);
+	  const material = new THREE.MeshPhongMaterial
+	  ({
+		color: new THREE.Color(real_color),
+		shininess: 6,
+		flatShading: true,
+		transparent: 1,
+		opacity: 0.8,
+	  });
+  
+	  //adjusted for the angle
+	  var x = points_collection[i].x;
+	  var y = points_collection[i].y;
+	  var radians = (Math.PI / 180) * angle;
+	  var cos = Math.cos(radians);
+	  var sin = Math.sin(radians);
+	  var newX = (cos * x) - (sin * y);
+	  var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+  
+	  mesh = new THREE.Mesh(geometry, material);
+	  mesh.position.set( newX, 0, -newY);
+	  alert(`Point created: ${newX, -newY}`)
+	  scene.add(mesh)
+	  
+	  }
+  }
 
 //same as createPoints, but for waypoints (which for some reason is in a different format).
 function createWayPoints(angle){
@@ -374,24 +374,6 @@ function translateTestPoints(points,angle){
 			scene.add(mesh)
 			
 	}
-}
-
-//used during testing
-function filterPoints(){
-	//filters points_collection so that only POIs along the path are displayed.
-	let newArr = [];
-	let waypoint_clone= [];
-	newArr = points_collection.filter( (element) => waypoint_path.indexOf(element.id) >= 0 )
-	
-	//to correct the order
-	for (var i = 0; i< waypoint_path.length; i++) {
-		for (var j = 0; j < newArr.length; j++) {
-			if (newArr[j].id === waypoint_path[i]) {
-				waypoint_clone[i] = newArr[j];
-			}
-		}
-	}
-	return waypoint_clone;
 }
 
 function init() {
