@@ -289,13 +289,13 @@ function createPoints(angle) {
   
 	  //adjusted for the angle
 	  var x = points_collection[i].x;
-	  var y = points_collection[i].z;
-	  console.log(x, y)
-	  var radians = (Math.PI / 180) * angle;
+	  var y = points_collection[i].y;
+
+	  var radians = ( (Math.PI / 180) * angle) + .3 ;
 	  var cos = Math.cos(radians);
 	  var sin = Math.sin(radians);
 	  var newX = (cos * x) - (sin * y);
-	  var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
+	  var newY = (cos * y) + (sin * x); 
   
 	  mesh = new THREE.Mesh(geometry, material);
 	  mesh.position.set( newX, 0, -newY);
