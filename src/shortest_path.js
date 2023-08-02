@@ -10,6 +10,8 @@ const hits = waypoints_raw.data.search.hits;
 var points_collection = JSON.parse(json_str);
 const g = new WeightedGraph();
 
+var Rooms = []; //array of geojson objects, which are just JSON objects really. 
+
 //----------------------------------------------------------------------------------------------------------------------------------
 //want to make user input with formation API
 
@@ -42,7 +44,6 @@ function extractOrigin() {
       destination = { lat: points_collection[i].lat, long: points_collection[i].long, x : Infinity, y : Infinity, color : points_collection[i].color };
       //console.log("destination found!");
     }
-    
   }
 }
 
@@ -114,12 +115,10 @@ function getPath() {
     totalDistance = result.totalDistance;
     path.push(destination_id);
     path.unshift(starting_id);  
-
     // console.log(Waypoints[first_waypoint], Waypoints[last_waypoint]);
 
 
     //translate path into a list of points. 
-
     for (var i = 1; i < path.length-1; i++){    // MISSING start and end coordinates
       let id = path[i]
       path_points.push( {x: Waypoints[id].x, y: Waypoints[id].y, title: Waypoints[id].title} )  //push a coordinate point based on the ID.
@@ -323,6 +322,7 @@ function generateEdges(g) {
     }
   }   //end element loop
 } //end function
+
 
 
 //----------------------------------------------------------------------------------------------------------------------------------
