@@ -1,10 +1,13 @@
 import requests
-
+import sys, json
 
 def search(groupId: str, token:str, item: str) -> list:
     url = 'https://api.tryformation.com/search'
     headers = {'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': f'Bearer {token}'}
-    payload = {"groupIds": [groupId], "text": item}
+    payload =   {
+                "groupIds": [groupId],
+                "tags" : ["Keyword:corner"],
+                }
 
     response = requests.post(url, json=payload, headers=headers)
     if response.status_code == 200:
@@ -36,9 +39,22 @@ def connect(item: str):
         print(f"Request failed with status code {response.status_code}")
 
 
-if __name__ == "__main__":
-    results = connect("Toilet")
+def CreateJson(obj: list, dest: str):
+    outFile = "./src/data/" + dest  #dump the info into an out file
+    sys.stdout = open(outFile, 'w')
 
-    print(f"Number of results: {len(results)}")
-    for i in range(len(results)):
-        print(results[i]['hit']['title'])
+    json_obj = json.dumps(obj)
+    
+    print("export var json_str = '{}' ".format(json_obj) )
+
+
+if __name__ == "__main__":
+
+    results = connect("corner")
+    CreateJson(results, "corners.js")
+
+    #results = connect("Toilet")
+
+    # print(f"Number of results: {len(results)}")
+    # for i in range(len(results)):
+    #     print(results[i]['hit'])

@@ -1,16 +1,16 @@
 import { distVincenty,degreesToRadians,radiansToDegrees } from "./Classes/Geo.js";
-import { WeightedGraph, findAngle} from "./Classes/WeightedGraph.js";
+import { WeightedGraph} from "./Classes/WeightedGraph.js";
 import { json_str } from "./data/icon_data.js";
-import { waypoints_raw } from "./data/waypoints_dump.js";
+import { json_str_wp } from "./data/waypoint_dump.js";
 
 // Based on waypoints in FORMATION demo. fetched from formation.
-const hits = waypoints_raw.data.search.hits;
+const hits = JSON.parse(json_str_wp);
+
+// console.log(hits);
 
 //Based on all the data points we have (currently just the subset in the excell spreadsheet).
 var points_collection = JSON.parse(json_str);
 const g = new WeightedGraph();
-
-var Rooms = []; //array of geojson objects, which are just JSON objects really. 
 
 //----------------------------------------------------------------------------------------------------------------------------------
 //want to make user input with formation API

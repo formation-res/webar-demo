@@ -246,7 +246,7 @@ function createPath(points, angle) {
 	  var y = point1.y;
 
 	  //translate
-	   	var radians = (Math.PI / 180) * (angle) + .3 ;
+	   	var radians = (Math.PI / 180) * (angle) ;
 		var cos = Math.cos(radians);
 		  var sin = Math.sin(radians);
 		  var newX = (cos * x) - (sin * y);

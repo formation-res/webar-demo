@@ -14,6 +14,7 @@
     "vite": "^4.4.0"
   },
   "dependencies": {
+    "@turf/turf": "^6.5.0",
     "geodesy": "^2.4.0",
     "geolib": "^3.3.4"
   }
