@@ -10,12 +10,16 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 
+<<<<<<< HEAD
 const version = 3;
+=======
+
+const version = 2;
+>>>>>>> 7f16dd01cac18611bf76022853c55358048ba63b
 
 //console.log(waypoint_collection);
 console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
-
 
 let camera, scene, renderer;
 let mesh;
