@@ -2,18 +2,19 @@ import { distVincenty,degreesToRadians,radiansToDegrees } from "./Classes/Geo.js
 import { WeightedGraph} from "./Classes/WeightedGraph.js";
 import { json_str } from "./data/icon_data.js";
 import { json_str_wp } from "./data/waypoint_dump.js";
+import { Rooms } from "./Classes/rooms.js";
+
 
 // Based on waypoints in FORMATION demo. fetched from formation.
 const hits = JSON.parse(json_str_wp);
 
-// console.log(hits);
 
 //Based on all the data points we have (currently just the subset in the excell spreadsheet).
 var points_collection = JSON.parse(json_str);
 const g = new WeightedGraph();
 
 //----------------------------------------------------------------------------------------------------------------------------------
-//want to make user input with formation API
+//want to make user input with formation API. Use Athena's results
 
 const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
 const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
