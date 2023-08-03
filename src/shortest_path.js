@@ -2,9 +2,9 @@ import { distVincenty,degreesToRadians,radiansToDegrees } from "./Classes/Geo.js
 import { WeightedGraph} from "./Classes/WeightedGraph.js";
 import { json_str } from "./data/icon_data.js";
 import { json_str_wp } from "./data/waypoint_dump.js";
+import { Rooms } from "./Classes/rooms.js";
 
-
-
+console.log(Rooms);
 // Based on waypoints in FORMATION demo. fetched from formation.
 const hits = JSON.parse(json_str_wp);
 
