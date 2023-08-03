@@ -1,6 +1,9 @@
 import requests
 import sys, json
 
+token = None
+groupId = None
+
 def search(groupId: str, token:str, item: str) -> list:
     url = 'https://api.tryformation.com/search'
     headers = {'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': f'Bearer {token}'}

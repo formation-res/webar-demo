@@ -2,6 +2,7 @@ import { json_str } from "./data/icon_data.js";
 import { waypoint_collection, final_path, test_points} from "./shortest_path.js";
 
 
+
 /* 
 Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
 -Version1: perhaps can tap the icons to do something useful or just visualize certain things.
