@@ -1,7 +1,4 @@
 import { json_str } from "./data/icon_data.js";
-// import { waypoint_collection, final_path, test_points} from "./shortest_path.js";
-
-
 
 /* 
 Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons. 
@@ -11,15 +8,11 @@ Going to make this two separate versions: one to display the waypoints and path,
 -Version3 : creates the path that we want to show, plus the starting POI and ending POI. 
 */
 let final_path = []
-const version = 1;
+const version = 3;		// 3 for navigation.
 
 //comment these out once merge with Athena
 document.getElementById("start").value = "b7nHb34SwJn3S5oXkEh0vQ";
 document.getElementById("end").value = "oPkKfi1FpX2As_BOVvBRyQ";
-
-document.getElementById("start-btn").style.display = 'none';
-document.getElementById("headingBtn").style.display = 'none';
-document.getElementById("testingBtn").style.display = 'none';
 
 const form = document.getElementById('dataForm');
 
@@ -28,8 +21,8 @@ form.addEventListener('submit', async (event) => {
   const message = [document.getElementById('start').value, document.getElementById('end').value ];
 //   console.log(message);
 
-  const url = "/shortest_path";             //computer
-  // const url = "http://192.168.2.126:3000/send-data";  //mobile
+//   const url = "/shortest_path";             //computer
+  const url = "https://192.168.2.126:443/shortest_path";  //mobile
   const response = await fetch(url, {
 	method: 'POST',
 	headers: {
@@ -39,27 +32,16 @@ form.addEventListener('submit', async (event) => {
   });
 
  final_path = await response.json();
-  console.log(final_path, "YES")
-
+//   console.log(final_path, "YES")
   //switch the display
-document.getElementById("start-btn").style.display = 'block';
-document.getElementById("headingBtn").style.display = 'block';
-document.getElementById("testingBtn").style.display = 'block';
-
 document.getElementById("start").style.display = 'none';
 document.getElementById("end").style.display = 'none';
 document.getElementById("dataForm").style.display = 'none';	
-
-//   console.log(result);
+startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
+//we have to do the rest inside here !!!
 
 });
 
-
-
-
-
-//console.log(waypoint_collection);
-console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
@@ -68,7 +50,6 @@ var heading = -1;
 const startBtn = document.querySelector(".start-btn");
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
-startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
 
 
 
