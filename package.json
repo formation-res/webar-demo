@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@turf/turf": "^6.5.0",
+    "express": "^4.18.2",
     "geodesy": "^2.4.0",
     "geolib": "^3.3.4",
     "three": "^0.155.0"
