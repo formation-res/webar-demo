@@ -22,7 +22,7 @@ app.use(express.static(pathh.join(__dirname, '.')));
 
 app.post('/shortest_path', (req, res) => {
   const dataFromClient = req.body.message;
-  console.log('Data received from client:', dataFromClient[0]);
+  console.log('Data received from client:', dataFromClient[0], " and ending id: ", dataFromClient[1]);
 
   // Process the data and generate final_path
 

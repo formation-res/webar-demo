@@ -1,6 +1,81 @@
 import { json_str } from "./data/icon_data.js";
 // import { waypoint_collection, final_path, test_points} from "./shortest_path.js";
 
+let temp, clickedItem, start, end;
+var titles = JSON.parse(content_str);
+var round = 1;
+
+const list = titles
+const output = document.querySelector(".output");
+const search = document.querySelector(".filter-input");
+
+window.addEventListener("DOMContentLoaded", loadList);
+search.addEventListener("input", filter);
+
+//hide the buttons
+document.getElementById("start-btn").style.display = 'none';
+document.getElementById("headingBtn").style.display = 'none';
+document.getElementById("testingBtn").style.display = 'none';
+
+
+function loadList() {
+    let temp = `<ul class="list-items">`;
+    list.forEach((item) => {
+        temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item['title']}  (${item['id']})</a> </li>`;
+    });
+    temp += `</ul>`;
+    output.innerHTML = temp;
+    output.addEventListener("click", handleItemClick);
+}
+
+
+function filter(e) {
+    let temp = '';
+    const result  = list.filter(item=> item['title'].toLowerCase().includes(e.target.value.toLowerCase()));
+    if(result.length>0){
+        temp = `<ul class="list-items">`;
+        result.forEach((item) => {
+            temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item['title']}  (${item['id']})</a> </li>`;
+        });
+        temp += `</ul>`;
+    }else{
+        temp =`<div class="no-item"> No Item Found </div>`;
+    }
+    output.innerHTML =temp;
+    output.addEventListener("click", handleItemClick);
+}
+
+
+function handleItemClick(event) {
+	temp = event.target.textContent;
+    clickedItem = temp.trim().split(/\s{2}/);;
+    console.log(`Clicked item: ${clickedItem}`);
+	var container = document.querySelector('.container');
+    for (let i = 0; i < list.length; i++) {
+        if (list[i]['id'] === clickedItem[1].substring(1, clickedItem[1].length - 1)) {
+			if (round === 1) {
+				start = list[i];
+            	console.log(`START: ${start}`);
+				if (window.confirm(`You chose "${clickedItem[0]}" as your current position. Please choose where you want to navigate to next.`)) {
+					round = 2;
+				} else {
+					console.log('cancel');
+				}
+            	break;
+			} else {
+				end = list[i];
+            	console.log(`END: ${end}`);
+				if (window.confirm(`Do you want to navigate to "${clickedItem[0]}"?`)) {
+					container.remove();
+				} else {
+					console.log('cancel');
+				}
+            	break;
+			}
+        }
+    }
+    
+}
 
 
 /* 
@@ -14,18 +89,16 @@ let final_path = []
 const version = 3;
 
 //comment these out once merge with Athena
-document.getElementById("start").value = "b7nHb34SwJn3S5oXkEh0vQ";
-document.getElementById("end").value = "oPkKfi1FpX2As_BOVvBRyQ";
+// document.getElementById("start").value = "b7nHb34SwJn3S5oXkEh0vQ";
+// document.getElementById("end").value = "oPkKfi1FpX2As_BOVvBRyQ";
 
-document.getElementById("start-btn").style.display = 'none';
-document.getElementById("headingBtn").style.display = 'none';
-document.getElementById("testingBtn").style.display = 'none';
 
 const form = document.getElementById('dataForm');
 
 form.addEventListener('submit', async (event) => {
+	
   event.preventDefault();
-  const message = [document.getElementById('start').value, document.getElementById('end').value ];
+  const message = [start['id'], end['id'] ];
 //   console.log(message);
 
   const url = "/shortest_path";             //computer
@@ -476,6 +549,8 @@ function render() {
 }
 
 function startCompass(){
+	console.log(start);
+	console.log(end);
 	if (isIOS){
 		DeviceOrientationEvent.requestPermission()
 		.then((response) => {

@@ -3,19 +3,22 @@
 	<head>
 
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-	
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">	
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r126/three.js" crossorigin="anonymous"></script>
-		<!-- <script type="module" src="https://cdn.jsdelivr.net/npm/three/examples/jsm/loaders/GLTFLoader.js"></script> -->
+		<script type="module" src="https://cdn.jsdelivr.net/npm/three/examples/jsm/loaders/GLTFLoader.js"></script>
+		<link type="text/css" rel="stylesheet" href="style.css">
 	</head>
 	<body>
-		<div>
-
-		</div>
+		<script type='text/javascript' src="./src/titles.js"></script>
+		<div class="container">
+			<h1>FormationMaps</h1>
+			<h1>Please begin by choosing your current position.</h1>
+            <input type="text" placeholder=" Search..." class="filter-input">
+            <div class="output"></div>
+        </div>
 		
 		<script type="module" src="./src/render_objects.js"></script>
 		<button id="start-btn" class="start-btn">Configure Orientation</button> 
-		
 		<button id="headingBtn" class="headingBtn"> Heading: </button>
 		<button id="testingBtn" class="testingBtn"> Platform </button>
 
