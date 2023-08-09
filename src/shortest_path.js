@@ -6,7 +6,7 @@ import { Rooms } from "./Classes/rooms.js";
 
 
 
-console.log(Rooms);
+// console.log(Rooms);
 // Based on waypoints in FORMATION demo. fetched from formation.
 const hits = JSON.parse(json_str_wp);
 
@@ -18,9 +18,9 @@ const g = new WeightedGraph();
 //----------------------------------------------------------------------------------------------------------------------------------
 //want to make user input with formation API. Use Athena's results
 
-const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI              == install the app
-// const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
-const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
+// const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI              == install the app
+// // const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
+// const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
 
 //----------------------------------------------------------------------------------------------------------------------------------
 let origin = {};          //initial coordinates
@@ -36,7 +36,7 @@ let totalDistance;
 let path_points = []
 
 
-function extractOrigin() {
+export function extractOrigin(starting_id, destination_id) {
   //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
   //console.log(starting_id);
   for (var i = 0; i < points_collection.length; i++) {
@@ -51,7 +51,7 @@ function extractOrigin() {
   }
 }
 
-function fillWaypoints() {
+export function fillWaypoints() {
   for (var i = 0; i < hits.length; i++) {
     Waypoints[hits[i].hit.id] = {
       title: hits[i].hit.title,
@@ -112,7 +112,7 @@ let res = distVincenty(origin.lat, origin.long, destination.lat, destination.lon
     destination.x = distance * Math.sin(degreesToRadians(angle));   // EAST
 }
 
-function getPath() {
+export function getPath() {
   let result = g.findShortestPath(first_waypoint, last_waypoint);
   if (result) {
     path = result.path;
@@ -135,10 +135,11 @@ function getPath() {
   else {
     path = null;
   }
+  return path_points;
 }
 
 
-function generateEdges(g) {
+export function generateEdges(g) {
   for (const element in Waypoints){
 
     if (element === "sK_AvPfFzIlFm5yrdP_mBQ")   { //waypoint 2
@@ -332,12 +333,12 @@ function generateEdges(g) {
 //----------------------------------------------------------------------------------------------------------------------------------
 //    Main code.
 
-extractOrigin();
+extractOrigin(starting_id, destination_id);
 fillWaypoints();
 generateEdges(g);
-//console.log(g.adjacencyList);
+console.log(getPath() );
 
-getPath();
+
 
 
 //console.log(Waypoints);
@@ -351,7 +352,7 @@ export var test_points = [
 ]
 // console.log(test_points)
 
-export const final_path = path_points;
-export const waypoint_collection = Waypoints;
+ const final_path = path_points;
+ const waypoint_collection = Waypoints;
 
-console.log(final_path);
+
