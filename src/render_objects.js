@@ -21,8 +21,8 @@ form.addEventListener('submit', async (event) => {
   const message = [document.getElementById('start').value, document.getElementById('end').value ];
 //   console.log(message);
 
-//   const url = "/shortest_path";             //computer
-  const url = "https://192.168.2.126:443/shortest_path";  //mobile
+  const url = "/shortest_path";             //computer
+
   const response = await fetch(url, {
 	method: 'POST',
 	headers: {
@@ -32,22 +32,31 @@ form.addEventListener('submit', async (event) => {
   });
 
  final_path = await response.json();
-//   console.log(final_path, "YES")
+ console.log(final_path, "YEs")
+
   //switch the display
 document.getElementById("start").style.display = 'none';
 document.getElementById("end").style.display = 'none';
 document.getElementById("dataForm").style.display = 'none';	
+
+const startBtn = document.querySelector(".start-btn");
 startBtn.addEventListener('click', startCompass); //nothing can happen until we add this.
-//we have to do the rest inside here !!!
+//   console.log(result);
 
 });
 
+
+
+
+
+//console.log(waypoint_collection);
+// console.log(final_path);	//we want final path to be an array or POINTS, not an array of IDs....
 var points_collection = JSON.parse(json_str);
 
 let camera, scene, renderer;
 let mesh;
 var heading = -1;
-const startBtn = document.querySelector(".start-btn");
+
 const isIOS = navigator.userAgent.match(/(iPod|iPhone|iPad)/) && navigator.userAgent.match(/AppleWebKit/);
 window.addEventListener("resize", onWindowResize, false);
 
@@ -474,6 +483,7 @@ function startCompass(){
   init()
   animate()
   document.body.appendChild(ARButton.createButton(renderer));
+  document.getElementById("start-btn").style.display = 'none';
 }
 
 function handleOrientation(e){
