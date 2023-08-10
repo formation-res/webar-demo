@@ -28,6 +28,19 @@ app.post('/shortest_path', (req, res) => {
   // Process the data and generate final_path
   //execute python scripts here. this will fill icon_data, corners, and waypoints with the most recent using Formation API
 
+  origin = {};          //initial coordinates
+  destination = {};     //destination coordinates
+  Waypoints = {};
+  first_waypoint;     //same room as start
+  last_waypoint;      //same room as destination
+  min_dist_start = Infinity;      //eventually will be starting_POI --> first_waypoint.
+  min_dist_end = Infinity;        //eventually last_waypoint --> destination_POI
+  
+  path = [];
+  totalDistance = 0;
+  path_points = []
+
+  g = new WeightedGraph();
 extractOrigin(dataFromClient[0], dataFromClient[1]);
 fillWaypoints();
 generateEdges(g);
@@ -51,7 +64,7 @@ const hits = JSON.parse(json_str_wp);
 //Based on all the data points we have (currently just the subset in the excell spreadsheet).
 var points_collection = JSON.parse(json_str);
 
-const g = new WeightedGraph();
+let g = new WeightedGraph();
 
 //----------------------------------------------------------------------------------------------------------------------------------
 //want to make user input with formation API. Use Athena's results
@@ -181,6 +194,7 @@ let res = distVincenty(origin.lat, origin.long, destination.lat, destination.lon
  function getPath(starting_id, destination_id) {
   let result = g.findShortestPath(first_waypoint, last_waypoint);
   if (result) {
+    path = []
     path = result.path;
     totalDistance = result.totalDistance;
     path.push(destination_id);

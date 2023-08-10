@@ -1,8 +1,15 @@
 import { json_str } from "./data/icon_data.js";
 
+//hide the buttons
+document.getElementById("start-btn").style.display = 'none';
+document.getElementById("headingBtn").style.display = 'none';
+document.getElementById("testingBtn").style.display = 'none';
+
+
 let temp, clickedItem, start, end;
 var titles = JSON.parse(content_str);
 var round = 1;
+
 
 const list = titles
 const output = document.querySelector(".output");
@@ -11,52 +18,54 @@ const search = document.querySelector(".filter-input");
 window.addEventListener("DOMContentLoaded", loadList);
 search.addEventListener("input", filter);
 
-//hide the buttons
-document.getElementById("start-btn").style.display = 'none';
-document.getElementById("headingBtn").style.display = 'none';
-document.getElementById("testingBtn").style.display = 'none';
-
 
 function loadList() {
-	let temp = `<ul class="list-items">`;
-	list.forEach((item) => {
-		temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item['title']}  (${item['id']})</a> </li>`;
-	});
-	temp += `</ul>`;
-	output.innerHTML = temp;
-	output.addEventListener("click", handleItemClick);
+    let temp = `<ul class="list-items">`;
+    list.forEach((item) => {
+        temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item['title']}  (${item['id']})</a> </li>`;
+    });
+    temp += `</ul>`;
+    output.innerHTML = temp;
+    output.addEventListener("click", handleItemClick);
 }
 
 
 function filter(e) {
-	let temp = '';
-	const result = list.filter(item => item['title'].toLowerCase().includes(e.target.value.toLowerCase()));
-	if (result.length > 0) {
-		temp = `<ul class="list-items">`;
-		result.forEach((item) => {
-			temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item['title']}  (${item['id']})</a> </li>`;
-		});
-		temp += `</ul>`;
-	} else {
-		temp = `<div class="no-item"> No Item Found </div>`;
-	}
-	output.innerHTML = temp;
-	output.addEventListener("click", handleItemClick);
+    let temp = '';
+    const result  = list.filter(item=> item['title'].toLowerCase().includes(e.target.value.toLowerCase()));
+    if(result.length>0){
+        temp = `<ul class="list-items">`;
+        result.forEach((item) => {
+            temp += `<li class="list-item"> <a onclick="handleItemClick(event)">${item['title']}  (${item['id']})</a> </li>`;
+        });
+        temp += `</ul>`;
+    }else{
+        temp =`<div class="no-item"> No Item Found </div>`;
+    }
+    output.innerHTML =temp;
+    output.addEventListener("click", handleItemClick);
 }
 
 
 function handleItemClick(event) {
 	temp = event.target.textContent;
-	clickedItem = temp.trim().split(/\s{2}/);;
-	console.log(`Clicked item: ${clickedItem}`);
+    clickedItem = temp.trim().split(/\s{2}/);;
+    console.log(`Clicked item: ${clickedItem}`);
+
 	var container = document.querySelector('.container');
 	for (let i = 0; i < list.length; i++) {
 		if (list[i]['id'] === clickedItem[1].substring(1, clickedItem[1].length - 1)) {
 			if (round === 1) {
 				start = list[i];
 				console.log(`START: ${start}`);
-				if (window.confirm(`You chose "${clickedItem[0]}" as your current position. Please choose where you want to navigate to next.`)) {
+				if (window.confirm(`CONFIRM: You chose "${clickedItem[0]}" as your current position.`)) {
 					round = 2;
+					const headings = document.querySelectorAll('.container h1');
+					if (headings.length >= 2) {
+						headings[1].textContent = "choose your DESTINATION:";
+					}
+					list.splice(i, 1);
+					loadList();
 				} else {
 					console.log('cancel');
 				}
@@ -64,7 +73,7 @@ function handleItemClick(event) {
 			} else {
 				end = list[i];
 				console.log(`END: ${end}`);
-				if (window.confirm(`Do you want to navigate to "${clickedItem[0]}"?`)) {
+				if (window.confirm(`CONFIRM: Do you want to navigate to "${clickedItem[0]}"?`)) {
 					container.remove();
 				} else {
 					console.log('cancel');
@@ -73,35 +82,14 @@ function handleItemClick(event) {
 			}
 		}
 	}
-
 }
 
-
-/*
-Going to make this two separate versions: one to display the waypoints and path, and one to display just the icons.
--Version1: perhaps can tap the icons to do something useful or just visualize certain things.
--Version2: navigation with waypoints that are invisible and show path of green to destination icon. start + dest are visible
-
--Version3 : creates the path that we want to show, plus the starting POI and ending POI.
-*/
 let final_path = []
 const version = 3;
-
-//comment these out once merge with Athena
-// document.getElementById("start").value = "b7nHb34SwJn3S5oXkEh0vQ";
-// document.getElementById("end").value = "oPkKfi1FpX2As_BOVvBRyQ";
-
 
 const form = document.getElementById('dataForm');
 
 form.addEventListener('submit', async (event) => {
-<<<<<<< HEAD
-
-  event.preventDefault();
-  const message = [start['id'], end['id'] ];
-//   console.log(message);
-=======
->>>>>>> 60fd8215349f751139df243942d8becb444ff7ec
 
 	event.preventDefault();
 	const message = [start['id'], end['id']];
@@ -125,8 +113,6 @@ form.addEventListener('submit', async (event) => {
 	document.getElementById("headingBtn").style.display = 'block';
 	document.getElementById("testingBtn").style.display = 'block';
 
-	document.getElementById("start").style.display = 'none';
-	document.getElementById("end").style.display = 'none';
 	document.getElementById("dataForm").style.display = 'none';
 
 	const startBtn = document.querySelector(".start-btn");
@@ -134,9 +120,6 @@ form.addEventListener('submit', async (event) => {
 	//   console.log(result);
 
 });
-
-
-
 
 
 //console.log(waypoint_collection);
@@ -235,19 +218,6 @@ class ARButton {
 			button.onclick = function () {
 
 				if (currentSession === null) {
-
-					//before starting the session, create all the points.
-					if (version === 1) {
-						createPoints(heading);
-						navigator.xr.requestSession('immersive-ar', sessionInit).then(onSessionStarted);
-
-					}
-					else if (version === 2) {
-						createWayPoints(heading);
-						navigator.xr.requestSession('immersive-ar', sessionInit).then(onSessionStarted);
-
-					}
-					else if (version === 3) {
 						if (final_path.length) {
 							createPath(final_path, heading);
 							navigator.xr.requestSession('immersive-ar', sessionInit).then(onSessionStarted);
@@ -256,18 +226,10 @@ class ARButton {
 							alert("No path found!")
 						}
 					}
-					else if (version === 4) {
-						translateTestPoints(test_points, heading)
-						navigator.xr.requestSession('immersive-ar', sessionInit).then(onSessionStarted);
-					}
 
-
-				} else {
+				 else {
 					currentSession.end();
 				}
-
-				//get list of waypoints.
-
 			};
 		}
 
@@ -410,114 +372,6 @@ function createLineTubeGeometry(p1, p2, thickness) {
 	line.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
 
 	return line;
-}
-
-//for version 1
-function createPoints(angle) {
-	for (var i = 0; i < points_collection.length; i++) {
-
-		//get the color
-		var real_color = "";
-		if (colors[points_collection[i].color] != null) { real_color = colors[points_collection[i].color]; }
-		else { real_color = "rgb(0, 0, 0)"; }
-
-		const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-		const material = new THREE.MeshPhongMaterial
-			({
-				color: new THREE.Color(real_color),
-				shininess: 6,
-				flatShading: true,
-				transparent: 1,
-				opacity: 0.8,
-			});
-
-		//adjusted for the angle
-		var x = points_collection[i].x;
-		var y = points_collection[i].y;
-
-		var radians = ((Math.PI / 180) * angle);
-		var cos = Math.cos(radians);
-		var sin = Math.sin(radians);
-		var newX = (cos * x) - (sin * y);
-		var newY = (cos * y) + (sin * x);
-
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(newX, 0, -newY);
-		scene.add(mesh)
-
-	}
-}
-
-//same as createPoints, but for waypoints (which for some reason is in a different format).
-function createWayPoints(angle) {
-	for (const element in waypoint_collection) {
-
-		//get the color
-		var real_color = "";
-		if (colors[waypoint_collection[element].color] != null) { real_color = colors[waypoint_collection[element].color]; }
-		else { real_color = "rgb(0, 0, 0)"; }
-
-		if (element === "PpvGjpxbS56-Gmymffxt8g")	//enterence waypoint
-		{
-			real_color = "rgb(255, 39, 39)";
-		}
-
-		console.log(real_color);
-		const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-		const material = new THREE.MeshPhongMaterial
-			({
-				color: new THREE.Color(real_color),
-				shininess: 6,
-				flatShading: true,
-				transparent: 1,
-				opacity: 0.8,
-			});
-
-		//adjusted for the angle
-		var x = waypoint_collection[element].x;
-		var y = waypoint_collection[element].y;
-
-		var radians = (Math.PI / 180) * (angle);
-		var cos = Math.cos(radians);
-		var sin = Math.sin(radians);
-		var newX = (cos * x) - (sin * y);
-		var newY = (cos * y) + (sin * x);
-
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(newX, 0, -newY);
-		scene.add(mesh)
-	}
-}
-
-function translateTestPoints(points, angle) {
-
-
-	var real_color = "rgb(0, 0, 0)";
-	const geometry = new THREE.IcosahedronGeometry(0.1, 1);
-	const material = new THREE.MeshPhongMaterial
-		({
-			color: new THREE.Color(real_color),
-			shininess: 6,
-			flatShading: true,
-			transparent: 1,
-			opacity: 0.8,
-		});
-
-	for (var i = 0; i < points.length; i++) {
-		//adjusted for the angle
-		var x = points[i].x;
-		var y = points[i].y;
-		var radians = (Math.PI / 180) * angle;
-		var cos = Math.cos(radians);
-		var sin = Math.sin(radians);
-		var newX = (cos * x) - (sin * y);
-		var newY = (cos * y) + (sin * x); //must be negative because -z = +y north
-
-		mesh = new THREE.Mesh(geometry, material);
-		mesh.position.set(newX, 0, -newY);
-		scene.add(mesh)
-
-	}
 }
 
 function init() {
