@@ -47,35 +47,29 @@ function handleItemClick(event) {
     clickedItem = temp.trim().split(/\s{2}/);;
     console.log(`Clicked item: ${clickedItem}`);
 
-	if (round === 2 && start['id'] === clickedItem[1].substring(1, clickedItem[1].length - 1)) {
-		if (window.confirm(`ERROR: You chose "${clickedItem[0]}" as your current position. Please try again.`)) {
-			console.log('ok');
-		} else {
-			console.log('cancel');
-		}
-	} else {
-		var container = document.querySelector('.container');
-		for (let i = 0; i < list.length; i++) {
-			if (list[i]['id'] === clickedItem[1].substring(1, clickedItem[1].length - 1)) {
-				if (round === 1) {
-					start = list[i];
-					console.log(`START: ${start}`);
-					if (window.confirm(`You chose "${clickedItem[0]}" as your current position. Please choose where you want to navigate to next.`)) {
-						round = 2;
-					} else {
-						console.log('cancel');
-					}
-					break;
+	var container = document.querySelector('.container');
+	for (let i = 0; i < list.length; i++) {
+		if (list[i]['id'] === clickedItem[1].substring(1, clickedItem[1].length - 1)) {
+			if (round === 1) {
+				start = list[i];
+				console.log(`START: ${start}`);
+				if (window.confirm(`You chose "${clickedItem[0]}" as your current position. Please choose where you want to navigate to next.`)) {
+					round = 2;
+					list.splice(i, 1);
+					loadList();
 				} else {
-					end = list[i];
-					console.log(`END: ${end}`);
-					if (window.confirm(`Do you want to navigate to "${clickedItem[0]}"?`)) {
-						container.remove();
-					} else {
-						console.log('cancel');
-					}
-					break;
+					console.log('cancel');
 				}
+				break;
+			} else {
+				end = list[i];
+				console.log(`END: ${end}`);
+				if (window.confirm(`Do you want to navigate to "${clickedItem[0]}"?`)) {
+					container.remove();
+				} else {
+					console.log('cancel');
+				}
+				break;
 			}
 		}
 	}
