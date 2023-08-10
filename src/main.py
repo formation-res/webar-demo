@@ -31,7 +31,7 @@ def find_angle(p1, p2):
 
         return fixed_angle_degrees
 # Find-angle is good???
- 
+
 def create_point_collection_in_json(geo_obj, points_collection):
     """
     Prepare the points to be converted into json by making storing each point's information into a dictionary and adding
@@ -60,7 +60,7 @@ def create_point_collection_in_json(geo_obj, points_collection):
         # append each point to the list, if it's within distance (if applicable):
         if geo_obj.filter_criteria['distance'] is None or float(geo_obj.filter_criteria['distance']) > distance:
             point_collection_in_json.append({'id': row[0], 'title': row[1], 'long': row[2], 'lat': row[3], 'color': row[4], 'category': row[5], 'shape': row[6], 'distance': distance, 'angle': angle, 'x': x, 'y': y})
-    
+
     return point_collection_in_json
 
 

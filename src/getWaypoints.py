@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import requests
 import sys, json
 
@@ -48,7 +50,7 @@ def CreateJson(obj: list, dest: str):
     sys.stdout = open(outFile, 'w')
 
     json_obj = json.dumps(obj)
-    
+
     print("export var json_str_wp = '{}' ".format(json_obj) )
 
 
