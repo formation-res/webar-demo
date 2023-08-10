@@ -53,8 +53,12 @@ function handleItemClick(event) {
 			if (round === 1) {
 				start = list[i];
 				console.log(`START: ${start}`);
-				if (window.confirm(`You chose "${clickedItem[0]}" as your current position. Please choose where you want to navigate to next.`)) {
+				if (window.confirm(`CONFIRM: You chose "${clickedItem[0]}" as your current position.`)) {
 					round = 2;
+					const headings = document.querySelectorAll('.container h1');
+					if (headings.length >= 2) {
+						headings[1].textContent = "choose your DESTINATION:";
+					}
 					list.splice(i, 1);
 					loadList();
 				} else {
@@ -64,7 +68,7 @@ function handleItemClick(event) {
 			} else {
 				end = list[i];
 				console.log(`END: ${end}`);
-				if (window.confirm(`Do you want to navigate to "${clickedItem[0]}"?`)) {
+				if (window.confirm(`CONFIRM: Do you want to navigate to "${clickedItem[0]}"?`)) {
 					container.remove();
 				} else {
 					console.log('cancel');
