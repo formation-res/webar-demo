@@ -6,7 +6,7 @@ def search(groupId: str, token:str, item: str) -> list:
     headers = {'accept': 'application/json', 'Content-Type': 'application/json', 'Authorization': f'Bearer {token}'}
     payload =   {
                 "groupIds": [groupId],
-                "tags" : ["Keyword:corner"],
+                "objectTypes": ["POI"]
                 }
 
     response = requests.post(url, json=payload, headers=headers)
@@ -50,8 +50,9 @@ def CreateJson(obj: list, dest: str):
 
 if __name__ == "__main__":
 
-    results = connect("corner")
-    CreateJson(results, "corners.js")
+    results = connect("icons")
+
+    CreateJson(results, "icons.js")
 
     #results = connect("Toilet")
 

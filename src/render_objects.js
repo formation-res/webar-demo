@@ -1,5 +1,4 @@
 import { json_str } from "./data/icon_data.js";
-// import { waypoint_collection, final_path, test_points} from "./shortest_path.js";
 
 let temp, clickedItem, start, end;
 var titles = JSON.parse(content_str);
@@ -96,7 +95,7 @@ const version = 3;
 const form = document.getElementById('dataForm');
 
 form.addEventListener('submit', async (event) => {
-	
+
   event.preventDefault();
   const message = [start['id'], end['id'] ];
 //   console.log(message);

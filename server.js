@@ -1,8 +1,9 @@
 import { distVincenty,degreesToRadians,radiansToDegrees } from "./src/Classes/Geo.js";
 import { WeightedGraph} from "./src/Classes/WeightedGraph.js";
-import { json_str } from "./src/data/icon_data.js";
-import { json_str_wp } from "./src/data/waypoint_dump.js";
+import { json_str } from "./src/data/icons.js";
+import { json_str_wp } from "./src/data/waypoints_dump.js";
 import { Rooms } from "./src/Classes/rooms.js";
+import * as turf from "@turf/turf"
 
 
 import express from 'express';
@@ -22,15 +23,16 @@ app.use(express.static(pathh.join(__dirname, '.')));
 
 app.post('/shortest_path', (req, res) => {
   const dataFromClient = req.body.message;
-  console.log('Data received from client:', dataFromClient[0], " and ending id: ", dataFromClient[1]);
+  console.log('ID of start POI:', dataFromClient[0], " and destination: ", dataFromClient[1]);
 
   // Process the data and generate final_path
+  //execute python scripts here. this will fill icon_data, corners, and waypoints with the most recent using Formation API
 
 extractOrigin(dataFromClient[0], dataFromClient[1]);
 fillWaypoints();
 generateEdges(g);
 
-res.json( getPath() ); // Respond with the result
+res.json( getPath(dataFromClient[0], dataFromClient[1]) ); // Respond with the result
 });
 
 app.listen(port,'0.0.0.0', () => {
@@ -46,24 +48,24 @@ app.listen(port,'0.0.0.0', () => {
 // Based on waypoints in FORMATION demo. fetched from formation.
 const hits = JSON.parse(json_str_wp);
 
-
 //Based on all the data points we have (currently just the subset in the excell spreadsheet).
 var points_collection = JSON.parse(json_str);
+
 const g = new WeightedGraph();
 
 //----------------------------------------------------------------------------------------------------------------------------------
 //want to make user input with formation API. Use Athena's results
 
-const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI              == install the app
-// const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
-const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
+// const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI              == install the app
+// // const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
+// const destination_id = "oPkKfi1FpX2As_BOVvBRyQ";  //final destination POI   == filter coffee machine
 
 //----------------------------------------------------------------------------------------------------------------------------------
 let origin = {};          //initial coordinates
 let destination = {};     //destination coordinates
 let Waypoints = {};
-let first_waypoint;
-let last_waypoint;
+let first_waypoint;     //same room as start
+let last_waypoint;      //same room as destination
 var min_dist_start = Infinity;      //eventually will be starting_POI --> first_waypoint.
 let min_dist_end = Infinity;        //eventually last_waypoint --> destination_POI
 
@@ -76,12 +78,12 @@ let path_points = []
   //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
   //console.log(starting_id);
   for (var i = 0; i < points_collection.length; i++) {
-    if (points_collection[i].id === starting_id) {
-      origin = { lat: points_collection[i].lat, long: points_collection[i].long };
+    if (points_collection[i].hit.id === starting_id) {
+      origin = { lat: points_collection[i].hit.latLon.lat, long: points_collection[i].hit.latLon.long };
       //console.log("Origin found!");
     }
-    if (points_collection[i].id === destination_id) {
-      destination = { lat: points_collection[i].lat, long: points_collection[i].long, x : Infinity, y : Infinity, color : points_collection[i].color };
+    if (points_collection[i].hit.id === destination_id) {
+      destination = { lat: points_collection[i].hit.latLon.lat, long: points_collection[i].hit.latLon.long, x : Infinity, y : Infinity, color : points_collection[i].hit.color };
       //console.log("destination found!");
     }
   }
@@ -104,6 +106,23 @@ let path_points = []
     //for each ID add a vertex that corresponds with this waypoint.
   }
 
+  //determine which room our origin and destination are in.
+  let start_room, destination_room; //these are polygons
+  var pt1 = turf.point([origin.lat, origin.long]);
+  var pt2 = turf.point([destination.lat, destination.long]);
+
+for (var i = 0; i < Rooms.length; i++) {
+      if (turf.booleanPointInPolygon( pt1, Rooms[i] ) ) {    //if starting point in this room...
+        start_room = Rooms[i];
+      }
+      if (turf.booleanPointInPolygon( pt2, Rooms[i] ) ) {
+        destination_room = Rooms[i];
+      }
+}
+
+// console.log(start_room, destination_room);
+
+
 
   //insert the x and y values into the waypoints that are relative to the STARTING ID.
   for (const element in Waypoints) {
@@ -117,27 +136,38 @@ let path_points = []
     Waypoints[element].y = distance * Math.cos(degreesToRadians(angle));  //north
     //console.log(`title: ${Waypoints[element].title}` , `x: ${Waypoints[element].x}`, `y: ${Waypoints[element].y}`, `angle: ${angle}`)
 
+      /* 
+        1. determine which room ORIGIN and DESTINATION are in. call this ROOM X, ROOM Y
+        2. for each element in Waypoints, decide if this POINT is inside ROOM X or ROOM Y
+        3. only waypoints inside ROOM X can be first_waypoint or last_waypoint ROOM Y.
 
-    //ADD CHECKS HERE TO SEE IF IN SAME ROOM? or the like !!!!!! -------------------------------------------------------------
-    //check for closest waypoint to start. 
-
+      */
 
     //console.log(`Distance: ${distance}  min_dist_start: ${min_dist_start} `)
-    if ( (min_dist_start - distance) > 0) {
+    var pt3 = turf.point([Waypoints[element].lat, Waypoints[element].long]);
+
+    if ( (min_dist_start - distance) > 0 &&  turf.booleanPointInPolygon(pt3, start_room ) )
+     {
       min_dist_start = distance;
       first_waypoint = element;
     }
 
+
     //check for closest waypoint to FINAL destination.
     let res2 = distVincenty(destination.lat, destination.long, Waypoints[element].lat, Waypoints[element].long)
     let distance2 = res2['distance'];   //for the END POINT distance only
-    if  (distance2 < min_dist_end) {
+
+
+    if  (distance2 < min_dist_end  &&  turf.booleanPointInPolygon(pt3, destination_room ))
+     {
       min_dist_end = distance2;
       last_waypoint = element;
-    }
-
   }
+
+
+}   //end waypoints forEach
 // console.log(Waypoints);
+
 
 
 //adding coordinates for the destination point
@@ -148,7 +178,7 @@ let res = distVincenty(origin.lat, origin.long, destination.lat, destination.lon
     destination.x = distance * Math.sin(degreesToRadians(angle));   // EAST
 }
 
- function getPath() {
+ function getPath(starting_id, destination_id) {
   let result = g.findShortestPath(first_waypoint, last_waypoint);
   if (result) {
     path = result.path;
@@ -363,8 +393,7 @@ let res = distVincenty(origin.lat, origin.long, destination.lat, destination.lon
   }   //end element loop
 } //end function
 
-
-// extractOrigin(starting_id, destination_id);
+// extractOrigin("b7nHb34SwJn3S5oXkEh0vQ", "oPkKfi1FpX2As_BOVvBRyQ");
 // fillWaypoints();
 // generateEdges(g);
-// console.log(getPath() );
+// console.log( getPath() );

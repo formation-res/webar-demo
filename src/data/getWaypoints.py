@@ -55,7 +55,7 @@ def CreateJson(obj: list, dest: str):
 if __name__ == "__main__":
 
     results = connect("waypoint")
-    CreateJson(results, "waypoint_dump.js")
+    CreateJson(results, "waypoints_dump.js")
 
     #results = connect("Toilet")
 
