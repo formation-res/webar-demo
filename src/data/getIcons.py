@@ -43,9 +43,9 @@ def CreateJson(obj: list, dest: str):
     outFile = "./src/data/" + dest  #dump the info into an out file
     sys.stdout = open(outFile, 'w')
 
-    json_obj = json.dumps(obj)
+    new_obj = json.dumps(obj)
     
-    print("export var json_str = '{}' ".format(json_obj) )
+    print("export var json_str = '{}' ".format(new_obj) )
 
 
 if __name__ == "__main__":

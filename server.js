@@ -1,6 +1,6 @@
 import { distVincenty,degreesToRadians,radiansToDegrees } from "./src/Classes/Geo.js";
 import { WeightedGraph} from "./src/Classes/WeightedGraph.js";
-import { json_str } from "./src/data/icons.js";
+import { json_str } from "./src/data/icon_data.js";
 import { json_str_wp } from "./src/data/waypoints_dump.js";
 import { Rooms } from "./src/Classes/rooms.js";
 import * as turf from "@turf/turf"
@@ -74,20 +74,20 @@ let totalDistance;
 let path_points = []
 
 
- function extractOrigin(starting_id, destination_id) {
-  //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
-  //console.log(starting_id);
-  for (var i = 0; i < points_collection.length; i++) {
-    if (points_collection[i].hit.id === starting_id) {
-      origin = { lat: points_collection[i].hit.latLon.lat, long: points_collection[i].hit.latLon.long };
-      //console.log("Origin found!");
-    }
-    if (points_collection[i].hit.id === destination_id) {
-      destination = { lat: points_collection[i].hit.latLon.lat, long: points_collection[i].hit.latLon.long, x : Infinity, y : Infinity, color : points_collection[i].hit.color };
-      //console.log("destination found!");
+function extractOrigin(starting_id, destination_id) {
+    //extract origin. currently points_collections represents OUR database, which is a subset from the original excel.
+    //console.log(starting_id);
+    for (var i = 0; i < points_collection.length; i++) {
+      if (points_collection[i].id === starting_id) {
+        origin = { lat: points_collection[i].lat, long: points_collection[i].long };
+        //console.log("Origin found!");
+      }
+      if (points_collection[i].id === destination_id) {
+        destination = { lat: points_collection[i].lat, long: points_collection[i].long, x : Infinity, y : Infinity, color : points_collection[i].color };
+        //console.log("destination found!");
+      }
     }
   }
-}
 
  function fillWaypoints() {
   for (var i = 0; i < hits.length; i++) {

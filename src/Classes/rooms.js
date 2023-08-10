@@ -1,6 +1,6 @@
 import * as turf from "@turf/turf"
 import {json_str} from '../data/corners.js';
-import { json_str_wp } from "../data/waypoint_dump.js";
+import { json_str_wp } from "../data/waypoints_dump.js";
 
 const corners_initial = JSON.parse(json_str);
 const corners = {};

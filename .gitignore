@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Node.js dependencies
 node_modules/
 
@@ -33,3 +34,6 @@ node_modules/
 
 # Dependency directories
 puppeteer/
+=======
+node_modules
+>>>>>>> 60fd8215349f751139df243942d8becb444ff7ec
