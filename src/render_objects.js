@@ -85,7 +85,6 @@ function handleItemClick(event) {
 }
 
 let final_path = []
-const version = 3;
 
 const form = document.getElementById('dataForm');
 
@@ -229,6 +228,7 @@ class ARButton {
 
 				 else {
 					currentSession.end();
+					location.reload();
 				}
 			};
 		}

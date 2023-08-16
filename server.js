@@ -10,6 +10,7 @@ import express from 'express';
 import pathh from 'path';
 
 
+
 const __dirname = pathh.dirname(new URL(import.meta.url).pathname);
 
 const app = express();
@@ -53,11 +54,6 @@ app.listen(port,'0.0.0.0', () => {
 });
 
 
-
-
-
-
-// console.log(Rooms);
 // Based on waypoints in FORMATION demo. fetched from formation.
 const hits = JSON.parse(json_str_wp);
 
@@ -67,7 +63,6 @@ var points_collection = JSON.parse(json_str);
 let g = new WeightedGraph();
 
 //----------------------------------------------------------------------------------------------------------------------------------
-//want to make user input with formation API. Use Athena's results
 
 // const starting_id = "b7nHb34SwJn3S5oXkEh0vQ";   //starting POI              == install the app
 // // const starting_id = "kzbVqke3CHYwdAB5e9nhqA";   //starting POI              ==  desk 4
@@ -133,8 +128,7 @@ for (var i = 0; i < Rooms.length; i++) {
       }
 }
 
-// console.log(start_room, destination_room);
-
+console.log(start_room, destination_room);
 
 
   //insert the x and y values into the waypoints that are relative to the STARTING ID.
@@ -163,6 +157,7 @@ for (var i = 0; i < Rooms.length; i++) {
      {
       min_dist_start = distance;
       first_waypoint = element;
+      console.log("first wp init", Waypoints[element].title )
     }
 
 
@@ -175,6 +170,7 @@ for (var i = 0; i < Rooms.length; i++) {
      {
       min_dist_end = distance2;
       last_waypoint = element;
+      console.log("last_waypoint init", Waypoints[element].title)
   }
 
 
@@ -187,11 +183,13 @@ for (var i = 0; i < Rooms.length; i++) {
 let res = distVincenty(origin.lat, origin.long, destination.lat, destination.long)
     let distance = res['distance'];
     let angle = res['initialBearing']
+    console.log(`distance: ${distance}, angle: ${angle}`);
     destination.y =  distance * Math.cos(degreesToRadians(angle));  //this represents NORTH.
     destination.x = distance * Math.sin(degreesToRadians(angle));   // EAST
 }
 
  function getPath(starting_id, destination_id) {
+  console.log(`first waypoit: ${first_waypoint}, last waypoint: ${last_waypoint}, starting id: ${starting_id}, ending id: ${destination_id}`);
   let result = g.findShortestPath(first_waypoint, last_waypoint);
   if (result) {
     path = []
@@ -287,7 +285,7 @@ let res = distVincenty(origin.lat, origin.long, destination.lat, destination.lon
     }
 
 
-    if (element === "5zUZUZfOyG_yI9dsyNPXRA")   { //waypoint_demo 5
+    if (element === "y8GXdICp6MHQfzBUWx-1Ag")   { //waypoint_demo 5   //fixed issue here. I had the wrong ID. 
       const lat = Waypoints[element].lat;
       const long = Waypoints[element].long;
       const connections = ["8M-V4tmK7B0ycDADY2QhaA", "s7pI1GTGz-p_DaxCHmtoVQ", "9PqPhP1AslO_L2RAeZuyFw", "JAb_7VFKSIwsMUTVVU3QjQ", "3fyYY6wSlAMQpcziVH1Zhg"];
