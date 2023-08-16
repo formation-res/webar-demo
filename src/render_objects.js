@@ -407,9 +407,7 @@ function render() {
 }
 
 function startCompass() {
-	console.log(start);
-	console.log(end);
-	if (isIOS) {
+		//do this regardless of iPhone. 
 		DeviceOrientationEvent.requestPermission()
 			.then((response) => {
 				if (response === "granted") {
@@ -420,10 +418,7 @@ function startCompass() {
 				}
 			})
 			.catch(() => alert("not supported"));
-	} else {
-		window.addEventListener("absolutedeviceorientation", handleOrientation, true);
-		document.getElementById("testingBtn").textContent = "not iOS"
-	}
+
 	init()
 	animate()
 	document.body.appendChild(ARButton.createButton(renderer));

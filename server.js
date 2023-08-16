@@ -157,7 +157,7 @@ console.log(start_room, destination_room);
      {
       min_dist_start = distance;
       first_waypoint = element;
-      console.log("first wp init", Waypoints[element].title )
+      // console.log("first wp init", Waypoints[element].title )
     }
 
 
@@ -170,7 +170,7 @@ console.log(start_room, destination_room);
      {
       min_dist_end = distance2;
       last_waypoint = element;
-      console.log("last_waypoint init", Waypoints[element].title)
+      // console.log("last_waypoint init", Waypoints[element].title)
   }
 
 
@@ -183,13 +183,13 @@ console.log(start_room, destination_room);
 let res = distVincenty(origin.lat, origin.long, destination.lat, destination.long)
     let distance = res['distance'];
     let angle = res['initialBearing']
-    console.log(`distance: ${distance}, angle: ${angle}`);
+    // console.log(`distance: ${distance}, angle: ${angle}`);
     destination.y =  distance * Math.cos(degreesToRadians(angle));  //this represents NORTH.
     destination.x = distance * Math.sin(degreesToRadians(angle));   // EAST
 }
 
  function getPath(starting_id, destination_id) {
-  console.log(`first waypoit: ${first_waypoint}, last waypoint: ${last_waypoint}, starting id: ${starting_id}, ending id: ${destination_id}`);
+  // console.log(`first waypoit: ${first_waypoint}, last waypoint: ${last_waypoint}, starting id: ${starting_id}, ending id: ${destination_id}`);
   let result = g.findShortestPath(first_waypoint, last_waypoint);
   if (result) {
     path = []
