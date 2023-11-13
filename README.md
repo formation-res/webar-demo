@@ -1,10 +1,10 @@
 webar-demo
 
-# Display icons in AR based on search criteria or radius away.
+# Display icons in AR based on search criteria and/or radius away.
 
-nearly works when facing west.
+Click "activate compass" to get device permissions for orientation.
+
+Displays icons for FORMATION hq office, creating a path to desired object using a graph traversal.
 
 ### npm run dev -- --host 
-for network hosting.
-Navigate to a desired point using Web AR.
-(when using an Apple mobile device, use the XRViewer application to start this program by clicking the "AR" button)
+
